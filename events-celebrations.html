@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events &amp; Celebrations | Clean Media Pictures</title>
+  <!-- Cormorant Garamond: high-fashion editorial serif -->
+  <!-- Bebas Neue: cinematic all-caps display -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #fff;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    .nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 40px;
+    }
+
+    .back-bar {
+      padding: 0 40px 22px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+    }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: #1a1a1a;
+      transition: transform 0.2s ease;
+    }
+
+    .back-link:hover svg { transform: translateX(-4px); }
+
+    .nav-logo img {
+      height: 95px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .nav-tab {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      opacity: 0.78;
+      transition: opacity 0.2s;
+      position: relative;
+    }
+
+    .nav-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: #c0000a;
+      transition: width 0.28s ease;
+    }
+
+    .nav-tab:hover { opacity: 1; }
+    .nav-tab:hover::after { width: 100%; }
+
+    /* ── Nav Portfolio Mega Dropdown ── */
+    .nav-dropdown-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-dropdown-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .nav-trigger-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      opacity: 0.78;
+      transition: opacity 0.2s;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .nav-trigger-label::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: #c0000a;
+      transition: width 0.28s ease;
+    }
+
+    .nav-dropdown-trigger:hover .nav-trigger-label { opacity: 1; }
+    .nav-dropdown-trigger:hover .nav-trigger-label::after { width: 100%; }
+
+    .nav-dropdown-chevron {
+      width: 9px; height: 6px;
+      flex-shrink: 0;
+      color: #1a1a1a;
+      opacity: 0.5;
+      transition: transform 0.25s ease, opacity 0.2s;
+      display: block;
+      margin-top: 1px;
+    }
+
+    .nav-dropdown-wrap.is-open .nav-dropdown-chevron {
+      transform: rotate(180deg);
+      opacity: 1;
+    }
+
+    .nav-dropdown {
+      position: fixed;
+      left: 50% !important;
+      transform: translateX(-50%) translateY(-10px);
+      background: #c0000a;
+      border-radius: 18px;
+      padding: 0;
+      width: 760px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.28s cubic-bezier(0.16,1,0.3,1),
+                  visibility 0.28s;
+      z-index: 9999;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.08),
+        0 8px 20px rgba(0,0,0,0.2),
+        0 24px 48px rgba(0,0,0,0.3),
+        0 48px 80px rgba(0,0,0,0.18);
+    }
+
+    .nav-dropdown-wrap.is-open .nav-dropdown {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .nav-dropdown::before { display: none; }
+
+    .nav-dropdown-inner {
+      display: grid;
+      grid-template-columns: 1fr 230px;
+      grid-template-rows: 1fr;
+      flex: 1;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .nav-dropdown-links {
+      padding: 28px 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-content: space-between;
+      column-gap: 4px;
+    }
+
+    .nav-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      padding: 9px 16px;
+      transition: color 0.18s, background 0.18s, padding-left 0.18s;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .nav-dropdown-item::before {
+      content: '';
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.25);
+      flex-shrink: 0;
+      transition: background 0.18s, height 0.18s;
+      border-radius: 1px;
+    }
+
+    .nav-dropdown-item:hover {
+      color: #fff;
+      background: rgba(0,0,0,0.12);
+      padding-left: 20px;
+    }
+
+    .nav-dropdown-item:hover::before {
+      background: #fff;
+      height: 18px;
+    }
+
+    .nav-dropdown-item.is-active {
+      color: #fff;
+    }
+
+    .nav-dropdown-item.is-active::before {
+      background: #fff;
+      height: 18px;
+    }
+
+    .nav-dropdown-preview {
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+      align-self: stretch;
+    }
+
+    .nav-dropdown-img-wrap {
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.2);
+      position: relative;
+      min-height: 0;
+    }
+
+    .nav-dropdown-img-wrap img.nav-dd-img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .nav-dropdown-footer {
+      height: 3px;
+      margin: 0;
+    }
+
+    .nav-right { display: flex; align-items: center; }
+
+    .btn-book {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #0a0a0a;
+      border: 1px solid rgba(10,10,10,0.35);
+      border-radius: 100px;
+      padding: 9px 22px;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .btn-book:hover {
+      background: #c0000a;
+      border-color: #c0000a;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 18px 20px; flex-wrap: wrap; gap: 14px; }
+      .nav-tabs { gap: 16px; order: 3; width: 100%; justify-content: center; }
+      .nav-tab { font-size: 0.62rem; }
+      .btn-book { font-size: 0.6rem; padding: 7px 16px; }
+      .nav-logo img { height: 95px; }
+      .back-bar { padding: 0 20px 18px; }
+      .back-link { font-size: 0.64rem; }
+    }
+
+    @media (max-width: 900px) {
+      .nav-tabs { gap: 24px; }
+    }
+
+    /* ── Gallery ─────────────────────────────────────────── */
+    .gallery {
+      background: #fff;
+      padding: 64px 40px 112px;
+    }
+
+    /* 4 portrait frames, then 2 landscape frames — same row height,
+       so each row reads as one clean horizontal line either way */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 440px;
+      gap: 16px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .gallery-item--portrait  { grid-column: span 1; }
+    .gallery-item--landscape { grid-column: span 2; }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.92);
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.045);
+      filter: brightness(1);
+    }
+
+    @media (max-width: 900px) {
+      .gallery { padding: 48px 24px 80px; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 320px; gap: 12px; }
+      .gallery-item--landscape { grid-column: span 2; }
+    }
+
+    @media (max-width: 540px) {
+      .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 280px; }
+      .gallery-item--portrait,
+      .gallery-item--landscape { grid-column: span 1; }
+    }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    .footer {
+      background: #0d0d0d;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 40px 40px;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-logo {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      filter: brightness(0) invert(1);
+      opacity: 0.85;
+      margin-bottom: 14px;
+    }
+
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+    }
+
+    .footer-whatsapp { max-width: 360px; }
+
+    .footer-wa-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .footer-wa-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .footer-wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #c0000a;
+      border: none;
+      border-radius: 100px;
+      padding: 12px 26px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.22s, transform 0.18s;
+    }
+
+    .footer-wa-btn:hover {
+      background: #a0000a;
+      transform: translateY(-1px);
+    }
+
+    .footer-wa-icon {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      flex-shrink: 0;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      padding: 56px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .footer-col-head {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 6px;
+    }
+
+    .footer-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.62);
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: #fff; }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-legal-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.28);
+      transition: color 0.2s;
+    }
+
+    .footer-legal-link:hover { color: rgba(255,255,255,0.7); }
+
+    @media (max-width: 900px) {
+      .footer-inner { padding: 56px 28px 32px; }
+      .footer-top { flex-direction: column; gap: 36px; }
+      .footer-whatsapp { max-width: 100%; }
+      .footer-links { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .footer-links { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ── Lightbox ───────────────────────────────────────── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .lightbox.is-open { display: flex; }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 2px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      animation: lb-in 0.3s ease;
+    }
+
+    @keyframes lb-in {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 24px; right: 32px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .lightbox-close:hover { opacity: 1; }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      cursor: pointer;
+      opacity: 0.75;
+      transition: opacity 0.2s, background 0.22s, border-color 0.22s;
+    }
+
+    .lightbox-nav svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .lightbox-nav:hover {
+      opacity: 1;
+      background: #c0000a;
+      border-color: #c0000a;
+    }
+
+    .lightbox-prev { left: 24px; }
+    .lightbox-next { right: 24px; }
+
+    @media (max-width: 640px) {
+      .lightbox-nav { width: 38px; height: 38px; }
+      .lightbox-nav svg { width: 16px; height: 16px; }
+      .lightbox-prev { left: 10px; }
+      .lightbox-next { right: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ───────────────────────────────────────────── -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <a href="index.html"><img src="images/nav-logo.png" alt="Clean Media Pictures" /></a>
+    </div>
+
+    <div class="nav-tabs">
+      <a href="index.html#about" class="nav-tab">About Studio</a>
+
+      <!-- Portfolio dropdown -->
+      <div class="nav-dropdown-wrap">
+        <button class="nav-dropdown-trigger" id="portfolioDropdownBtn" aria-label="Toggle portfolio categories" aria-expanded="false">
+          <a href="index.html#portfolio" class="nav-tab nav-trigger-label">Portfolio</a>
+          <svg class="nav-dropdown-chevron" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="nav-dropdown" id="portfolioDropdown" role="menu">
+          <div class="nav-dropdown-inner">
+
+            <!-- LEFT: category links -->
+            <div class="nav-dropdown-links">
+              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/headshots.jpg">Corporate &amp; Headshots</a>
+              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/product.jpg">Product Photography</a>
+              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/fashion.jpg">Editorial &amp; Fashion</a>
+              <a href="events-celebrations.html" class="nav-dropdown-item is-active" data-img="images/events.jpg">Events &amp; Celebrations</a>
+              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="weddings/wedding1.webp">Video Production</a>
+              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/branding.jpg">Portraits &amp; Branding</a>
+            </div>
+
+            <!-- RIGHT: image preview -->
+            <div class="nav-dropdown-preview">
+              <div class="nav-dropdown-img-wrap" id="navDdImgWrap">
+                <img class="nav-dd-img" id="navDdImg" src="images/events.jpg" alt="Portfolio preview" />
+              </div>
+            </div>
+
+          </div>
+          <div class="nav-dropdown-footer"></div>
+        </div>
+      </div>
+
+      <a href="index.html#testimonials" class="nav-tab">Testimonials</a>
+      <a href="index.html#faqs"         class="nav-tab">FAQs</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="index.html#book" class="btn-book">Book a Session</a>
+    </div>
+  </nav>
+
+  <div class="back-bar">
+    <a href="index.html#portfolio" class="back-link">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back to Portfolio Categories
+    </a>
+  </div>
+
+  <!-- ── Gallery ──────────────────────────────────────────── -->
+  <section class="gallery" id="gallery">
+    <div class="gallery-grid">
+
+      <!-- Replace with: images/gallery/events/portrait-1.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-1/600/900" alt="Event photography 1" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-2.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-2/600/900" alt="Event photography 2" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-3.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-3/600/900" alt="Event photography 3" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-4.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-4/600/900" alt="Event photography 4" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/landscape-1.jpg -->
+      <div class="gallery-item gallery-item--landscape">
+        <img src="https://picsum.photos/seed/cmp-events-landscape-1/1200/800" alt="Event photography landscape 1" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/landscape-2.jpg -->
+      <div class="gallery-item gallery-item--landscape">
+        <img src="https://picsum.photos/seed/cmp-events-landscape-2/1200/800" alt="Event photography landscape 2" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-5.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-5/600/900" alt="Event photography 5" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-6.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-6/600/900" alt="Event photography 6" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-7.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-7/600/900" alt="Event photography 7" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-8.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-8/600/900" alt="Event photography 8" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/landscape-3.jpg -->
+      <div class="gallery-item gallery-item--landscape">
+        <img src="https://picsum.photos/seed/cmp-events-landscape-3/1200/800" alt="Event photography landscape 3" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/landscape-4.jpg -->
+      <div class="gallery-item gallery-item--landscape">
+        <img src="https://picsum.photos/seed/cmp-events-landscape-4/1200/800" alt="Event photography landscape 4" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-9.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-9/600/900" alt="Event photography 9" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-10.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-10/600/900" alt="Event photography 10" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-11.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-11/600/900" alt="Event photography 11" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-12.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-12/600/900" alt="Event photography 12" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/landscape-5.jpg -->
+      <div class="gallery-item gallery-item--landscape">
+        <img src="https://picsum.photos/seed/cmp-events-landscape-5/1200/800" alt="Event photography landscape 5" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/landscape-6.jpg -->
+      <div class="gallery-item gallery-item--landscape">
+        <img src="https://picsum.photos/seed/cmp-events-landscape-6/1200/800" alt="Event photography landscape 6" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-13.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-13/600/900" alt="Event photography 13" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-14.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-14/600/900" alt="Event photography 14" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-15.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-15/600/900" alt="Event photography 15" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/portrait-16.jpg -->
+      <div class="gallery-item gallery-item--portrait">
+        <img src="https://picsum.photos/seed/cmp-events-portrait-16/600/900" alt="Event photography 16" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/landscape-7.jpg -->
+      <div class="gallery-item gallery-item--landscape">
+        <img src="https://picsum.photos/seed/cmp-events-landscape-7/1200/800" alt="Event photography landscape 7" />
+      </div>
+
+      <!-- Replace with: images/gallery/events/landscape-8.jpg -->
+      <div class="gallery-item gallery-item--landscape">
+        <img src="https://picsum.photos/seed/cmp-events-landscape-8/1200/800" alt="Event photography landscape 8" />
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Footer ──────────────────────────────────────────── -->
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo-link">
+            <img src="images/nav-logo.png" alt="Clean Media Pictures" class="footer-logo" />
+          </a>
+          <p class="footer-tagline">Light. Story. Craft.</p>
+        </div>
+
+        <div class="footer-whatsapp">
+          <p class="footer-wa-label">Chat with us on WhatsApp</p>
+          <p class="footer-wa-sub">Ready to book or have questions? Message us directly — we respond fast.</p>
+          <a href="https://wa.me/27000000000" target="_blank" rel="noopener" class="footer-wa-btn">
+            <svg class="footer-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Message Us on WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <p class="footer-col-head">Studio</p>
+          <a href="index.html#portfolio" class="footer-link">Portfolio</a>
+          <a href="index.html#about"     class="footer-link">About Studio</a>
+          <a href="index.html#faqs"      class="footer-link">FAQs</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Sessions</p>
+          <a href="index.html#book" class="footer-link">Book a Session</a>
+          <a href="index.html#book" class="footer-link">Corporate Portraits</a>
+          <a href="index.html#book" class="footer-link">Product Photography</a>
+          <a href="index.html#book" class="footer-link">Editorial &amp; Fashion</a>
+          <a href="index.html#book" class="footer-link">Video Production</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Connect</p>
+          <a href="mailto:hello@cleanmediapictures.com" class="footer-link">hello@cleanmediapictures.com</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-link">Instagram</a>
+          <a href="https://facebook.com"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
+          <a href="https://tiktok.com"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 Clean Media Pictures. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#" class="footer-legal-link">Privacy Policy</a>
+          <a href="#" class="footer-legal-link">Terms of Use</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ── Lightbox ───────────────────────────────────────── -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="Full view" />
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <script>
+    /* ── Portfolio nav dropdown ── */
+    (function () {
+      const btn      = document.getElementById('portfolioDropdownBtn');
+      const dropdown = document.getElementById('portfolioDropdown');
+      const wrap     = btn ? btn.closest('.nav-dropdown-wrap') : null;
+      if (!btn || !wrap || !dropdown) return;
+
+      function positionDropdown() {
+        const rect = btn.getBoundingClientRect();
+        dropdown.style.top = (rect.bottom + 16) + 'px';
+        dropdown.style.height = '210px';
+      }
+
+      const label = btn.querySelector('.nav-trigger-label');
+      if (label) {
+        label.addEventListener('click', function (e) { e.stopPropagation(); });
+      }
+
+      btn.addEventListener('click', function (e) {
+        if (label && label.contains(e.target)) return;
+        e.stopPropagation();
+        const isOpen = wrap.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen);
+        if (isOpen) positionDropdown();
+      });
+
+      window.addEventListener('resize', () => { if (wrap.classList.contains('is-open')) positionDropdown(); });
+      window.addEventListener('scroll', () => { if (wrap.classList.contains('is-open')) positionDropdown(); }, true);
+
+      document.addEventListener('click', function (e) {
+        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) {
+          wrap.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      const ddImg = document.getElementById('navDdImg');
+      document.querySelectorAll('.nav-dropdown-item').forEach(item => {
+        item.addEventListener('mouseenter', function () {
+          if (ddImg && this.dataset.img) ddImg.src = this.dataset.img;
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const imgs    = Array.from(document.querySelectorAll('.gallery-item img'));
+      const lb      = document.getElementById('lightbox');
+      const lbImg   = document.getElementById('lightboxImg');
+      const lbClose = document.getElementById('lightboxClose');
+      const lbPrev  = document.getElementById('lightboxPrev');
+      const lbNext  = document.getElementById('lightboxNext');
+      let current = 0;
+
+      function show(index) {
+        current = (index + imgs.length) % imgs.length;
+        lbImg.src = imgs[current].src;
+        lbImg.alt = imgs[current].alt;
+      }
+
+      imgs.forEach((img, i) => {
+        img.addEventListener('click', () => {
+          show(i);
+          lb.classList.add('is-open');
+        });
+      });
+
+      lbClose.addEventListener('click', () => lb.classList.remove('is-open'));
+
+      lbPrev.addEventListener('click', (e) => { e.stopPropagation(); show(current - 1); });
+      lbNext.addEventListener('click', (e) => { e.stopPropagation(); show(current + 1); });
+
+      lb.addEventListener('click', (e) => {
+        if (e.target === lb) lb.classList.remove('is-open');
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (!lb.classList.contains('is-open')) return;
+        if (e.key === 'Escape')     lb.classList.remove('is-open');
+        if (e.key === 'ArrowLeft')  show(current - 1);
+        if (e.key === 'ArrowRight') show(current + 1);
+      });
+    })();
+  </script>
+
+</body>
+</html>

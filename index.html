@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clean Media Pictures</title>
+  <!-- Cormorant Garamond: high-fashion editorial serif -->
+  <!-- Bebas Neue: cinematic all-caps display -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #0a0a0a;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%; height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Background image */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+    }
+
+    /* gradient vignette */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.42) 0%, transparent 38%),
+        linear-gradient(to top,    rgba(0,0,0,0.65) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    .nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 40px;
+    }
+
+    .nav-logo img {
+      height: 95px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .nav-tab {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: 0.82;
+      transition: opacity 0.2s;
+      position: relative;
+    }
+
+    .nav-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: #c0000a;
+      transition: width 0.28s ease;
+    }
+
+    .nav-tab:hover { opacity: 1; }
+    .nav-tab:hover::after { width: 100%; }
+
+    /* ── Nav Portfolio Mega Dropdown ── */
+    .nav-dropdown-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-dropdown-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .nav-trigger-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: 0.82;
+      transition: opacity 0.2s;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .nav-trigger-label::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: #c0000a;
+      transition: width 0.28s ease;
+    }
+
+    .nav-dropdown-trigger:hover .nav-trigger-label { opacity: 1; }
+    .nav-dropdown-trigger:hover .nav-trigger-label::after { width: 100%; }
+
+    .nav-dropdown-chevron {
+      width: 9px; height: 6px;
+      flex-shrink: 0;
+      color: #fff;
+      opacity: 0.7;
+      transition: transform 0.25s ease, opacity 0.2s;
+      display: block;
+      margin-top: 1px;
+    }
+
+    .nav-dropdown-wrap.is-open .nav-dropdown-chevron {
+      transform: rotate(180deg);
+      opacity: 1;
+    }
+
+    /* ── Centered floating panel ── */
+    .nav-dropdown {
+      position: fixed;
+      /* JS sets top; CSS handles horizontal centering */
+      left: 50% !important;
+      transform: translateX(-50%) translateY(-10px);
+      background: #c0000a;
+      border-radius: 18px;
+      padding: 0;
+      width: 760px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.28s cubic-bezier(0.16,1,0.3,1),
+                  visibility 0.28s;
+      z-index: 9999;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.08),
+        0 8px 20px rgba(0,0,0,0.2),
+        0 24px 48px rgba(0,0,0,0.3),
+        0 48px 80px rgba(0,0,0,0.18);
+    }
+
+    .nav-dropdown-wrap.is-open .nav-dropdown {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* No caret — centered panel doesn't need one */
+    .nav-dropdown::before { display: none; }
+
+    /* ── Inner two-column layout ── */
+    .nav-dropdown-inner {
+      display: grid;
+      grid-template-columns: 1fr 230px;
+      grid-template-rows: 1fr;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* LEFT: links — laid out as a 2-column grid, no divider border */
+    .nav-dropdown-links {
+      padding: 28px 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-content: space-between;
+      column-gap: 4px;
+    }
+
+    .nav-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      padding: 9px 16px;
+      transition: color 0.18s, background 0.18s, padding-left 0.18s;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    /* Thin left bar accent */
+    .nav-dropdown-item::before {
+      content: '';
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.25);
+      flex-shrink: 0;
+      transition: background 0.18s, height 0.18s;
+      border-radius: 1px;
+    }
+
+    .nav-dropdown-item:hover {
+      color: #fff;
+      background: rgba(0,0,0,0.12);
+      padding-left: 20px;
+    }
+
+    .nav-dropdown-item:hover::before {
+      background: #fff;
+      height: 18px;
+    }
+
+    .nav-dropdown-item.is-active {
+      color: #fff;
+    }
+
+    .nav-dropdown-item.is-active::before {
+      background: #fff;
+      height: 18px;
+    }
+
+    /* RIGHT: image panel */
+    .nav-dropdown-preview {
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+    }
+
+    .nav-dropdown-img-wrap {
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.2);
+      position: relative;
+      min-height: 0;
+    }
+
+    .nav-dropdown-img-wrap img.nav-dd-img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Bottom strip — kept as a spacer, no longer a different shade */
+    .nav-dropdown-footer {
+      height: 3px;
+      margin: 0;
+    }
+
+    .nav-right { display: flex; align-items: center; }
+
+    .btn-book {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 100px;
+      padding: 9px 22px;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .btn-book:hover {
+      background: #c0000a;
+      border-color: #c0000a;
+      color: #fff;
+    }
+
+    /* ── Headline ────────────────────────────────────────── */
+    .hero-title {
+      position: relative;
+      z-index: 10;
+      padding-bottom: 12vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* "CLEAN MEDIA" — Bebas Neue, wide tracked, full bleed */
+    .line-main {
+      font-family: 'Bebas Neue', sans-serif;
+      font-weight: 400; /* Bebas only has one weight */
+      font-size: clamp(4rem, 14.5vw, 16rem);
+      line-height: 0.88;
+      /* Wide tracking gives the luxury editorial feel */
+      letter-spacing: 0.08em;
+      color: #fff;
+      text-transform: uppercase;
+      white-space: nowrap;
+      width: 100%;
+      text-align: center;
+      display: block;
+      /* Thin text-shadow for depth against photo */
+      text-shadow: 0 2px 32px rgba(0,0,0,0.22);
+    }
+
+    /* "PICTURES" — Cormorant Garamond, spaced, smaller, red */
+    .line-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: clamp(0.8rem, 4vw, 12rem);
+      line-height: 1;
+      margin-top: -0.01em;
+      letter-spacing: 0.55em;
+      color: #c0000a;
+      text-transform: uppercase;
+      white-space: nowrap;
+      display: block;
+      text-align: center;
+      padding-left: 0.55em;
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-tabs { gap: 24px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 18px 20px; flex-wrap: wrap; gap: 14px; }
+      .nav-tabs { gap: 16px; order: 3; width: 100%; justify-content: center; }
+      .nav-tab { font-size: 0.62rem; }
+      .btn-book { font-size: 0.6rem; padding: 7px 16px; }
+      .nav-logo img { height: 95px; }
+      .line-main { font-size: clamp(3rem, 16vw, 6rem); }
+      .line-sub  { font-size: clamp(0.7rem, 4vw, 1.8rem); letter-spacing: 0.35em; padding-left: 0.35em; }
+    }
+
+    /* ── About Studio ───────────────────────────────────── */
+    .about {
+      background: #fff;
+      overflow: visible;
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 64px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 96px 64px 112px;
+    }
+
+    /* LEFT — text */
+    .about-text-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-eyebrow {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #c0000a;
+      margin-bottom: 24px;
+    }
+
+    .about-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+      font-weight: 300;
+      line-height: 1.78;
+      color: #1a1a1a;
+    }
+
+    .about-desc + .about-desc {
+      margin-top: 1.1em;
+    }
+
+    /* RIGHT — polaroid stack */
+    .about-polaroids {
+      position: relative;
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .polaroid {
+      position: absolute;
+      width: 320px;
+      background: #fff;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10);
+      padding: 12px 12px 36px 12px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.4s ease,
+                  z-index 0s;
+      user-select: none;
+    }
+
+    /* Stacked rotation defaults */
+    .polaroid:nth-child(1) { transform: rotate(-6deg) translate(-18px, 12px); z-index: 1; }
+    .polaroid:nth-child(2) { transform: rotate(3deg)  translate(14px, -8px);  z-index: 2; }
+    .polaroid:nth-child(3) { transform: rotate(-1deg) translate(0px,  0px);   z-index: 3; }
+
+    /* Front card sits flat and casts stronger shadow */
+    .polaroid.is-front {
+      z-index: 10;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.28), 0 4px 12px rgba(0,0,0,0.14);
+    }
+
+    .polaroid-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      background: #e0e0e0;
+    }
+
+    .polaroid-caption {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: #555;
+      text-align: center;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Hint text below stack */
+    .polaroid-hint {
+      position: absolute;
+      bottom: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #aaa;
+      white-space: nowrap;
+    }
+
+
+
+    @media (max-width: 900px) {
+      .about-inner {
+        grid-template-columns: 1fr;
+        padding: 64px 28px 80px;
+        gap: 72px;
+      }
+      .about-polaroids { height: 320px; }
+      .polaroid { width: 260px; }
+    }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    .footer {
+      background: #0d0d0d;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 40px 40px;
+    }
+
+    /* Top row */
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-logo {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      filter: brightness(0) invert(1);
+      opacity: 0.85;
+      margin-bottom: 14px;
+    }
+
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+    }
+
+    /* WhatsApp CTA */
+    .footer-whatsapp { max-width: 360px; }
+
+    .footer-wa-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .footer-wa-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .footer-wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #c0000a;
+      border: none;
+      border-radius: 100px;
+      padding: 12px 26px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.22s, transform 0.18s;
+    }
+
+    .footer-wa-btn:hover {
+      background: #a0000a;
+      transform: translateY(-1px);
+    }
+
+    .footer-wa-icon {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      flex-shrink: 0;
+    }
+
+    /* Link columns */
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      padding: 56px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .footer-col-head {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 6px;
+    }
+
+    .footer-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.62);
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: #fff; }
+
+    /* Bottom bar */
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-legal-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.28);
+      transition: color 0.2s;
+    }
+
+    .footer-legal-link:hover { color: rgba(255,255,255,0.7); }
+
+    /* ── Responsive: About & Footer ─────────────────────── */
+    @media (max-width: 900px) {
+      .about-white { padding: 56px 28px 52px; }
+      .footer-inner { padding: 56px 28px 32px; }
+      .footer-top { flex-direction: column; gap: 36px; }
+      .footer-whatsapp { max-width: 100%; }
+      .footer-links { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .footer-links { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ── Portfolio ───────────────────────────────────────── */
+    .portfolio {
+      background: #0a0a0a;
+      padding: 96px 40px 112px;
+    }
+
+    .portfolio-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .portfolio-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #c0000a;
+      margin-bottom: 14px;
+    }
+
+    .portfolio-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: #fff;
+      line-height: 1;
+    }
+
+    /* Grid: 3 cols top row, 3 cols bottom row — varied heights */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 16px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* Make col 1 tall, col 2 short, col 3 tall on row 1;
+       col 1 short, col 2 tall, col 3 short on row 2 — staggered feel */
+    .portfolio-card:nth-child(1) { grid-row: span 1; }
+    .portfolio-card:nth-child(2) { grid-row: span 1; }
+    .portfolio-card:nth-child(3) { grid-row: span 1; }
+
+    .portfolio-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      cursor: pointer;
+      display: block;
+      text-decoration: none;
+      transition: opacity 0.32s ease, transform 0.32s ease;
+    }
+
+    .portfolio-card.is-hidden {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+      position: absolute;
+      visibility: hidden;
+    }
+
+    /* Alternating heights for visual rhythm */
+    .portfolio-card:nth-child(odd)  { height: 420px; }
+    .portfolio-card:nth-child(even) { height: 420px; }
+
+    .portfolio-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      filter: brightness(0.82);
+    }
+
+    /* Dark gradient overlay on each card */
+    .portfolio-card-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.1) 55%, transparent 100%);
+      transition: background 0.3s;
+    }
+
+    .portfolio-card:hover .portfolio-card-overlay {
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.25) 55%, transparent 100%);
+    }
+
+    /* Red accent line that grows on hover */
+    .portfolio-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 3px;
+      background: #c0000a;
+      z-index: 3;
+      transition: width 0.35s ease;
+    }
+
+    .portfolio-card:hover::before { width: 100%; }
+
+    /* Label sits at bottom */
+    .portfolio-card-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 24px 24px 28px;
+      z-index: 2;
+    }
+
+    .portfolio-card-category {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #c0000a;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .portfolio-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      letter-spacing: 0.06em;
+      color: #fff;
+      display: block;
+      line-height: 1;
+    }
+
+    .portfolio-card-arrow {
+      display: inline-block;
+      margin-top: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .portfolio-card:hover .portfolio-card-arrow {
+      color: #fff;
+      transform: translateX(4px);
+    }
+
+    /* View all CTA */
+    .portfolio-cta {
+      text-align: center;
+      margin-top: 52px;
+    }
+
+    .btn-portfolio {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 100px;
+      padding: 13px 36px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+
+    .btn-portfolio:hover {
+      background: #c0000a;
+      border-color: #c0000a;
+    }
+
+    @media (max-width: 900px) {
+      .portfolio { padding: 72px 24px 80px; }
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .portfolio-card:nth-child(odd)  { height: 340px; }
+      .portfolio-card:nth-child(even) { height: 340px; }
+    }
+
+    @media (max-width: 540px) {
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .portfolio-card:nth-child(odd),
+      .portfolio-card:nth-child(even) { height: 300px; }
+    }
+
+    /* ── Testimonials Carousel ───────────────────────────── */
+    .testimonials {
+      background: #0a0a0a;
+      padding: 96px 40px 112px;
+      overflow: hidden;
+    }
+
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .testimonials-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #c0000a;
+      margin-bottom: 14px;
+    }
+
+    .testimonials-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .tcarousel-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .tcarousel-track { overflow: hidden; border-radius: 16px; }
+
+    .tcarousel-slides {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tslide {
+      min-width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 52px;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      box-sizing: border-box;
+    }
+
+    .tslide:nth-child(even) { flex-direction: row-reverse; }
+
+    /* Avatar — circular, sized for a real photo */
+    .tslide-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: #e8e8e8;
+    }
+
+    .tslide-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    .tslide-body { flex: 1; }
+
+    .tslide-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .tslide-logo-dot {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: #c0000a;
+      flex-shrink: 0;
+    }
+
+    .tslide-logo-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #111;
+    }
+
+    .tslide-stars {
+      font-size: 0.9rem;
+      color: #f0a500;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+
+    .tslide-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 1.7vw, 1.45rem);
+      font-weight: 400;
+      line-height: 1.68;
+      color: #111;
+      margin-bottom: 22px;
+    }
+
+    .tslide-author-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #111;
+      display: block;
+    }
+
+    .tslide-author-role {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      color: #777;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .tcarousel-controls {
+      display: flex;
+      align-items: center;
+      margin-top: 28px;
+    }
+
+    .tcarousel-dots {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .tdot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+      padding: 0;
+    }
+
+    .tdot.is-active { background: #c0000a; transform: scale(1.35); }
+
+    .tcarousel-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.22s, border-color 0.22s;
+      flex-shrink: 0;
+    }
+
+    .tcarousel-btn:hover { background: #c0000a; border-color: #c0000a; }
+
+    @media (max-width: 680px) {
+      .tslide { flex-direction: column !important; padding: 36px 28px; gap: 28px; }
+      .tslide-avatar { width: 110px; height: 110px; }
+      .testimonials { padding: 72px 20px 80px; }
+    }
+
+    /* ── Stats Strip (before footer) ────────────────────── */
+    .stats {
+      background: #000;
+      padding: 80px 40px 88px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+    }
+
+    .stats-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: #fff;
+      margin-bottom: 56px;
+    }
+
+    .stats-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 40px;
+      position: relative;
+    }
+
+    .stat-item + .stat-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 15%; bottom: 15%;
+      width: 1px;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      line-height: 1;
+      color: #c0000a;
+      letter-spacing: 0.04em;
+    }
+
+    .stat-suffix { color: rgba(192,0,10,0.6); }
+
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: #fff;
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 600px) {
+      .stats-inner { grid-template-columns: 1fr; gap: 40px; }
+      .stat-item + .stat-item::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+
+    <div class="hero-bg">
+      <img src="images/hero-page.png" alt="Hero Image" />
+    </div>
+
+    <nav class="nav">
+      <div class="nav-logo">
+        <a href="index.html"><img src="images/nav-logo.png" alt="Clean Media Pictures" /></a>
+      </div>
+
+      <div class="nav-tabs">
+        <a href="#about"        class="nav-tab">About Studio</a>
+
+        <!-- Portfolio dropdown -->
+        <div class="nav-dropdown-wrap">
+          <button class="nav-dropdown-trigger" id="portfolioDropdownBtn" aria-label="Toggle portfolio categories" aria-expanded="false">
+            <a href="#portfolio" class="nav-tab nav-trigger-label">Portfolio</a>
+            <svg class="nav-dropdown-chevron" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="nav-dropdown" id="portfolioDropdown" role="menu">
+            <div class="nav-dropdown-inner">
+
+              <!-- LEFT: category links -->
+              <div class="nav-dropdown-links">
+                <a href="#portfolio" class="nav-dropdown-item" data-filter="professional" data-img="images/headshots.jpg">Corporate &amp; Headshots</a>
+                <a href="#portfolio" class="nav-dropdown-item" data-filter="commercial" data-img="images/product.jpg">Product Photography</a>
+                <a href="#portfolio" class="nav-dropdown-item" data-filter="creative" data-img="images/fashion.jpg">Editorial &amp; Fashion</a>
+                <a href="#portfolio" class="nav-dropdown-item" data-filter="lifestyle" data-img="images/events.jpg">Events &amp; Celebrations</a>
+                <a href="#portfolio" class="nav-dropdown-item" data-filter="motion" data-img="weddings/wedding1.webp">Video Production</a>
+                <a href="#portfolio" class="nav-dropdown-item" data-filter="personal" data-img="images/branding.jpg">Portraits &amp; Branding</a>
+              </div>
+
+              <!-- RIGHT: image preview -->
+              <div class="nav-dropdown-preview">
+                <div class="nav-dropdown-img-wrap" id="navDdImgWrap">
+                  <!-- Add your own image: set src below, e.g. src="images/portfolio-preview.jpg" -->
+                  <img class="nav-dd-img" id="navDdImg" src="images/nav-image.jpg" alt="Portfolio preview" />
+                </div>
+              </div>
+
+            </div>
+            <div class="nav-dropdown-footer"></div>
+          </div>
+        </div>
+
+        <a href="#testimonials" class="nav-tab">Testimonials</a>
+        <a href="#faqs"         class="nav-tab">FAQs</a>
+      </div>
+
+      <div class="nav-right">
+        <a href="booking.html" class="btn-book">Book a Session</a>
+      </div>
+    </nav>
+
+    <div class="hero-title">
+      <span class="line-main">Clean Media</span>
+      <span class="line-sub">Pictures</span>
+    </div>
+
+  </section>
+
+  <!-- ── About Studio ──────────────────────────────────────── -->
+  <section class="about" id="about">
+
+    <div class="about-inner">
+
+      <!-- LEFT: Text -->
+      <div class="about-text-col">
+        <p class="about-eyebrow">About Studio</p>
+        <p class="about-desc">
+          Clean Media Pictures was built on a single belief: that powerful imagery
+          is never an accident. Every frame we shoot is the result of deliberate
+          choices — in light, in composition, in the story we choose to tell on
+          your behalf.
+        </p>
+        <p class="about-desc">
+          We are a Johannesburg-based creative studio serving brands, entrepreneurs,
+          and artists who refuse to blend in. Whether you step in front of our lens
+          for a corporate portrait, a product campaign, or a full editorial shoot,
+          you leave with visuals that speak before you do.
+        </p>
+      </div>
+
+      <!-- RIGHT: Polaroid stack -->
+      <div class="about-polaroids" id="polaroidStack">
+
+        <!-- Polaroid 1 (back) -->
+        <div class="polaroid" data-index="0">
+          <img class="polaroid-img" src="images/polaroid1.jpg" alt="Behind the lens" />
+          <p class="polaroid-caption">Behind the lens</p>
+        </div>
+
+        <!-- Polaroid 2 (middle) -->
+        <div class="polaroid" data-index="1">
+          <img class="polaroid-img" src="images/polaroid2.jpg" alt="In the studio" />
+          <p class="polaroid-caption">In the studio</p>
+        </div>
+
+        <!-- Polaroid 3 (front) -->
+        <div class="polaroid is-front" data-index="2">
+          <img class="polaroid-img" src="images/polaroid3.jpg" alt="The craft" />
+          <p class="polaroid-caption">The craft</p>
+        </div>
+
+        <span class="polaroid-hint">Click to see next photo</span>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ── Lightbox ──────────────────────────────────────────── -->
+
+
+  <!-- ── Portfolio ─────────────────────────────────────────── -->
+  <section class="portfolio" id="portfolio">
+
+    <div class="portfolio-header">
+      <p class="portfolio-eyebrow">Our Work</p>
+      <h2 class="portfolio-heading">Portfolio</h2>
+    </div>
+
+    <div class="portfolio-grid">
+
+      <!-- Card 1: Corporate & Headshots -->
+      <a href="#portfolio" class="portfolio-card" data-category="professional">
+        <img class="portfolio-card-img" src="images/headshots.jpg" alt="Corporate & Headshots" />
+        <div class="portfolio-card-overlay"></div>
+        <div class="portfolio-card-label">
+          <span class="portfolio-card-category">Professional</span>
+          <span class="portfolio-card-title">Corporate &amp; Headshots</span>
+          <span class="portfolio-card-arrow">View Gallery →</span>
+        </div>
+      </a>
+
+      <!-- Card 2: Product Photography -->
+      <a href="#portfolio" class="portfolio-card" data-category="commercial">
+        <img class="portfolio-card-img" src="images/product.jpg" alt="Product Photography" />
+        <div class="portfolio-card-overlay"></div>
+        <div class="portfolio-card-label">
+          <span class="portfolio-card-category">Commercial</span>
+          <span class="portfolio-card-title">Product Photography</span>
+          <span class="portfolio-card-arrow">View Gallery →</span>
+        </div>
+      </a>
+
+      <!-- Card 3: Editorial & Fashion -->
+      <a href="#portfolio" class="portfolio-card" data-category="creative">
+        <img class="portfolio-card-img" src="images/fashion.jpg" alt="Editorial & Fashion" />
+        <div class="portfolio-card-overlay"></div>
+        <div class="portfolio-card-label">
+          <span class="portfolio-card-category">Creative</span>
+          <span class="portfolio-card-title">Editorial &amp; Fashion</span>
+          <span class="portfolio-card-arrow">View Gallery →</span>
+        </div>
+      </a>
+
+      <!-- Card 4: Events & Celebrations -->
+      <a href="events-celebrations.html" class="portfolio-card" data-category="lifestyle">
+        <img class="portfolio-card-img" src="images/events.jpg" alt="Events & Celebrations" />
+        <div class="portfolio-card-overlay"></div>
+        <div class="portfolio-card-label">
+          <span class="portfolio-card-category">Lifestyle</span>
+          <span class="portfolio-card-title">Events &amp; Celebrations</span>
+          <span class="portfolio-card-arrow">View Gallery →</span>
+        </div>
+      </a>
+
+      <!-- Card 5: Video Production -->
+      <a href="#portfolio" class="portfolio-card" data-category="motion">
+        <img class="portfolio-card-img" src="weddings/wedding1.webp" alt="Video Production" />
+        <div class="portfolio-card-overlay"></div>
+        <div class="portfolio-card-label">
+          <span class="portfolio-card-category">Motion</span>
+          <span class="portfolio-card-title">Video Production</span>
+          <span class="portfolio-card-arrow">View Gallery →</span>
+        </div>
+      </a>
+
+      <!-- Card 6: Portraits -->
+      <a href="#portfolio" class="portfolio-card" data-category="personal">
+        <img class="portfolio-card-img" src="images/branding.jpg" alt="Portraits & Branding" />
+        <div class="portfolio-card-overlay"></div>
+        <div class="portfolio-card-label">
+          <span class="portfolio-card-category">Personal</span>
+          <span class="portfolio-card-title">Portraits &amp; Branding</span>
+          <span class="portfolio-card-arrow">View Gallery →</span>
+        </div>
+      </a>
+
+    </div>
+
+
+
+  </section>
+
+  <!-- ── Testimonials ──────────────────────────────────────── -->
+  <section class="testimonials" id="testimonials">
+
+    <div class="testimonials-header">
+      <p class="testimonials-eyebrow">Client Stories</p>
+      <h2 class="testimonials-heading">What People Say</h2>
+    </div>
+
+    <div class="tcarousel-wrap">
+      <div class="tcarousel-track">
+        <div class="tcarousel-slides" id="tSlides">
+
+          <!-- Slide 1: avatar RIGHT -->
+          <div class="tslide">
+            <div class="tslide-body">
+              <div class="tslide-logo">
+                <div class="tslide-logo-dot"></div>
+                <span class="tslide-logo-name">Molefe Brands</span>
+              </div>
+              <div class="tslide-stars">★★★★★</div>
+              <p class="tslide-quote">
+                Clean Media completely transformed how our brand looks online. The team understood
+                our vision instantly — every shot was deliberate, clean, and exactly what we needed
+                to stand out.
+              </p>
+              <span class="tslide-author-name">— Thabo Molefe</span>
+              <span class="tslide-author-role">CEO, Molefe Brands</span>
+            </div>
+            <div class="tslide-avatar">
+              <img src="images/client3.jpg" alt="Thabo Molefe" />
+            </div>
+          </div>
+
+          <!-- Slide 2: avatar LEFT (flex-direction reversed by nth-child CSS) -->
+          <div class="tslide">
+            <div class="tslide-avatar">
+              <img src="images/client2.jpg" alt="Amahle Nkosi" />
+            </div>
+            <div class="tslide-body">
+              <div class="tslide-logo">
+                <div class="tslide-logo-dot"></div>
+                <span class="tslide-logo-name">Personal Brand</span>
+              </div>
+              <div class="tslide-stars">★★★★★</div>
+              <p class="tslide-quote">
+                I came in nervous and left feeling like a model. The studio atmosphere is
+                professional but welcoming — and the final headshots exceeded everything I expected.
+                Booked again already.
+              </p>
+              <span class="tslide-author-name">— Amahle Nkosi</span>
+              <span class="tslide-author-role">Entrepreneur &amp; Speaker</span>
+            </div>
+          </div>
+
+          <!-- Slide 3: avatar RIGHT -->
+          <div class="tslide">
+            <div class="tslide-body">
+              <div class="tslide-logo">
+                <div class="tslide-logo-dot"></div>
+                <span class="tslide-logo-name">Luxe Co.</span>
+              </div>
+              <div class="tslide-stars">★★★★★</div>
+              <p class="tslide-quote">
+                Our product launch campaign visuals were shot here and the quality was
+                outstanding. Fast turnaround, great communication, and imagery that actually
+                converts. Highly recommended.
+              </p>
+              <span class="tslide-author-name">— Keitumetse Dlamini</span>
+              <span class="tslide-author-role">Marketing Director, Luxe Co.</span>
+            </div>
+            <div class="tslide-avatar">
+              <img src="images/client1.jpg" alt="Keitumetse Dlamini" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="tcarousel-controls">
+        <button class="tcarousel-btn" id="tPrev" aria-label="Previous">&#8592;</button>
+        <div class="tcarousel-dots" id="tDots"></div>
+        <button class="tcarousel-btn" id="tNext" aria-label="Next">&#8594;</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Stats Strip ───────────────────────────────────────── -->
+  <section class="stats">
+    <h2 class="stats-title">Our Milestones</h2>
+    <div class="stats-inner">
+      <div class="stat-item">
+        <span class="stat-number"><span class="count" data-target="500">0</span><span class="stat-suffix">+</span></span>
+        <span class="stat-label">Sessions Delivered</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number"><span class="count" data-target="98">0</span><span class="stat-suffix">%</span></span>
+        <span class="stat-label">Client Satisfaction</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number"><span class="count" data-target="5">0</span><span class="stat-suffix">+</span></span>
+        <span class="stat-label">Years in the Industry</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+
+      <!-- Top row: brand + whatsapp -->
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo-link">
+            <img src="images/nav-logo.png" alt="Clean Media Pictures" class="footer-logo" />
+          </a>
+          <p class="footer-tagline">Light. Story. Craft.</p>
+        </div>
+
+        <div class="footer-whatsapp">
+          <p class="footer-wa-label">Chat with us on WhatsApp</p>
+          <p class="footer-wa-sub">Ready to book or have questions? Message us directly — we respond fast.</p>
+          <a href="https://wa.me/27000000000" target="_blank" rel="noopener" class="footer-wa-btn">
+            <svg class="footer-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Message Us on WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- Middle row: links -->
+      <div class="footer-links">
+        <div class="footer-col">
+          <p class="footer-col-head">Studio</p>
+          <a href="#portfolio" class="footer-link">Portfolio</a>
+          <a href="#about"     class="footer-link">About Studio</a>
+          <a href="#faqs"      class="footer-link">FAQs</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Sessions</p>
+          <a href="#book" class="footer-link">Book a Session</a>
+          <a href="#book" class="footer-link">Corporate Portraits</a>
+          <a href="#book" class="footer-link">Product Photography</a>
+          <a href="#book" class="footer-link">Editorial &amp; Fashion</a>
+          <a href="#book" class="footer-link">Video Production</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Connect</p>
+          <a href="mailto:hello@cleanmediapictures.com" class="footer-link">hello@cleanmediapictures.com</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-link">Instagram</a>
+          <a href="https://facebook.com"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
+          <a href="https://tiktok.com"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 Clean Media Pictures. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#" class="footer-legal-link">Privacy Policy</a>
+          <a href="#" class="footer-legal-link">Terms of Use</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const stack = document.getElementById('polaroidStack');
+      const cards = Array.from(stack.querySelectorAll('.polaroid'));
+      const presets = [
+        { rotate: -6, tx: -22, ty: 14,  z: 1  },
+        { rotate:  4, tx:  18, ty: -10, z: 2  },
+        { rotate: -1, tx:   0, ty:  0,  z: 10 },
+      ];
+      function applyPresets() {
+        cards.forEach((card, i) => {
+          const p = presets[i];
+          card.style.transform = `rotate(${p.rotate}deg) translate(${p.tx}px, ${p.ty}px)`;
+          card.style.zIndex = p.z;
+          card.classList.toggle('is-front', i === cards.length - 1);
+        });
+      }
+      applyPresets();
+      stack.addEventListener('click', function (e) {
+        const clicked = e.target.closest('.polaroid');
+        if (!clicked) return;
+        const front = cards.pop();
+        cards.unshift(front);
+        applyPresets();
+      });
+    })();
+  </script>
+
+  <script>
+    /* ── Polaroid stack ── */
+    (function () {
+      const stack = document.getElementById('polaroidStack');
+      if (!stack) return;
+      const cards = Array.from(stack.querySelectorAll('.polaroid'));
+      const presets = [
+        { rotate: -6, tx: -22, ty: 14,  z: 1  },
+        { rotate:  4, tx:  18, ty: -10, z: 2  },
+        { rotate: -1, tx:   0, ty:  0,  z: 10 },
+      ];
+      function applyPresets() {
+        cards.forEach((card, i) => {
+          const p = presets[i];
+          card.style.transform = `rotate(${p.rotate}deg) translate(${p.tx}px, ${p.ty}px)`;
+          card.style.zIndex = p.z;
+          card.classList.toggle('is-front', i === cards.length - 1);
+        });
+      }
+      applyPresets();
+      stack.addEventListener('click', function (e) {
+        const clicked = e.target.closest('.polaroid');
+        if (!clicked) return;
+        const front = cards.pop();
+        cards.unshift(front);
+        applyPresets();
+      });
+    })();
+
+    /* ── Testimonials carousel ── */
+    (function () {
+      const slides   = document.getElementById('tSlides');
+      const dotsWrap = document.getElementById('tDots');
+      const btnPrev  = document.getElementById('tPrev');
+      const btnNext  = document.getElementById('tNext');
+      if (!slides) return;
+      const total = slides.children.length;
+      let current = 0;
+      const dots = Array.from({ length: total }, (_, i) => {
+        const d = document.createElement('button');
+        d.className = 'tdot' + (i === 0 ? ' is-active' : '');
+        d.setAttribute('aria-label', 'Slide ' + (i + 1));
+        d.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(d);
+        return d;
+      });
+      function goTo(n) {
+        current = (n + total) % total;
+        slides.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+      }
+      btnPrev.addEventListener('click', () => goTo(current - 1));
+      btnNext.addEventListener('click', () => goTo(current + 1));
+      let timer = setInterval(() => goTo(current + 1), 6000);
+      const wrap = document.querySelector('.tcarousel-wrap');
+      wrap.addEventListener('mouseenter', () => clearInterval(timer));
+      wrap.addEventListener('mouseleave', () => { timer = setInterval(() => goTo(current + 1), 6000); });
+    })();
+
+    /* ── Animated counter ── */
+    (function () {
+      const counters = document.querySelectorAll('.count');
+      const animate = (el) => {
+        const target = +el.dataset.target;
+        const start = performance.now();
+        const tick = (now) => {
+          const p = Math.min((now - start) / 1800, 1);
+          const e = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.floor(e * target);
+          if (p < 1) requestAnimationFrame(tick);
+          else el.textContent = target;
+        };
+        requestAnimationFrame(tick);
+      };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { counters.forEach(animate); observer.disconnect(); } });
+      }, { threshold: 0.3 });
+      const s = document.querySelector('.stats');
+      if (s) observer.observe(s);
+    })();
+  </script>
+  <script>
+    /* ── Portfolio nav mega-dropdown filter ── */
+    (function () {
+      const btn      = document.getElementById('portfolioDropdownBtn');
+      const dropdown = document.getElementById('portfolioDropdown');
+      const wrap     = btn ? btn.closest('.nav-dropdown-wrap') : null;
+      const items    = document.querySelectorAll('.nav-dropdown-item[data-filter]');
+      const cards    = document.querySelectorAll('.portfolio-card[data-category]');
+      if (!btn || !wrap || !dropdown) return;
+
+      const heroTitle = document.querySelector('.hero-title');
+
+      function positionDropdown() {
+        const rect = btn.getBoundingClientRect();
+        const top  = rect.bottom + 16;
+        // Horizontal centering handled by CSS (left: 50% + translateX(-50%))
+        dropdown.style.top = top + 'px';
+
+        // Stretch the panel taller, stopping just above the "Clean Media" title
+        if (heroTitle) {
+          const titleRect = heroTitle.getBoundingClientRect();
+          const available = titleRect.top - top - 28; // 28px breathing room above the title
+          const maxH = 560;  // never look absurdly oversized on tall screens
+          const safeFloor = Math.min(180, available); // never forces overlap on short viewports
+          dropdown.style.height = Math.max(safeFloor, Math.min(available, maxH)) + 'px';
+        }
+      }
+
+      const label = btn.querySelector('.nav-trigger-label');
+      if (label) {
+        label.addEventListener('click', function (e) {
+          e.stopPropagation();
+        });
+      }
+
+      btn.addEventListener('click', function (e) {
+        if (label && label.contains(e.target)) return;
+        e.stopPropagation();
+        const isOpen = wrap.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen);
+        if (isOpen) positionDropdown();
+      });
+
+      window.addEventListener('resize', () => { if (wrap.classList.contains('is-open')) positionDropdown(); });
+      window.addEventListener('scroll', () => { if (wrap.classList.contains('is-open')) positionDropdown(); }, true);
+
+      document.addEventListener('click', function (e) {
+        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) {
+          wrap.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      function filterCards(chosen) {
+        cards.forEach(card => {
+          card.classList.toggle('is-hidden', card.dataset.category !== chosen);
+        });
+        items.forEach(el => el.classList.toggle('is-active', el.dataset.filter === chosen));
+      }
+
+      const ddImg = document.getElementById('navDdImg');
+
+      items.forEach(item => {
+        item.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          filterCards(this.dataset.filter);
+          document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });
+          // dropdown stays open
+        });
+
+        item.addEventListener('mouseenter', function () {
+          if (ddImg && this.dataset.img) ddImg.src = this.dataset.img;
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Session — Clean Media Pictures</title>
+<link href="https://fonts.googleapis.com/css2?family=Myriad+Pro:wght@300;400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { overflow-x: hidden; height: 100%; overflow-y: hidden; }
+body {
+  font-family: 'Myriad Pro', 'Myriad', 'Gill Sans', 'Trebuchet MS', Arial, sans-serif;
+  background: #f4f4f4;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ════════════════════════════════
+   SITE NAV
+════════════════════════════════ */
+.nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.nav-logo img {
+  height: 90px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-tab {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  opacity: 0.78;
+  transition: opacity 0.2s;
+  position: relative;
+}
+
+.nav-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: #C0000A;
+  transition: width 0.28s ease;
+}
+
+.nav-tab:hover { opacity: 1; }
+.nav-tab:hover::after { width: 100%; }
+
+.nav-dropdown-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.nav-trigger-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  opacity: 0.78;
+  transition: opacity 0.2s;
+  position: relative;
+  text-decoration: none;
+}
+
+.nav-trigger-label::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: #C0000A;
+  transition: width 0.28s ease;
+}
+
+.nav-dropdown-trigger:hover .nav-trigger-label { opacity: 1; }
+.nav-dropdown-trigger:hover .nav-trigger-label::after { width: 100%; }
+
+.nav-dropdown-chevron {
+  width: 9px; height: 6px;
+  flex-shrink: 0;
+  color: #1a1a1a;
+  opacity: 0.5;
+  transition: transform 0.25s ease, opacity 0.2s;
+  display: block;
+  margin-top: 1px;
+}
+
+.nav-dropdown-wrap.is-open .nav-dropdown-chevron {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+.nav-dropdown {
+  position: fixed;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(-10px);
+  background: #C0000A;
+  border-radius: 18px;
+  padding: 0;
+  width: 760px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.28s cubic-bezier(0.16,1,0.3,1),
+              transform 0.28s cubic-bezier(0.16,1,0.3,1),
+              visibility 0.28s;
+  z-index: 9999;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 8px 20px rgba(0,0,0,0.2),
+    0 24px 48px rgba(0,0,0,0.3),
+    0 48px 80px rgba(0,0,0,0.18);
+}
+
+.nav-dropdown-wrap.is-open .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav-dropdown-inner {
+  display: grid;
+  grid-template-columns: 1fr 230px;
+  grid-template-rows: 1fr;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.nav-dropdown-links {
+  padding: 28px 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: space-between;
+  column-gap: 4px;
+}
+
+.nav-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  padding: 9px 16px;
+  transition: color 0.18s, background 0.18s, padding-left 0.18s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.nav-dropdown-item::before {
+  content: '';
+  width: 1px;
+  height: 14px;
+  background: rgba(255,255,255,0.25);
+  flex-shrink: 0;
+  transition: background 0.18s, height 0.18s;
+  border-radius: 1px;
+}
+
+.nav-dropdown-item:hover {
+  color: #fff;
+  background: rgba(0,0,0,0.12);
+  padding-left: 20px;
+}
+
+.nav-dropdown-item:hover::before {
+  background: #fff;
+  height: 18px;
+}
+
+.nav-dropdown-preview {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  align-self: stretch;
+}
+
+.nav-dropdown-img-wrap {
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.2);
+  position: relative;
+  min-height: 0;
+}
+
+.nav-dropdown-img-wrap img.nav-dd-img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.nav-dropdown-footer {
+  height: 3px;
+  margin: 0;
+}
+
+.nav-right { display: flex; align-items: center; }
+
+.btn-book {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  border: 1px solid rgba(10,10,10,0.35);
+  border-radius: 100px;
+  padding: 9px 22px;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn-book:hover {
+  background: #C0000A;
+  border-color: #C0000A;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 18px 20px; flex-wrap: wrap; gap: 14px; }
+  .nav-tabs { gap: 16px; order: 3; width: 100%; justify-content: center; }
+  .nav-tab { font-size: 0.62rem; }
+  .btn-book { font-size: 0.6rem; padding: 7px 16px; }
+  .nav-logo img { height: 48px; }
+}
+
+@media (max-width: 900px) {
+  .nav-tabs { gap: 24px; }
+}
+
+/* ════════════════════════════════
+   PAGE
+════════════════════════════════ */
+#page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════
+   CARD
+════════════════════════════════ */
+.card {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.10);
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  grid-template-rows: 1fr;
+  width: 100%; max-width: 960px;
+  height: 100%;
+  max-height: 630px;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════
+   LEFT PANEL
+════════════════════════════════ */
+.panel-left {
+  position: relative;
+  background: #111;
+  border-radius: 20px;
+  overflow: hidden;
+}
+/* ── IMAGE SLIDER ── */
+#panel-slider {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.slide {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+.slide.active { opacity: 0.72; }
+
+/* keep old img rule in case fallback needed */
+.panel-left img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  opacity: 0.72;
+}
+.panel-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.12) 55%, transparent 100%);
+}
+.panel-brand {
+  position: absolute; top: 24px; left: 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.panel-brand-bar { width: 3px; height: 32px; background: #C0000A; flex-shrink: 0; }
+.panel-brand-name {
+  font-family: 'Dubiel', Georgia, serif;
+  font-size: 19px; font-weight: 900;
+  letter-spacing: 0.06em; color: #fff;
+  line-height: 1; text-transform: uppercase;
+}
+.panel-brand-name span {
+  display: block;
+  font-family: 'Myriad Pro', sans-serif;
+  font-size: 9px; font-weight: 300;
+  letter-spacing: 0.45em; color: #C0000A;
+  margin-top: 5px; text-transform: uppercase;
+}
+.panel-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 28px 28px 32px;
+}
+.panel-step-label {
+  font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); margin-bottom: 8px;
+  font-family: 'Myriad Pro', sans-serif; font-weight: 300;
+}
+.panel-step-title {
+  font-family: 'Dubiel', Georgia, serif;
+  font-size: 26px; font-weight: 900;
+  line-height: 1.2; color: #fff; letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.panel-step-title em { font-style: italic; color: #C0000A; font-weight: 900; }
+
+/* ════════════════════════════════
+   RIGHT PANEL
+════════════════════════════════ */
+.panel-right {
+  padding: 32px 42px;
+  display: flex; flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Progress */
+.progress-row {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 34px;
+}
+.progress-dots { display: flex; gap: 8px; align-items: center; }
+.dot {
+  height: 4px; border-radius: 4px;
+  background: #e8e8e8; width: 26px;
+  transition: background 0.3s, width 0.3s;
+}
+.dot.active { background: #C0000A; width: 42px; }
+.dot.done   { background: #C0000A; opacity: 0.35; }
+
+.nav-arrows { display: flex; gap: 8px; }
+.arr-btn {
+  height: 36px; border-radius: 100px;
+  border: 1px solid #e0e0e0; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #888;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  padding: 0 16px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.arr-btn:hover:not(:disabled) { border-color: #C0000A; color: #C0000A; }
+.arr-btn:disabled { opacity: 0.28; cursor: default; }
+#btn-next-arr { background: #C0000A; border-color: #C0000A; color: #fff; }
+#btn-next-arr:hover:not(:disabled) { background: #a0000a; border-color: #a0000a; color: #fff; }
+#btn-next-arr:disabled { background: #e0e0e0; border-color: #e0e0e0; color: #fff; }
+
+/* Step heading */
+.step-eyebrow {
+  font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+  color: #C0000A; margin-bottom: 6px;
+  font-family: 'Myriad Pro', sans-serif; font-weight: 300;
+}
+.step-heading {
+  font-family: 'Dubiel', Georgia, serif;
+  font-size: 28px; font-weight: 900;
+  letter-spacing: 0.02em; color: #111;
+  margin-bottom: 26px; line-height: 1.1;
+  text-transform: uppercase;
+}
+
+/* ── SERVICE CARDS ── */
+.service-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 26px;
+}
+.svc-card {
+  border: 1.5px solid #ebebeb; border-radius: 14px;
+  padding: 16px 14px; cursor: pointer; background: #fafafa;
+  transition: border-color 0.2s, background 0.2s;
+  user-select: none;
+}
+.svc-card:hover { border-color: #C0000A; }
+.svc-card.selected { border-color: #C0000A; background: #fff5f5; }
+.svc-name {
+  font-size: 13px; font-weight: 600; color: #111;
+  margin-bottom: 3px;
+  font-family: 'Myriad Pro', sans-serif;
+}
+.svc-desc { font-size: 11px; color: #aaa; line-height: 1.4; font-weight: 300; }
+.svc-card.selected .svc-name { color: #C0000A; }
+.svc-card.selected .svc-desc { color: #884444; }
+
+/* ── CHIP GROUP ── */
+.chip-label {
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: #bbb; margin-bottom: 10px; display: block;
+  font-family: 'Myriad Pro', sans-serif; font-weight: 300;
+}
+.chip-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.chip {
+  padding: 10px 18px; border: 1.5px solid #ebebeb; border-radius: 12px;
+  font-size: 13px; color: #666; background: #fafafa; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  user-select: none; font-family: 'Myriad Pro', sans-serif;
+}
+.chip:hover { border-color: #C0000A; color: #C0000A; }
+.chip.selected { border-color: #C0000A; background: #fff5f5; color: #C0000A; font-weight: 600; }
+
+/* ── NUMBER SELECTOR ── */
+.num-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.num-btn {
+  width: 42px; height: 42px; border-radius: 10px;
+  border: 1.5px solid #ebebeb; background: #fafafa;
+  font-size: 14px; color: #666; cursor: pointer;
+  font-family: 'Myriad Pro', sans-serif;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.num-btn:hover { border-color: #C0000A; color: #C0000A; }
+.num-btn.selected { border-color: #C0000A; background: #fff5f5; color: #C0000A; font-weight: 600; }
+
+/* ── TEXT FIELDS ── */
+.field-group { margin-bottom: 16px; }
+.field-label {
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: #bbb; margin-bottom: 7px; display: block;
+  font-family: 'Myriad Pro', sans-serif; font-weight: 300;
+}
+.field-input, .field-select, .field-textarea {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid #ebebeb; border-radius: 10px;
+  font-family: 'Myriad Pro', sans-serif;
+  font-size: 14px; color: #111;
+  background: #fafafa; outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+.field-input:focus, .field-select:focus, .field-textarea:focus {
+  border-color: #C0000A; background: #fff;
+}
+.field-input::placeholder, .field-textarea::placeholder { color: #ccc; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.field-textarea { resize: vertical; min-height: 84px; line-height: 1.6; }
+
+/* ── STEPS ── */
+.step { display: none; flex-direction: column; flex: 1; }
+.step.active { display: flex; flex-direction: column; flex: 1; }
+
+
+/* ── SUCCESS ── */
+#success {
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; flex: 1; padding: 20px 0;
+}
+.success-ring {
+  width: 60px; height: 60px; border-radius: 50%;
+  border: 1.5px solid #C0000A;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: #C0000A; margin-bottom: 22px;
+}
+#success h3 {
+  font-family: 'Dubiel', Georgia, serif;
+  font-size: 30px; font-weight: 900; margin-bottom: 10px; color: #111;
+  text-transform: uppercase;
+}
+#success p {
+  font-size: 13px; color: #999; line-height: 1.7;
+  max-width: 280px; font-family: 'Myriad Pro', sans-serif; font-weight: 300;
+}
+@media (max-width: 700px) {
+  html, body { overflow-y: auto; height: auto; }
+  body { display: block; }
+  #page { display: block; padding: 16px; overflow: visible; }
+  .card { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; max-height: none; }
+  .panel-left { min-height: 200px; border-radius: 20px 20px 0 0; }
+  .panel-right { padding: 26px 22px; overflow-y: visible; }
+  .service-grid { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ NAV ════ -->
+<nav class="nav">
+  <div class="nav-logo">
+    <a href="index.html"><img src="images/nav-logo.png" alt="Clean Media Pictures" /></a>
+  </div>
+
+  <div class="nav-tabs">
+    <a href="index.html#about" class="nav-tab">About Studio</a>
+
+    <!-- Portfolio dropdown -->
+    <div class="nav-dropdown-wrap">
+      <button class="nav-dropdown-trigger" id="portfolioDropdownBtn" aria-label="Toggle portfolio categories" aria-expanded="false">
+        <a href="index.html#portfolio" class="nav-tab nav-trigger-label">Portfolio</a>
+        <svg class="nav-dropdown-chevron" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="nav-dropdown" id="portfolioDropdown" role="menu">
+        <div class="nav-dropdown-inner">
+
+          <!-- LEFT: category links -->
+          <div class="nav-dropdown-links">
+            <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/headshots.jpg">Corporate &amp; Headshots</a>
+            <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/product.jpg">Product Photography</a>
+            <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/fashion.jpg">Editorial &amp; Fashion</a>
+            <a href="events-celebrations.html" class="nav-dropdown-item" data-img="images/events.jpg">Events &amp; Celebrations</a>
+            <a href="index.html#portfolio" class="nav-dropdown-item" data-img="weddings/wedding1.webp">Video Production</a>
+            <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/branding.jpg">Portraits &amp; Branding</a>
+          </div>
+
+          <!-- RIGHT: image preview -->
+          <div class="nav-dropdown-preview">
+            <div class="nav-dropdown-img-wrap" id="navDdImgWrap">
+              <img class="nav-dd-img" id="navDdImg" src="images/headshots.jpg" alt="Portfolio preview" />
+            </div>
+          </div>
+
+        </div>
+        <div class="nav-dropdown-footer"></div>
+      </div>
+    </div>
+
+    <a href="index.html#testimonials" class="nav-tab">Testimonials</a>
+    <a href="index.html#faqs"         class="nav-tab">FAQs</a>
+  </div>
+
+  <div class="nav-right"></div>
+</nav>
+
+<!-- ════ PAGE ════ -->
+<div id="page">
+  <div class="card">
+
+    <!-- LEFT -->
+    <div class="panel-left">
+      <!-- Image slider -->
+      <div id="panel-slider">
+        <div class="slide active" style="background-image:url('images/image1.webp')"></div>
+        <div class="slide" style="background-image:url('images/image2.webp')"></div>
+        <div class="slide" style="background-image:url('images/image3.webp')"></div>
+        <div class="slide" style="background-image:url('images/image4.webp')"></div>
+        <div class="slide" style="background-image:url('images/image5.webp')"></div>
+      </div>
+      <div class="panel-overlay"></div>
+      <div class="panel-brand">
+        <div class="panel-brand-bar"></div>
+        <div class="panel-brand-name">Clean Media<span>Pictures</span></div>
+      </div>
+      <div class="panel-bottom">
+        <div class="panel-step-label" id="panel-label">Step 1 of 4</div>
+        <div class="panel-step-title" id="panel-title">Choose your <em>shoot</em> type.</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="panel-right">
+
+      <div class="progress-row">
+        <div class="progress-dots">
+          <div class="dot active" id="dot-0"></div>
+          <div class="dot" id="dot-1"></div>
+          <div class="dot" id="dot-2"></div>
+          <div class="dot" id="dot-3"></div>
+        </div>
+        <div class="nav-arrows">
+          <button class="arr-btn" id="btn-prev" disabled aria-label="Previous">Previous</button>
+          <button class="arr-btn" id="btn-next-arr" aria-label="Next">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="step active" id="step-0">
+        <div class="step-eyebrow">What are you booking?</div>
+        <div class="step-heading">Select your service</div>
+        <div class="service-grid" id="svc-group">
+          <div class="svc-card" data-val="Wedding Photography" tabindex="0" role="button">
+            <div class="svc-name">Wedding Photography</div>
+            <div class="svc-desc">Full-day coverage for your special day</div>
+          </div>
+          <div class="svc-card" data-val="Portrait Shoot" tabindex="0" role="button">
+            <div class="svc-name">Portrait Shoot</div>
+            <div class="svc-desc">Professional studio or outdoor portraits</div>
+          </div>
+          <div class="svc-card" data-val="Videography" tabindex="0" role="button">
+            <div class="svc-name">Videography</div>
+            <div class="svc-desc">Cinematic video for any occasion</div>
+          </div>
+          <div class="svc-card" data-val="Family & Kids" tabindex="0" role="button">
+            <div class="svc-name">Family &amp; Kids</div>
+            <div class="svc-desc">Fun, natural family sessions</div>
+          </div>
+          <div class="svc-card" data-val="Events & Corporate" tabindex="0" role="button">
+            <div class="svc-name">Events &amp; Corporate</div>
+            <div class="svc-desc">Conferences, launches, headshots</div>
+          </div>
+          <div class="svc-card" data-val="Digital Art & Retouching" tabindex="0" role="button">
+            <div class="svc-name">Digital Art &amp; Retouching</div>
+            <div class="svc-desc">Creative editing &amp; composite work</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step" id="step-1">
+        <div class="step-eyebrow">Tell us more</div>
+        <div class="step-heading">Session preferences</div>
+
+        <span class="chip-label">Shoot location preference</span>
+        <div class="chip-group" id="location-group">
+          <div class="chip" data-val="Studio">Studio</div>
+          <div class="chip" data-val="Outdoor">Outdoor</div>
+          <div class="chip" data-val="At my venue">At my venue</div>
+          <div class="chip" data-val="Flexible">I'm flexible</div>
+        </div>
+
+        <span class="chip-label">How many people in the shoot?</span>
+        <div class="num-group" id="people-group">
+          <button class="num-btn" data-val="1">1</button>
+          <button class="num-btn" data-val="2">2</button>
+          <button class="num-btn" data-val="3">3</button>
+          <button class="num-btn" data-val="4">4</button>
+          <button class="num-btn" data-val="5">5</button>
+          <button class="num-btn" data-val="6">6</button>
+          <button class="num-btn" data-val="7+">7+</button>
+        </div>
+
+        <span class="chip-label">Budget range</span>
+        <div class="chip-group" id="budget-group">
+          <div class="chip" data-val="Under R1 500">Under R1 500</div>
+          <div class="chip" data-val="R1 500 – R3 000">R1 500 – R3 000</div>
+          <div class="chip" data-val="R3 000 – R6 000">R3 000 – R6 000</div>
+          <div class="chip" data-val="R6 000+">R6 000+</div>
+          <div class="chip" data-val="Let's discuss">Let's discuss</div>
+        </div>
+
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step" id="step-2">
+        <div class="step-eyebrow">When &amp; where</div>
+        <div class="step-heading">Pick your date</div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="f-date">Preferred date</label>
+            <input class="field-input" type="date" id="f-date">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="f-time">Preferred time</label>
+            <select class="field-select" id="f-time">
+              <option value="" disabled selected>Select time</option>
+              <option>Morning (07:00 – 10:00)</option>
+              <option>Late Morning (10:00 – 12:00)</option>
+              <option>Afternoon (12:00 – 15:00)</option>
+              <option>Late Afternoon (15:00 – 18:00)</option>
+              <option>Golden Hour (18:00 – 20:00)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="f-location">Specific location / venue</label>
+          <input class="field-input" type="text" id="f-location" placeholder="e.g. Kempton Park Studio, Sandton rooftop…">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="f-notes">Your vision (optional)</label>
+          <textarea class="field-textarea" id="f-notes" placeholder="Mood, inspiration, special requests, outfit ideas…"></textarea>
+        </div>
+
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step" id="step-3">
+        <div class="step-eyebrow">Almost done</div>
+        <div class="step-heading">Your details</div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="f-fname">First name</label>
+            <input class="field-input" type="text" id="f-fname" placeholder="Thabo">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="f-lname">Last name</label>
+            <input class="field-input" type="text" id="f-lname" placeholder="Nkosi">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="f-email">Email address</label>
+          <input class="field-input" type="email" id="f-email" placeholder="you@example.com">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="f-phone">Phone / WhatsApp</label>
+          <input class="field-input" type="tel" id="f-phone" placeholder="+27 72 000 0000">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="f-heard">How did you hear about us?</label>
+          <select class="field-select" id="f-heard">
+            <option value="" disabled selected>Select one</option>
+            <option>Instagram</option>
+            <option>Facebook</option>
+            <option>Word of mouth / referral</option>
+            <option>Google search</option>
+            <option>TikTok</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- SUCCESS -->
+      <div id="success">
+        <div class="success-ring">&#10003;</div>
+        <h3>Request sent!</h3>
+        <p>Thank you. We'll be in touch within 24 hours to confirm your session details.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════ PORTFOLIO NAV DROPDOWN ════ */
+(function () {
+  var btn      = document.getElementById('portfolioDropdownBtn');
+  var dropdown = document.getElementById('portfolioDropdown');
+  var wrap     = btn ? btn.closest('.nav-dropdown-wrap') : null;
+  if (!btn || !wrap || !dropdown) return;
+
+  function positionDropdown() {
+    var rect = btn.getBoundingClientRect();
+    dropdown.style.top = (rect.bottom + 16) + 'px';
+    dropdown.style.height = '210px';
+  }
+
+  var label = btn.querySelector('.nav-trigger-label');
+  if (label) {
+    label.addEventListener('click', function (e) { e.stopPropagation(); });
+  }
+
+  btn.addEventListener('click', function (e) {
+    if (label && label.contains(e.target)) return;
+    e.stopPropagation();
+    var isOpen = wrap.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', isOpen);
+    if (isOpen) positionDropdown();
+  });
+
+  window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });
+  window.addEventListener('scroll', function () { if (wrap.classList.contains('is-open')) positionDropdown(); }, true);
+
+  document.addEventListener('click', function (e) {
+    if (!wrap.contains(e.target) && !dropdown.contains(e.target)) {
+      wrap.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  var ddImg = document.getElementById('navDdImg');
+  document.querySelectorAll('.nav-dropdown-item').forEach(function (item) {
+    item.addEventListener('mouseenter', function () {
+      if (ddImg && this.dataset.img) ddImg.src = this.dataset.img;
+    });
+  });
+})();
+
+/* ════ MIN DATE ════ */
+var today = new Date().toISOString().split('T')[0];
+document.getElementById('f-date').setAttribute('min', today);
+
+/* ════ STEP LOGIC ════ */
+var currentStep = 0;
+var totalSteps  = 4;
+
+var panelMeta = [
+  { label: 'Step 1 of 4', title: 'Choose your <em>shoot</em> type.'  },
+  { label: 'Step 2 of 4', title: 'Set your <em>preferences</em>.'     },
+  { label: 'Step 3 of 4', title: 'Pick the <em>perfect</em> date.'    },
+  { label: 'Step 4 of 4', title: 'Last step — <em>almost</em> there.' },
+];
+
+function goTo(step) {
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  currentStep = step;
+  document.getElementById('step-' + currentStep).classList.add('active');
+  updateUI();
+}
+
+document.getElementById('btn-prev').addEventListener('click', function() {
+  if (currentStep > 0) goTo(currentStep - 1);
+});
+document.getElementById('btn-next-arr').addEventListener('click', function() {
+  if (currentStep < totalSteps - 1) {
+    goTo(currentStep + 1);
+  } else {
+    submitForm();
+  }
+});
+
+function updateUI() {
+  for (var i = 0; i < totalSteps; i++) {
+    var d = document.getElementById('dot-' + i);
+    d.classList.remove('active', 'done');
+    if (i === currentStep) d.classList.add('active');
+    else if (i < currentStep) d.classList.add('done');
+  }
+  document.getElementById('btn-prev').disabled = currentStep === 0;
+  var nextBtn = document.getElementById('btn-next-arr');
+  if (currentStep === totalSteps - 1) {
+    nextBtn.textContent = 'Send Request';
+    nextBtn.disabled = false;
+  } else {
+    nextBtn.textContent = 'Next';
+    nextBtn.disabled = false;
+  }
+  var m = panelMeta[currentStep];
+  document.getElementById('panel-label').textContent = m.label;
+  document.getElementById('panel-title').innerHTML   = m.title;
+}
+
+/* ════ INTERACTIONS ════ */
+function initChips(groupId, single) {
+  var g = document.getElementById(groupId);
+  if (!g) return;
+  g.querySelectorAll('.chip').forEach(function(c) {
+    c.addEventListener('click', function() {
+      if (single) g.querySelectorAll('.chip').forEach(function(x){ x.classList.remove('selected'); });
+      c.classList.toggle('selected');
+    });
+  });
+}
+function initNumBtns(groupId) {
+  var g = document.getElementById(groupId);
+  if (!g) return;
+  g.querySelectorAll('.num-btn').forEach(function(b) {
+    b.addEventListener('click', function() {
+      g.querySelectorAll('.num-btn').forEach(function(x){ x.classList.remove('selected'); });
+      b.classList.add('selected');
+    });
+  });
+}
+initChips('location-group', true);
+initNumBtns('people-group');
+initChips('budget-group', true);
+
+/* ════ IMAGE SLIDER ════ */
+
+var CATEGORY_IMAGES = {
+  'Wedding Photography':      ['weddings/wedding1.webp','weddings/wedding2.webp','weddings/wedding3.webp','weddings/wedding4.webp','weddings/wedding5.webp'],
+  'Portrait Shoot':           ['portraits/portraits1.webp','portraits/portraits2.webp','portraits/portraits3.webp','portraits/portraits4.webp'],
+  'Videography':              ['videography/video1.webp','videography/video2.webp','videography/video3.webp'],
+  'Family & Kids':            ['family/family1.webp','family/family2.webp','family/family3.webp','family/family4.webp'],
+  'Events & Corporate':       ['events/event1.webp','events/event2.webp','events/event3.webp','events/event4.webp'],
+  'Digital Art & Retouching': ['digital/digital1.webp','digital/digital2.webp','digital/digital3.webp'],
+  /* TODO: replace images/ paths above with real category folders once created:
+     Portrait Shoot    → portraits/portrait1.webp … portrait4.webp
+     Videography       → videography/video1.webp … video3.webp
+     Family & Kids     → family/family1.webp … family4.webp
+     Events & Corporate → events/event1.webp … event4.webp
+     Digital Art       → digital/digital1.webp … digital3.webp  */
+};
+
+var DEFAULT_IMAGES = [
+  'images/image1.webp','images/image2.webp','images/image3.webp',
+  'images/image4.webp','images/image5.webp',
+];
+
+var sliderEl    = document.getElementById('panel-slider');
+var sliderIndex = 0;
+var sliderTimer = null;
+
+function startSlider(images) {
+  /* Stop existing timer */
+  clearInterval(sliderTimer);
+  sliderTimer = null;
+  sliderIndex = 0;
+
+  /* Build fresh slides */
+  sliderEl.innerHTML = '';
+  for (var i = 0; i < images.length; i++) {
+    var div = document.createElement('div');
+    div.className = 'slide' + (i === 0 ? ' active' : '');
+    div.style.backgroundImage = "url('" + images[i] + "')";
+    sliderEl.appendChild(div);
+  }
+
+  /* Auto-advance */
+  if (images.length > 1) {
+    sliderTimer = setInterval(function() {
+      var slides = sliderEl.querySelectorAll('.slide');
+      slides[sliderIndex].classList.remove('active');
+      sliderIndex = (sliderIndex + 1) % slides.length;
+      slides[sliderIndex].classList.add('active');
+    }, 3500);
+  }
+}
+
+/* Start on defaults */
+startSlider(DEFAULT_IMAGES);
+
+/* Service card clicks — select/deselect + swap slider */
+var svcGroup = document.getElementById('svc-group');
+svcGroup.addEventListener('click', function(e) {
+  var card = e.target.closest('.svc-card');
+  if (!card) return;
+
+  var wasSelected = card.classList.contains('selected');
+
+  /* Deselect all cards first */
+  svcGroup.querySelectorAll('.svc-card').forEach(function(c) {
+    c.classList.remove('selected');
+  });
+
+  if (wasSelected) {
+    /* Clicking a selected card deselects it → back to defaults */
+    startSlider(DEFAULT_IMAGES);
+  } else {
+    /* Select the clicked card → show its images */
+    card.classList.add('selected');
+    var key  = card.getAttribute('data-val');
+    var imgs = CATEGORY_IMAGES[key];
+    startSlider(imgs && imgs.length ? imgs : DEFAULT_IMAGES);
+  }
+});
+
+function submitForm() {
+  for (var i = 0; i < totalSteps; i++) {
+    var s = document.getElementById('step-' + i);
+    if (s) s.classList.remove('active');
+  }
+  document.getElementById('success').style.display = 'flex';
+  document.querySelector('.progress-row').style.display = 'none';
+  document.getElementById('panel-label').textContent = 'All done!';
+  document.getElementById('panel-title').innerHTML   = 'We\'ll be in <em>touch</em> soon.';
+}
+</script>
+</body>
+</html>
