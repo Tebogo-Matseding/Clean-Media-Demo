@@ -241,7 +241,35 @@ a { text-decoration: none; color: inherit; }
   margin: 0;
 }
 
-.nav-right { display: flex; align-items: center; }
+.nav-right { display: flex; align-items: center; gap: 18px; }
+
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  width: 26px;
+  height: 20px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-hamburger span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #1a1a1a;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+}
+
+.nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 100%; }
+.nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 100%; }
 
 .btn-book {
   font-family: 'Inter', sans-serif;
@@ -265,9 +293,62 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 768px) {
-  .nav { padding: 18px 20px; flex-wrap: wrap; gap: 14px; }
-  .nav-tabs { gap: 16px; order: 3; width: 100%; justify-content: center; }
-  .nav-tab { font-size: 0.62rem; }
+  .nav { padding: 18px 20px; flex-wrap: nowrap; }
+  .nav-hamburger { display: flex; }
+
+  .nav-tabs {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    background: #fff;
+    transition: max-height 0.35s ease, opacity 0.3s ease;
+    z-index: 999;
+  }
+  .nav-tabs.is-open {
+    max-height: calc(100vh - 60px);
+    opacity: 1;
+    visibility: visible;
+    overflow-y: auto;
+    padding: 10px 24px 28px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+  }
+  .nav-tab { font-size: 0.72rem; width: 100%; padding: 16px 0; border-bottom: 1px solid rgba(10,10,10,0.08); }
+
+  .nav-dropdown-wrap { width: 100%; flex-direction: column; align-items: stretch; }
+  .nav-dropdown-trigger { width: 100%; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(10,10,10,0.08); }
+  .nav-trigger-label { padding: 0; border: none; text-align: left; }
+
+  .nav-dropdown {
+    position: static !important;
+    top: auto !important; left: auto !important; transform: none !important;
+    width: 100% !important; height: auto !important;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: none;
+    box-shadow: none;
+    border-radius: 0;
+    background: transparent;
+    transition: max-height 0.3s ease;
+  }
+  .nav-dropdown-wrap.is-open .nav-dropdown {
+    max-height: 600px;
+    pointer-events: auto;
+    margin-bottom: 4px;
+  }
+  .nav-dropdown-inner { display: block; }
+  .nav-dropdown-preview { display: none; }
+  .nav-dropdown-links { grid-template-columns: 1fr; align-content: start; padding: 4px 0 12px; gap: 0; }
+  .nav-dropdown-item { padding: 10px 4px; white-space: normal; color: rgba(10,10,10,0.72); }
+
   .btn-book { font-size: 0.6rem; padding: 7px 16px; }
   .nav-logo img { height: 48px; }
 }
@@ -549,7 +630,7 @@ a { text-decoration: none; color: inherit; }
     <a href="index.html"><img src="images/nav-logo.png" alt="Clean Media Pictures" /></a>
   </div>
 
-  <div class="nav-tabs">
+  <div class="nav-tabs" id="navTabs">
     <a href="index.html#about" class="nav-tab">About Studio</a>
 
     <!-- Portfolio dropdown -->
@@ -590,7 +671,11 @@ a { text-decoration: none; color: inherit; }
     <a href="index.html#faqs"         class="nav-tab">FAQs</a>
   </div>
 
-  <div class="nav-right"></div>
+  <div class="nav-right">
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navTabs">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- ════ PAGE ════ -->
@@ -1002,6 +1087,59 @@ function submitForm() {
   document.getElementById('panel-label').textContent = 'All done!';
   document.getElementById('panel-title').innerHTML   = 'We\'ll be in <em>touch</em> soon.';
 }
+</script>
+
+<script>
+/* ════ MOBILE HAMBURGER NAV ════ */
+(function () {
+  var hamburger = document.getElementById('navHamburger');
+  var navTabs   = document.getElementById('navTabs');
+  var nav       = document.querySelector('.nav');
+  if (!hamburger || !navTabs) return;
+
+  function positionPanel() {
+    if (nav) navTabs.style.top = nav.getBoundingClientRect().bottom + 'px';
+  }
+
+  function closeMenu() {
+    navTabs.classList.remove('is-open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.nav-dropdown-wrap.is-open').forEach(function (w) {
+      w.classList.remove('is-open');
+      var t = w.querySelector('.nav-dropdown-trigger');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var isOpen = navTabs.classList.toggle('is-open');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    if (isOpen) { positionPanel(); } else { closeMenu(); }
+  });
+
+  navTabs.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (navTabs.classList.contains('is-open') &&
+        !navTabs.contains(e.target) &&
+        e.target !== hamburger &&
+        !hamburger.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) { closeMenu(); }
+    else if (navTabs.classList.contains('is-open')) { positionPanel(); }
+  });
+})();
 </script>
 </body>
 </html>

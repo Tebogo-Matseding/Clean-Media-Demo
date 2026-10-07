@@ -200,18 +200,37 @@
     .nav-dropdown-inner {
       display: grid;
       grid-template-columns: 1fr 230px;
-      grid-template-rows: 1fr;
+      grid-template-rows: minmax(0, 1fr);
       flex: 1;
       min-height: 0;
     }
 
-    /* LEFT: links — laid out as a 2-column grid, no divider border */
+    /* LEFT: links — laid out as a 2-column grid, no divider border (original design) */
     .nav-dropdown-links {
       padding: 28px 8px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      align-content: space-between;
+      align-content: space-evenly;   /* original used space-between; evenly looks better with only 2 rows */
       column-gap: 4px;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .nav-dd-group { display: block; }
+    .nav-dd-row { display: block; }
+    .nav-dd-row .nav-dd-parent { width: 100%; }
+
+    /* Desktop: sub-categories are shown as a slideshow in the image box, not as a list.
+       The markup stays in the page so tablet/mobile can expand it and so each
+       sub-category can be linked to its own page later. */
+    .nav-dd-toggle { display: none; }
+    .nav-dd-subs { display: none; }
+
+    /* Sub-category + third level (tablet / mobile only) */
+    .nav-dropdown-item.nav-dd-sub { padding-left: 30px; padding-top: 8px; padding-bottom: 8px; white-space: normal; }
+    .nav-dropdown-item.nav-dd-subsub {
+      padding-left: 48px; padding-top: 7px; padding-bottom: 7px;
+      font-size: 0.6rem; color: rgba(255,255,255,0.62);
     }
 
     .nav-dropdown-item {
@@ -283,7 +302,11 @@
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
+      opacity: 0;
+      transition: opacity 0.7s ease;
     }
+
+    .nav-dropdown-img-wrap img.nav-dd-img.is-shown { opacity: 1; }
 
     /* Bottom strip — kept as a spacer, no longer a different shade */
     .nav-dropdown-footer {
@@ -291,7 +314,29 @@
       margin: 0;
     }
 
-    .nav-right { display: flex; align-items: center; }
+    /* Desktop only: fewer categories, so the panel is larger */
+    @media (min-width: 1025px) {
+      .nav-dropdown { width: 960px; border-radius: 20px; }
+      .nav-dropdown-inner { grid-template-columns: 1fr 340px; }
+      .nav-dropdown-links { padding: 40px 16px; }
+      .nav-dropdown-item { font-size: 0.76rem; letter-spacing: 0.12em; padding: 15px 22px; gap: 14px; white-space: normal; }
+      .nav-dropdown-item:hover { padding-left: 26px; }
+      .nav-dropdown-item::before { height: 20px; }
+      .nav-dropdown-item:hover::before,
+      .nav-dropdown-item.is-active::before { height: 24px; }
+      .nav-dropdown-preview { padding: 18px; }
+      .nav-dropdown-img-wrap { border-radius: 12px; }
+    }
+
+    /* Logo shown in the preview box when no category is hovered */
+    .nav-dropdown-img-wrap img.nav-dd-img.is-logo {
+      object-fit: contain;
+      padding: 14%;
+      filter: brightness(0) invert(1);
+      background: rgba(0,0,0,0.22);
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 18px; }
 
     .btn-book {
       font-family: 'Inter', sans-serif;
@@ -313,6 +358,35 @@
       border-color: #c0000a;
       color: #fff;
     }
+
+    /* ── Hamburger (mobile nav toggle) ──────────────────────── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 6px;
+      width: 26px;
+      height: 20px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+    }
+
+    .nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 100%; }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 100%; }
 
     /* ── Headline ────────────────────────────────────────── */
     .hero-title {
@@ -363,10 +437,107 @@
       .nav-tabs { gap: 24px; }
     }
 
+    /* Tablet + phone: no hover slideshow; categories get a drop-down arrow for sub-categories */
+    @media (max-width: 1024px) {
+      .nav-dropdown { width: min(460px, calc(100vw - 48px)); height: auto !important; max-height: 72vh; }
+      .nav-dropdown-inner { display: block; overflow-y: auto; max-height: 72vh; }
+      .nav-dropdown-preview { display: none; }
+      .nav-dropdown-links { display: flex; flex-direction: column; overflow: visible; padding: 8px 12px 14px; gap: 0; }
+
+      .nav-dd-group { border-bottom: 1px solid rgba(255,255,255,0.16); }
+      .nav-dropdown-item.nav-dd-parent { font-size: 0.76rem; padding: 14px 10px; }
+      .nav-dropdown-item.nav-dd-parent::before { height: 16px; }
+
+      .nav-dd-toggle {
+        display: flex; align-items: center; justify-content: center;
+        width: 46px; height: 46px; flex-shrink: 0;
+        background: none; border: none; color: #fff; cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .nav-dd-toggle svg { width: 11px; height: 7px; transition: transform 0.25s ease; }
+      .nav-dd-group.is-expanded .nav-dd-toggle svg { transform: rotate(180deg); }
+
+      .nav-dd-subs {
+        display: flex; flex-direction: column;
+        max-height: 0; overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      .nav-dd-group.is-expanded .nav-dd-subs { max-height: 600px; padding-bottom: 8px; }
+
+      .nav-dropdown-item.nav-dd-cta { margin-top: 4px; border-top: none; padding: 16px 10px; }
+    }
+
     @media (max-width: 768px) {
-      .nav { padding: 18px 20px; flex-wrap: wrap; gap: 14px; }
-      .nav-tabs { gap: 16px; order: 3; width: 100%; justify-content: center; }
-      .nav-tab { font-size: 0.62rem; }
+      .nav { padding: 18px 20px; flex-wrap: nowrap; }
+      .nav-hamburger { display: flex; }
+
+      /* Nav links collapse into a full-width panel toggled by the hamburger */
+      .nav-tabs {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        background: rgba(10,10,10,0.98);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: max-height 0.35s ease, opacity 0.3s ease;
+        z-index: 999;
+      }
+      .nav-tabs.is-open {
+        max-height: calc(100vh - 60px);
+        opacity: 1;
+        visibility: visible;
+        overflow-y: auto;
+        padding: 10px 24px 28px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      }
+      .nav-tab { font-size: 0.72rem; width: 100%; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+      .nav-dropdown-wrap { width: 100%; flex-direction: column; align-items: stretch; }
+      .nav-dropdown-trigger { width: 100%; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      .nav-trigger-label { padding: 0; border: none; text-align: left; }
+
+      .nav-dropdown {
+        position: static !important;
+        top: auto !important; left: auto !important; transform: none !important;
+        width: 100% !important; height: auto !important;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: none;
+        box-shadow: none;
+        border-radius: 0;
+        background: transparent;
+        transition: max-height 0.3s ease;
+      }
+      .nav-dropdown-wrap.is-open .nav-dropdown {
+        max-height: 1100px;
+        pointer-events: auto;
+        margin-bottom: 4px;
+      }
+      .nav-dropdown-inner { display: block; overflow: visible; max-height: none; }
+      .nav-dropdown-preview { display: none; }
+      .nav-dropdown-links { padding: 4px 0 12px; }
+      .nav-dropdown-item { color: rgba(255,255,255,0.72); padding: 10px 4px; white-space: normal; }
+      .nav-dropdown-item.nav-dd-parent { color: #fff; padding: 12px 4px; font-size: 0.74rem; }
+      .nav-dropdown-item.nav-dd-sub { padding: 8px 4px 8px 18px; }
+      .nav-dropdown-item.nav-dd-subsub { padding: 7px 4px 7px 36px; }
+      .nav-dropdown-item.nav-dd-sub:hover,
+      .nav-dropdown-item.nav-dd-subsub:hover,
+      .nav-dropdown-item.nav-dd-parent:hover { padding-left: 4px; }
+      .nav-dropdown-item.nav-dd-sub:hover { padding-left: 18px; }
+      .nav-dropdown-item.nav-dd-subsub:hover { padding-left: 36px; }
+      .nav-dropdown-item.nav-dd-cta { padding: 14px 4px; color: #fff; }
+      .nav-dropdown-item.is-active { color: #c0000a; }
+      .nav-dropdown-item.is-active::before { background: #c0000a; }
+
       .btn-book { font-size: 0.6rem; padding: 7px 16px; }
       .nav-logo img { height: 95px; }
       .line-main { font-size: clamp(3rem, 16vw, 6rem); }
@@ -733,8 +904,8 @@
     }
 
     /* Alternating heights for visual rhythm */
-    .portfolio-card:nth-child(odd)  { height: 420px; }
-    .portfolio-card:nth-child(even) { height: 420px; }
+    .portfolio-card:nth-child(odd)  { height: 500px; }
+    .portfolio-card:nth-child(even) { height: 500px; }
 
     .portfolio-card-img {
       width: 100%;
@@ -750,13 +921,13 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.1) 55%, transparent 100%);
+        linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.52) 50%, rgba(0,0,0,0.06) 100%);
       transition: background 0.3s;
     }
 
     .portfolio-card:hover .portfolio-card-overlay {
       background:
-        linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.25) 55%, transparent 100%);
+        linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.62) 50%, rgba(0,0,0,0.12) 100%);
     }
 
     /* Red accent line that grows on hover */
@@ -842,17 +1013,72 @@
       border-color: #c0000a;
     }
 
+    /* Shoot types listed on each category card */
+    .portfolio-card-shoots {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: min-content;
+      align-content: start;
+      gap: 7px 18px;
+      margin: 14px 0 6px;
+      /* Same height on every card (room for 4 rows) so titles and links line up */
+      height: 96px;
+    }
+    /* A last item left alone on its row spans the full width (keeps long names on one line) */
+    .portfolio-card-shoots li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+    .portfolio-card-shoots li {
+      position: relative;
+      padding-left: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .portfolio-card-shoots li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.62em;
+      width: 7px; height: 1px;
+      background: #c0000a;
+    }
+
+    /* "Not what you're looking for?" block under the categories */
+    .portfolio-notfound { max-width: 560px; margin-left: auto; margin-right: auto; }
+
+    .portfolio-notfound-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+      letter-spacing: 0.06em;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .portfolio-notfound-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 26px;
+    }
+
     @media (max-width: 900px) {
       .portfolio { padding: 72px 24px 80px; }
+      .portfolio-card-shoots { height: 112px; }
       .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .portfolio-card:nth-child(odd)  { height: 340px; }
-      .portfolio-card:nth-child(even) { height: 340px; }
+      .portfolio-card:nth-child(odd)  { height: 470px; }
+      .portfolio-card:nth-child(even) { height: 470px; }
+      /* Three cards: let the odd one out span the full row */
+      .portfolio-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
     }
 
     @media (max-width: 540px) {
       .portfolio-grid { grid-template-columns: 1fr; }
       .portfolio-card:nth-child(odd),
-      .portfolio-card:nth-child(even) { height: 300px; }
+      .portfolio-card:nth-child(even) { height: 470px; }
     }
 
     /* ── Testimonials Carousel ───────────────────────────── */
@@ -1113,7 +1339,7 @@
         <a href="index.html"><img src="images/nav-logo.png" alt="Clean Media Pictures" /></a>
       </div>
 
-      <div class="nav-tabs">
+      <div class="nav-tabs" id="navTabs">
         <a href="#about"        class="nav-tab">About Studio</a>
 
         <!-- Portfolio dropdown -->
@@ -1128,21 +1354,69 @@
           <div class="nav-dropdown" id="portfolioDropdown" role="menu">
             <div class="nav-dropdown-inner">
 
-              <!-- LEFT: category links -->
-              <div class="nav-dropdown-links">
-                <a href="#portfolio" class="nav-dropdown-item" data-filter="professional" data-img="images/headshots.jpg">Corporate &amp; Headshots</a>
-                <a href="#portfolio" class="nav-dropdown-item" data-filter="commercial" data-img="images/product.jpg">Product Photography</a>
-                <a href="#portfolio" class="nav-dropdown-item" data-filter="creative" data-img="images/fashion.jpg">Editorial &amp; Fashion</a>
-                <a href="#portfolio" class="nav-dropdown-item" data-filter="lifestyle" data-img="images/events.jpg">Events &amp; Celebrations</a>
-                <a href="#portfolio" class="nav-dropdown-item" data-filter="motion" data-img="weddings/wedding1.webp">Video Production</a>
-                <a href="#portfolio" class="nav-dropdown-item" data-filter="personal" data-img="images/branding.jpg">Portraits &amp; Branding</a>
+              <!--
+                DESKTOP: only the 3 main categories are shown. Hovering one runs a slideshow of its
+                sub-category images in the preview box. Slide images are looked up automatically as
+                images/portfolio/<slug>.jpg (or .webp/.png/.jpeg) - slugs are listed in each
+                category's data-slides attribute. Missing images are skipped; if none exist the
+                category's data-img is shown instead.
+                TABLET/PHONE: the arrow next to each category expands the sub-category links below.
+                To link a sub-category to its own page later, change its href from "#portfolio"
+                to the page URL and remove data-sub-pending.
+              -->
+              <div class="nav-dropdown-links" id="navDdLinks">
+
+                <div class="nav-dd-group" data-group="corporate">
+                  <div class="nav-dd-row">
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-parent" data-filter="corporate" data-img="images/headshots.jpg" data-slides="professional-headshots|Professional Headshots">Corporate</a>
+                    <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                  </div>
+                  <div class="nav-dd-subs">
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="corporate" data-sub="professional-headshots" data-sub-pending>Professional Headshots</a>
+                  </div>
+                </div>
+
+                <div class="nav-dd-group" data-group="lifestyle">
+                  <div class="nav-dd-row">
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-parent" data-filter="lifestyle" data-img="images/branding.jpg" data-slides="maternity|Maternity,matric-farewell|Matric Farewell,graduation|Graduation,birthday|Birthday,outdoor-photography|Outdoor Photography,studio-photography|Studio Photography,housecall-birthday-photography|Housecall Birthday Photography">Lifestyle</a>
+                    <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Lifestyle sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                  </div>
+                  <div class="nav-dd-subs">
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="maternity" data-sub-pending>Maternity</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="matric-farewell" data-sub-pending>Matric Farewell</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="graduation" data-sub-pending>Graduation</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="birthday" data-sub-pending>Birthday</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="outdoor-photography" data-sub-pending>Outdoor Photography</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="studio-photography" data-sub-pending>Studio Photography</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="housecall-birthday-photography" data-sub-pending>Housecall Birthday Photography</a>
+                  </div>
+                </div>
+
+                <div class="nav-dd-group" data-group="events">
+                  <div class="nav-dd-row">
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-parent" data-filter="events" data-img="images/events.jpg" data-slides="weddings|Weddings,birthday-lunch|Birthday Lunch,birthday-dinner|Birthday Dinner,celebration|Celebration,party|Party">Events</a>
+                    <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                  </div>
+                  <div class="nav-dd-subs">
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="events" data-sub="weddings" data-sub-pending>Weddings</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="events" data-sub="functions" data-sub-pending>Functions</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-subsub" data-filter="events" data-sub="birthday-lunch" data-sub-pending>Birthday Lunch</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-subsub" data-filter="events" data-sub="birthday-dinner" data-sub-pending>Birthday Dinner</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-subsub" data-filter="events" data-sub="celebration" data-sub-pending>Celebration</a>
+                    <a href="#portfolio" class="nav-dropdown-item nav-dd-subsub" data-filter="events" data-sub="party" data-sub-pending>Party</a>
+                  </div>
+                </div>
+
+                <a href="booking.html" class="nav-dropdown-item nav-dd-cta" id="navDdCta" data-img="images/nav-logo.png" data-slides="custom-shoot|Not what you're looking for?">Not what you're looking for?</a>
+
               </div>
 
               <!-- RIGHT: image preview -->
               <div class="nav-dropdown-preview">
                 <div class="nav-dropdown-img-wrap" id="navDdImgWrap">
-                  <!-- Add your own image: set src below, e.g. src="images/portfolio-preview.jpg" -->
-                  <img class="nav-dd-img" id="navDdImg" src="images/nav-image.jpg" alt="Portfolio preview" />
+                  <!-- Two stacked images cross-fade for the slideshow. With nothing hovered, the logo (src below) is shown. -->
+                  <img class="nav-dd-img is-shown is-logo" id="navDdImg" src="images/nav-logo.png" alt="Clean Media Pictures" />
+                  <img class="nav-dd-img is-logo" id="navDdImgB" src="images/nav-logo.png" alt="" />
                 </div>
               </div>
 
@@ -1157,6 +1431,9 @@
 
       <div class="nav-right">
         <a href="booking.html" class="btn-book">Book a Session</a>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navTabs">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </nav>
 
@@ -1230,75 +1507,62 @@
 
     <div class="portfolio-grid">
 
-      <!-- Card 1: Corporate & Headshots -->
-      <a href="#portfolio" class="portfolio-card" data-category="professional">
-        <img class="portfolio-card-img" src="images/headshots.jpg" alt="Corporate & Headshots" />
+      <!-- Card 1: Corporate -->
+      <a href="#portfolio" class="portfolio-card" data-category="corporate">
+        <img class="portfolio-card-img" src="images/headshots.jpg" alt="Corporate" />
         <div class="portfolio-card-overlay"></div>
         <div class="portfolio-card-label">
-          <span class="portfolio-card-category">Professional</span>
-          <span class="portfolio-card-title">Corporate &amp; Headshots</span>
+          <span class="portfolio-card-title">Corporate</span>
+          <ul class="portfolio-card-shoots">
+            <li>Professional Headshots</li>
+          </ul>
           <span class="portfolio-card-arrow">View Gallery →</span>
         </div>
       </a>
 
-      <!-- Card 2: Product Photography -->
-      <a href="#portfolio" class="portfolio-card" data-category="commercial">
-        <img class="portfolio-card-img" src="images/product.jpg" alt="Product Photography" />
+      <!-- Card 2: Lifestyle -->
+      <a href="#portfolio" class="portfolio-card" data-category="lifestyle">
+        <img class="portfolio-card-img" src="images/branding.jpg" alt="Lifestyle" />
         <div class="portfolio-card-overlay"></div>
         <div class="portfolio-card-label">
-          <span class="portfolio-card-category">Commercial</span>
-          <span class="portfolio-card-title">Product Photography</span>
+          <span class="portfolio-card-title">Lifestyle</span>
+          <ul class="portfolio-card-shoots">
+            <li>Maternity</li>
+            <li>Matric Farewell</li>
+            <li>Graduation</li>
+            <li>Birthday</li>
+            <li>Outdoor Photography</li>
+            <li>Studio Photography</li>
+            <li>Housecall Birthday Photography</li>
+          </ul>
           <span class="portfolio-card-arrow">View Gallery →</span>
         </div>
       </a>
 
-      <!-- Card 3: Editorial & Fashion -->
-      <a href="#portfolio" class="portfolio-card" data-category="creative">
-        <img class="portfolio-card-img" src="images/fashion.jpg" alt="Editorial & Fashion" />
+      <!-- Card 3: Events -->
+      <a href="#portfolio" class="portfolio-card" data-category="events">
+        <img class="portfolio-card-img" src="images/events.jpg" alt="Events" />
         <div class="portfolio-card-overlay"></div>
         <div class="portfolio-card-label">
-          <span class="portfolio-card-category">Creative</span>
-          <span class="portfolio-card-title">Editorial &amp; Fashion</span>
-          <span class="portfolio-card-arrow">View Gallery →</span>
-        </div>
-      </a>
-
-      <!-- Card 4: Events & Celebrations -->
-      <a href="events-celebrations.html" class="portfolio-card" data-category="lifestyle">
-        <img class="portfolio-card-img" src="images/events.jpg" alt="Events & Celebrations" />
-        <div class="portfolio-card-overlay"></div>
-        <div class="portfolio-card-label">
-          <span class="portfolio-card-category">Lifestyle</span>
-          <span class="portfolio-card-title">Events &amp; Celebrations</span>
-          <span class="portfolio-card-arrow">View Gallery →</span>
-        </div>
-      </a>
-
-      <!-- Card 5: Video Production -->
-      <a href="#portfolio" class="portfolio-card" data-category="motion">
-        <img class="portfolio-card-img" src="weddings/wedding1.webp" alt="Video Production" />
-        <div class="portfolio-card-overlay"></div>
-        <div class="portfolio-card-label">
-          <span class="portfolio-card-category">Motion</span>
-          <span class="portfolio-card-title">Video Production</span>
-          <span class="portfolio-card-arrow">View Gallery →</span>
-        </div>
-      </a>
-
-      <!-- Card 6: Portraits -->
-      <a href="#portfolio" class="portfolio-card" data-category="personal">
-        <img class="portfolio-card-img" src="images/branding.jpg" alt="Portraits & Branding" />
-        <div class="portfolio-card-overlay"></div>
-        <div class="portfolio-card-label">
-          <span class="portfolio-card-category">Personal</span>
-          <span class="portfolio-card-title">Portraits &amp; Branding</span>
+          <span class="portfolio-card-title">Events</span>
+          <ul class="portfolio-card-shoots">
+            <li>Weddings</li>
+            <li>Birthday Lunches</li>
+            <li>Birthday Dinners</li>
+            <li>Celebrations</li>
+            <li>Parties</li>
+          </ul>
           <span class="portfolio-card-arrow">View Gallery →</span>
         </div>
       </a>
 
     </div>
 
-
+    <div class="portfolio-cta portfolio-notfound">
+      <p class="portfolio-notfound-title">Not what you're looking for?</p>
+      <p class="portfolio-notfound-text">Have a different kind of shoot in mind? Book a session and describe the photography you want &mdash; we'll take it from there.</p>
+      <a href="booking.html" class="btn-portfolio">Book a Session</a>
+    </div>
 
   </section>
 
@@ -1580,7 +1844,7 @@
     })();
   </script>
   <script>
-    /* ── Portfolio nav mega-dropdown filter ── */
+    /* ── Portfolio nav dropdown: filter + desktop hover slideshow + tablet/phone accordion ── */
     (function () {
       const btn      = document.getElementById('portfolioDropdownBtn');
       const dropdown = document.getElementById('portfolioDropdown');
@@ -1590,28 +1854,138 @@
       if (!btn || !wrap || !dropdown) return;
 
       const heroTitle = document.querySelector('.hero-title');
+      const TABLET_MAX = 1024;                       // must match the CSS breakpoint
+      const isDesktop = () => window.innerWidth > TABLET_MAX;
 
+      /* ---------- positioning ---------- */
       function positionDropdown() {
         const rect = btn.getBoundingClientRect();
         const top  = rect.bottom + 16;
-        // Horizontal centering handled by CSS (left: 50% + translateX(-50%))
         dropdown.style.top = top + 'px';
 
-        // Stretch the panel taller, stopping just above the "Clean Media" title
+        if (!isDesktop()) { dropdown.style.height = ''; return; }
+        // Desktop: stretch the panel, stopping just above the "Clean Media" title
         if (heroTitle) {
           const titleRect = heroTitle.getBoundingClientRect();
-          const available = titleRect.top - top - 28; // 28px breathing room above the title
-          const maxH = 560;  // never look absurdly oversized on tall screens
-          const safeFloor = Math.min(180, available); // never forces overlap on short viewports
+          const available = titleRect.top - top - 28;
+          const maxH = 620;
+          const safeFloor = Math.min(180, available);
           dropdown.style.height = Math.max(safeFloor, Math.min(available, maxH)) + 'px';
         }
       }
 
+      /* ---------- desktop slideshow ---------- */
+      const SLIDE_DIR  = 'images/portfolio/';        // put sub-category images here, named <slug>.jpg
+      const SLIDE_EXTS = ['jpg', 'webp', 'png', 'jpeg'];
+      const SLIDE_MS   = 1800;
+
+      const ddImgs  = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
+      const caption = document.getElementById('navDdCaption');
+      const linksEl = document.getElementById('navDdLinks');
+      const defaultSrc = ddImgs[0] ? ddImgs[0].getAttribute('src') : '';
+      let active = 0, timer = null, runId = 0;
+      const resolved = {};
+
+      function resolveSlide(slug) {
+        if (resolved[slug]) return resolved[slug];
+        resolved[slug] = new Promise(function (resolve) {
+          let i = 0;
+          (function next() {
+            if (i >= SLIDE_EXTS.length) return resolve(null);
+            const url = SLIDE_DIR + slug + '.' + SLIDE_EXTS[i++];
+            const im = new Image();
+            im.onload = function () { resolve(url); };
+            im.onerror = next;
+            im.src = url;
+          })();
+        });
+        return resolved[slug];
+      }
+
+      function parseSlides(item) {
+        return (item.dataset.slides || '').split(',').map(function (t) {
+          const parts = t.trim().split('|');
+          return { slug: parts[0], label: parts[1] || '' };
+        }).filter(function (d) { return d.slug; });
+      }
+
+      const LOGO_SRC = defaultSrc;
+
+      function show(src, label) {
+        if (!ddImgs[0] || !ddImgs[1]) return;
+        const next = ddImgs[1 - active], cur = ddImgs[active];
+        if (cur.getAttribute('src') !== src) {
+          next.src = src;
+          next.classList.toggle('is-logo', src === LOGO_SRC);
+          next.classList.add('is-shown');
+          cur.classList.remove('is-shown');
+          active = 1 - active;
+        }
+        if (caption) {
+          caption.textContent = label || '';
+          caption.classList.toggle('is-visible', !!label);
+        }
+      }
+
+      function stopSlideshow() {
+        runId++;
+        if (timer) { clearInterval(timer); timer = null; }
+      }
+
+      function resetPreview() {
+        stopSlideshow();
+        show(defaultSrc, '');
+      }
+
+      async function startSlideshow(item) {
+        if (!isDesktop()) return;
+        stopSlideshow();
+        const id = runId;
+        const defs = parseSlides(item);
+        show(item.dataset.img || defaultSrc, item.textContent.trim());   // instant feedback
+        const urls = await Promise.all(defs.map(function (d) { return resolveSlide(d.slug); }));
+        if (id !== runId) return;
+        const slides = defs.map(function (d, i) { return { src: urls[i], label: d.label }; })
+                           .filter(function (sl) { return sl.src; });
+        if (!slides.length) return;                                       // no images yet → keep fallback
+        let n = 0;
+        show(slides[0].src, slides[0].label);
+        if (slides.length > 1) {
+          timer = setInterval(function () {
+            n = (n + 1) % slides.length;
+            show(slides[n].src, slides[n].label);
+          }, SLIDE_MS);
+        }
+      }
+
+      function preloadAll() {
+        items.forEach(function (it) { parseSlides(it).forEach(function (d) { resolveSlide(d.slug); }); });
+      }
+
+      document.querySelectorAll('.nav-dd-parent').forEach(function (it) {
+        it.addEventListener('mouseenter', function () { startSlideshow(this); });
+        it.addEventListener('focus',      function () { startSlideshow(this); });
+      });
+
+      // "Not what you're looking for?" has its own image too: images/portfolio/custom-shoot.jpg
+      // (falls back to the logo until that file exists).
+      const cta = document.getElementById('navDdCta');
+      if (cta) {
+        cta.addEventListener('mouseenter', function () { startSlideshow(cta); });
+        cta.addEventListener('focus',      function () { startSlideshow(cta); });
+      }
+      if (linksEl) linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
+
+      /* ---------- open / close ---------- */
+      function closeDropdown() {
+        wrap.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        resetPreview();
+      }
+
       const label = btn.querySelector('.nav-trigger-label');
       if (label) {
-        label.addEventListener('click', function (e) {
-          e.stopPropagation();
-        });
+        label.addEventListener('click', function (e) { e.stopPropagation(); });
       }
 
       btn.addEventListener('click', function (e) {
@@ -1619,40 +1993,99 @@
         e.stopPropagation();
         const isOpen = wrap.classList.toggle('is-open');
         btn.setAttribute('aria-expanded', isOpen);
-        if (isOpen) positionDropdown();
+        if (isOpen) { positionDropdown(); if (isDesktop()) preloadAll(); } else { resetPreview(); }
       });
 
-      window.addEventListener('resize', () => { if (wrap.classList.contains('is-open')) positionDropdown(); });
-      window.addEventListener('scroll', () => { if (wrap.classList.contains('is-open')) positionDropdown(); }, true);
+      window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });
+      window.addEventListener('scroll', function () { if (wrap.classList.contains('is-open')) positionDropdown(); }, true);
 
       document.addEventListener('click', function (e) {
-        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) {
-          wrap.classList.remove('is-open');
-          btn.setAttribute('aria-expanded', 'false');
-        }
+        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
       });
 
-      function filterCards(chosen) {
-        cards.forEach(card => {
+      /* ---------- tablet / phone: expand sub-categories ---------- */
+      document.querySelectorAll('.nav-dd-toggle').forEach(function (t) {
+        t.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const group = t.closest('.nav-dd-group');
+          const open = group.classList.toggle('is-expanded');
+          t.setAttribute('aria-expanded', open);
+        });
+      });
+
+      /* ---------- category filter ---------- */
+      function filterCards(chosen, activeEl) {
+        cards.forEach(function (card) {
           card.classList.toggle('is-hidden', card.dataset.category !== chosen);
         });
-        items.forEach(el => el.classList.toggle('is-active', el.dataset.filter === chosen));
+        items.forEach(function (el) {
+          const isParentOfChoice = el.classList.contains('nav-dd-parent') && el.dataset.filter === chosen;
+          el.classList.toggle('is-active', el === activeEl || isParentOfChoice);
+        });
       }
 
-      const ddImg = document.getElementById('navDdImg');
-
-      items.forEach(item => {
+      items.forEach(function (item) {
         item.addEventListener('click', function (e) {
           e.preventDefault();
           e.stopPropagation();
-          filterCards(this.dataset.filter);
+          filterCards(this.dataset.filter, this);
           document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });
-          // dropdown stays open
+          if (!isDesktop()) closeDropdown();       // desktop panel stays open, as before
         });
+      });
+    })();
+  </script>
 
-        item.addEventListener('mouseenter', function () {
-          if (ddImg && this.dataset.img) ddImg.src = this.dataset.img;
+  <script>
+    /* ── Mobile hamburger nav ── */
+    (function () {
+      var hamburger = document.getElementById('navHamburger');
+      var navTabs   = document.getElementById('navTabs');
+      var nav       = document.querySelector('.nav');
+      if (!hamburger || !navTabs) return;
+
+      function positionPanel() {
+        if (nav) navTabs.style.top = nav.getBoundingClientRect().bottom + 'px';
+      }
+
+      function closeMenu() {
+        navTabs.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.querySelectorAll('.nav-dropdown-wrap.is-open').forEach(function (w) {
+          w.classList.remove('is-open');
+          var t = w.querySelector('.nav-dropdown-trigger');
+          if (t) t.setAttribute('aria-expanded', 'false');
         });
+      }
+
+      hamburger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = navTabs.classList.toggle('is-open');
+        hamburger.setAttribute('aria-expanded', isOpen);
+        if (isOpen) { positionPanel(); } else { closeMenu(); }
+      });
+
+      navTabs.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeMenu);
+      });
+
+      document.addEventListener('click', function (e) {
+        if (navTabs.classList.contains('is-open') &&
+            !navTabs.contains(e.target) &&
+            e.target !== hamburger &&
+            !hamburger.contains(e.target)) {
+          closeMenu();
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) { closeMenu(); }
+        else if (navTabs.classList.contains('is-open')) { positionPanel(); }
       });
     })();
   </script>

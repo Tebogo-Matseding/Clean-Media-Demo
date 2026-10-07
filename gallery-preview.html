@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery Preview | Clean Media Pictures</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #fff;
+      color: #111;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Top bar ── */
+    .topbar {
+      position: relative;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 40px;
+      background: #fff;
+    }
+    .topbar-logo img { height: 95px; width: auto; display: block; object-fit: contain; }
+    .topbar-tabs { display: flex; align-items: center; gap: 40px; }
+    .topbar-tab {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #111; opacity: 0.82; transition: opacity 0.2s; position: relative;
+    }
+    .topbar-tab::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+      background: #c0000a; transition: width 0.28s ease;
+    }
+    .topbar-tab:hover { opacity: 1; }
+    .topbar-tab:hover::after { width: 100%; }
+    .btn-book {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #111; border: 1px solid rgba(0,0,0,0.5); border-radius: 100px;
+      padding: 9px 22px; transition: background 0.25s, border-color 0.25s, color 0.25s; white-space: nowrap;
+    }
+    .btn-book:hover { background: #c0000a; border-color: #c0000a; color: #fff; }
+
+    /* ── Header ── */
+    .page-head {
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
+      min-height: 320px; padding: 40px 40px 40px; text-align: left;
+    }
+    .page-head > * { position: relative; z-index: 1; }
+    .page-intro {
+      font-family: 'Cormorant Garamond', serif; font-weight: 400;
+      font-size: clamp(1.1rem, 1.5vw, 1.3rem); line-height: 1.7;
+      color: rgba(0,0,0,0.7); max-width: 620px;
+      margin-top: 22px; padding-left: 20px; border-left: 2px solid #c0000a;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif; font-weight: 400;
+      font-size: clamp(3.4rem, 9vw, 7.5rem); letter-spacing: 0.06em; line-height: 0.95;
+    }
+
+    /* ── Sub-category blocks ── */
+    .subs { max-width: 1240px; margin: 0 auto; padding: 56px 40px 40px; }
+
+    .sub {
+      display: grid; grid-template-columns: 340px 1fr; gap: 56px; align-items: center;
+      padding: 64px 0; border-top: 1px solid rgba(192,0,10,0.2);
+      scroll-margin-top: 90px;
+    }
+    .sub:first-child { border-top: none; }
+    .sub:nth-child(even) { grid-template-columns: 1fr 340px; }
+    .sub:nth-child(even) .sub-info { order: 2; }
+
+    .sub-name {
+      font-family: 'Bebas Neue', sans-serif; font-weight: 400;
+      font-size: clamp(2.2rem, 4vw, 3.4rem); letter-spacing: 0.05em; line-height: 1; margin: 0 0 14px;
+    }
+    .sub-name::before {
+      content: ''; display: block; width: 36px; height: 2px; background: #c0000a; margin-bottom: 16px;
+    }
+    .sub-desc {
+      font-family: 'Cormorant Garamond', serif; font-weight: 400;
+      font-size: 1.2rem; line-height: 1.65; color: rgba(0,0,0,0.65); margin-bottom: 26px;
+    }
+    .sub-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #111; border: 1px solid rgba(0,0,0,0.35); border-radius: 100px; padding: 13px 28px;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+    }
+    .sub-link span { transition: transform 0.2s, color 0.2s; color: #c0000a; }
+    .sub-link:hover span { color: #fff; }
+    .sub-link:hover { background: #c0000a; border-color: #c0000a; color: #fff; }
+    .sub-link:hover span { transform: translateX(4px); }
+
+    /* Mosaic: 1 large + 3 small (or fewer) */
+    .mosaic {
+      display: grid; gap: 12px; height: 460px;
+      grid-template-columns: 1.5fr 1fr;
+      grid-template-rows: repeat(3, 1fr);
+    }
+    .mosaic .shot:first-child { grid-row: 1 / -1; }
+    .mosaic.n-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+    .mosaic.n-2 { grid-template-rows: 1fr; }
+    .mosaic.n-3 { grid-template-rows: repeat(2, 1fr); }
+
+    .shot {
+      position: relative; overflow: hidden; border-radius: 4px; display: block;
+      background: #eee;
+    }
+    .shot img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: brightness(0.88);
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s;
+    }
+    .shot:hover img { transform: scale(1.05); filter: brightness(1); }
+    .shot::after {
+      content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 3px;
+      background: #c0000a; transition: width 0.35s ease;
+    }
+    .shot:hover::after { width: 100%; }
+
+    /* "More" tile on the last shot */
+    .shot-more {
+      color: #fff;
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      background: rgba(10,10,10,0.55); transition: background 0.3s;
+    }
+    .shot:hover .shot-more { background: rgba(192,0,10,0.72); }
+    .shot-more b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.9rem; letter-spacing: 0.08em; }
+    .shot-more small { font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+
+    /* ── Bottom CTA ── */
+    .cta { text-align: center; padding: 72px 24px 96px; border-top: 1px solid rgba(0,0,0,0.1); }
+    .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 3.6vw, 2.8rem); letter-spacing: 0.06em; margin-bottom: 12px; }
+    .cta-text { font-size: 0.85rem; line-height: 1.65; color: rgba(0,0,0,0.6); max-width: 520px; margin: 0 auto 26px; }
+
+    /* ── Footer ── */
+    .foot { background: #f6f6f6; border-top: 3px solid #c0000a; padding: 28px 40px; text-align: center; }
+    .foot p { font-size: 0.72rem; color: rgba(0,0,0,0.45); }
+
+    /* Entrance */
+    .sub { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .sub.in { opacity: 1; transform: none; }
+
+    @media (max-width: 960px) {
+      .topbar { padding: 18px 20px; }
+      .topbar-logo img { height: 70px; }
+      .topbar-tabs { display: none; }
+      .page-head { padding: 32px 20px 24px; min-height: 220px; }
+      .subs { padding: 32px 20px 20px; }
+      .sub, .sub:nth-child(even) { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+      .sub:nth-child(even) .sub-info { order: 0; }
+      .mosaic { height: 380px; }
+    }
+    @media (max-width: 560px) {
+      .page-head { min-height: 180px; }
+      .mosaic { height: 320px; gap: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sub { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="index.html" class="topbar-logo"><img src="images/nav-logo.png" alt="Clean Media Pictures" /></a>
+    <nav class="topbar-tabs">
+      <a href="index.html#about" class="topbar-tab">About Studio</a>
+      <a href="index.html#portfolio" class="topbar-tab">Portfolio</a>
+      <a href="index.html#testimonials" class="topbar-tab">Testimonials</a>
+      <a href="index.html#faqs" class="topbar-tab">FAQs</a>
+    </nav>
+    <a href="booking.html" class="btn-book">Book a Session</a>
+  </header>
+
+  <section class="page-head">
+    <h1 class="page-title" id="pageTitle">Lifestyle</h1>
+    <p class="page-intro" id="pageIntro"></p>
+  </section>
+
+  <main class="subs" id="subs"></main>
+
+  <section class="cta">
+    <p class="cta-title">Not what you're looking for?</p>
+    <p class="cta-text">Have a different kind of shoot in mind? Book a session and describe the photography you want &mdash; we'll take it from there.</p>
+    <a href="booking.html" class="btn-book">Book a Session</a>
+  </section>
+
+  <footer class="foot"><p>&copy; 2025 Clean Media Pictures. All rights reserved.</p></footer>
+
+  <script>
+    /* ════════════════════════════════════════════════════════════
+       CONFIG — edit this block only.
+
+       Images: for each sub-category, drop files named
+         images/portfolio/<slug>-1.jpg, <slug>-2.jpg, <slug>-3.jpg, <slug>-4.jpg
+       Image 1 is shown large; 2-4 are the small tiles. Fewer files = fewer tiles.
+       To use different files, add  images: ['path/a.jpg', 'path/b.jpg', ...]  to a sub.
+
+       Links: each sub-category links to galleryUrl(slug). Change that one
+       function when you build the individual gallery pages, e.g.
+         const galleryUrl = slug => 'gallery-' + slug + '.html';
+       ════════════════════════════════════════════════════════════ */
+    const IMG_DIR  = 'images/portfolio/';
+    const IMG_EXT  = 'jpg';
+    const IMG_COUNT = 4;
+    const galleryUrl = slug => 'gallery.html?sub=' + slug;
+
+    const CATEGORIES = {
+      corporate: {
+        title: 'Corporate',
+        intro: 'From executive headshots to full brand campaigns, we craft imagery that positions your business with confidence and clarity. Every frame is intentional \u2014 built to communicate professionalism, trust, and vision.',
+        subs: [
+          { slug: 'professional-headshots', name: 'Professional Headshots',
+            desc: 'Sharp, flattering portraits for LinkedIn, company websites and press kits.' }
+        ]
+      },
+      lifestyle: {
+        title: 'Lifestyle',
+        intro: 'From the glow of maternity to the pride of graduation day, we photograph the milestones that shape your story. Every frame is intentional \u2014 guided by natural light, honest emotion, and a deep respect for the moment.',
+        subs: [
+          { slug: 'maternity', name: 'Maternity',
+            desc: 'Soft, timeless portraits that celebrate this chapter of your story.' },
+          { slug: 'matric-farewell', name: 'Matric Farewell',
+            desc: 'Glamorous portraits to mark the end of school, from outfit to final frame.' },
+          { slug: 'graduation', name: 'Graduation',
+            desc: 'Cap-and-gown portraits that capture years of hard work in a single image.' },
+          { slug: 'birthday', name: 'Birthday',
+            desc: 'Playful, personality-filled shoots for the birthday that deserves more than a phone snap.' },
+          { slug: 'outdoor-photography', name: 'Outdoor Photography',
+            desc: 'Natural light, open spaces and relaxed, candid energy.' },
+          { slug: 'studio-photography', name: 'Studio Photography',
+            desc: 'Controlled lighting and clean backdrops for striking, editorial results.' },
+          { slug: 'housecall-birthday-photography', name: 'Housecall Birthday Photography',
+            desc: 'We bring the studio to you and photograph the celebration at home.' }
+        ]
+      },
+      events: {
+        title: 'Events',
+        intro: 'From intimate dinners to full-scale weddings, we capture the energy of the day and the moments you will want to relive. Every frame is intentional \u2014 discreet, atmospheric, and true to the occasion.',
+        subs: [
+          { slug: 'weddings', name: 'Weddings',
+            desc: 'From quiet preparations to the final send-off, told as one cohesive story.' },
+          { slug: 'functions', name: 'Functions',
+            desc: 'Corporate and private functions covered discreetly and professionally.' },
+          { slug: 'birthday-lunch', name: 'Birthday Lunches',
+            desc: 'Relaxed daytime celebrations, from table details to candid laughter.' },
+          { slug: 'birthday-dinner', name: 'Birthday Dinners',
+            desc: 'Warm, moody evening coverage that does justice to the occasion.' },
+          { slug: 'celebration', name: 'Celebrations',
+            desc: 'Engagements, anniversaries, baby showers and everything worth toasting.' },
+          { slug: 'party', name: 'Parties',
+            desc: 'High-energy coverage that keeps up with the night.' }
+        ]
+      }
+    };
+
+    /* ════════════════ Rendering ════════════════ */
+    (function () {
+      const params = new URLSearchParams(location.search);
+      let key = (params.get('category') || 'lifestyle').toLowerCase();
+      if (!CATEGORIES[key]) key = 'lifestyle';
+      const cat = CATEGORIES[key];
+
+      document.title = cat.title + ' Gallery | Clean Media Pictures';
+      document.getElementById('pageTitle').textContent = cat.title;
+      document.getElementById('pageIntro').textContent = cat.intro;
+
+      // Sub-category blocks
+      const root = document.getElementById('subs');
+      cat.subs.forEach(function (s, i) {
+        const url = galleryUrl(s.slug);
+        const files = s.images || Array.from({ length: IMG_COUNT }, function (_, n) {
+          return IMG_DIR + s.slug + '-' + (n + 1) + '.' + IMG_EXT;
+        });
+
+        const sec = document.createElement('section');
+        sec.className = 'sub';
+        sec.id = s.slug;
+
+        const info = document.createElement('div');
+        info.className = 'sub-info';
+        info.innerHTML =
+          '<h2 class="sub-name"></h2>' +
+          '<p class="sub-desc"></p>' +
+          '<a class="sub-link" href="' + url + '">View ' + 'Gallery' + ' <span>&rarr;</span></a>';
+        info.querySelector('.sub-name').textContent = s.name;
+        info.querySelector('.sub-desc').textContent = s.desc;
+        info.querySelector('.sub-link').setAttribute('aria-label', 'View the ' + s.name + ' gallery');
+
+        const mosaic = document.createElement('div');
+        mosaic.className = 'mosaic';
+        sec.appendChild(info);
+        sec.appendChild(mosaic);
+        root.appendChild(sec);
+
+        // Image boxes are always shown; a missing image just leaves a plain empty box
+        const tiles = files.slice(0, 4);
+        tiles.forEach(function (f, n) {
+          const a = document.createElement('a');
+          a.className = 'shot';
+          a.href = url;
+          a.setAttribute('aria-label', s.name + ' preview ' + (n + 1));
+          const img = new Image();
+          img.loading = 'lazy';
+          img.alt = '';
+          img.onerror = function () { img.style.display = 'none'; };
+          img.src = f;
+          a.appendChild(img);
+          if (n === tiles.length - 1 && tiles.length > 1) {
+            const more = document.createElement('div');
+            more.className = 'shot-more';
+            more.innerHTML = '<b>View All</b><small>' + s.name + '</small>';
+            a.appendChild(more);
+          }
+          mosaic.appendChild(a);
+        });
+        mosaic.classList.add('n-' + tiles.length);
+      });
+
+      // Fade-in on scroll
+      const blocks = document.querySelectorAll('.sub');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        blocks.forEach(function (b) { io.observe(b); });
+      } else {
+        blocks.forEach(function (b) { b.classList.add('in'); });
+      }
+    })();
+  </script>
+</body>
+</html>
