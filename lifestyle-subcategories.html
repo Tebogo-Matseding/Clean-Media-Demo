@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery Preview | Clean Media Pictures</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #fff;
+      color: #111;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Nav (same structure as index.html, dark text for the white page) ── */
+    .nav {
+      position: relative;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 40px;
+      background: #fff;
+    }
+    .nav-logo img { height: 95px; width: auto; display: block; object-fit: contain; }
+
+    .nav-tabs { display: flex; align-items: center; gap: 40px; }
+
+    .nav-tab, .nav-trigger-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #111; opacity: 0.82; transition: opacity 0.2s; position: relative;
+    }
+    .nav-tab::after, .nav-trigger-label::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+      background: #c0000a; transition: width 0.28s ease;
+    }
+    .nav-tab:hover, .nav-dropdown-trigger:hover .nav-trigger-label { opacity: 1; }
+    .nav-tab:hover::after, .nav-dropdown-trigger:hover .nav-trigger-label::after { width: 100%; }
+
+    /* Portfolio mega dropdown */
+    .nav-dropdown-wrap { position: relative; display: flex; align-items: center; }
+    .nav-dropdown-trigger {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: none; padding: 0; cursor: pointer; color: #111;
+    }
+    .nav-dropdown-chevron {
+      width: 9px; height: 6px; flex-shrink: 0; color: #111; opacity: 0.7;
+      transition: transform 0.25s ease, opacity 0.2s; display: block; margin-top: 1px;
+    }
+    .nav-dropdown-wrap.is-open .nav-dropdown-chevron { transform: rotate(180deg); opacity: 1; }
+
+    .nav-dropdown {
+      position: fixed;
+      left: 50% !important;
+      transform: translateX(-50%) translateY(-10px);
+      background: #c0000a;
+      border-radius: 18px;
+      padding: 0;
+      width: 760px;
+      display: flex; flex-direction: column;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.16,1,0.3,1), transform 0.28s cubic-bezier(0.16,1,0.3,1), visibility 0.28s;
+      z-index: 9999;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 8px 20px rgba(0,0,0,0.2), 0 24px 48px rgba(0,0,0,0.3), 0 48px 80px rgba(0,0,0,0.18);
+    }
+    .nav-dropdown-wrap.is-open .nav-dropdown {
+      opacity: 1; visibility: visible; pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown-inner {
+      display: grid; grid-template-columns: 1fr 230px; grid-template-rows: minmax(0, 1fr);
+      flex: 1; min-height: 0;
+    }
+    .nav-dropdown-links {
+      padding: 28px 8px; display: grid; grid-template-columns: 1fr 1fr;
+      align-content: space-evenly; column-gap: 4px; overflow-y: auto; min-height: 0;
+    }
+    .nav-dd-group, .nav-dd-row { display: block; }
+    .nav-dd-row .nav-dd-parent { width: 100%; }
+    .nav-dd-toggle, .nav-dd-subs { display: none; }
+
+    .nav-dropdown-item.nav-dd-sub { padding-left: 30px; padding-top: 8px; padding-bottom: 8px; white-space: normal; }
+
+    .nav-dropdown-item {
+      display: flex; align-items: center; gap: 12px;
+      font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.75); padding: 9px 16px;
+      transition: color 0.18s, background 0.18s, padding-left 0.18s;
+      white-space: nowrap;
+    }
+    .nav-dropdown-item::before {
+      content: ''; width: 1px; height: 14px; background: rgba(255,255,255,0.25);
+      flex-shrink: 0; transition: background 0.18s, height 0.18s; border-radius: 1px;
+    }
+    .nav-dropdown-item:hover { color: #fff; background: rgba(0,0,0,0.12); padding-left: 20px; }
+    .nav-dropdown-item:hover::before { background: #fff; height: 18px; }
+    .nav-dropdown-item.is-active { color: #fff; }
+    .nav-dropdown-item.is-active::before { background: #fff; height: 18px; }
+
+    .nav-dropdown-preview { display: flex; flex-direction: column; padding: 14px; }
+    .nav-dropdown-img-wrap {
+      flex: 1; border-radius: 10px; overflow: hidden; background: rgba(0,0,0,0.2);
+      position: relative; min-height: 0;
+    }
+    .nav-dropdown-img-wrap img.nav-dd-img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block; opacity: 0; transition: opacity 0.7s ease;
+    }
+    .nav-dropdown-img-wrap img.nav-dd-img.is-shown { opacity: 1; }
+    .nav-dropdown-img-wrap img.nav-dd-img.is-logo { object-fit: contain; padding: 14%; background: #fff; }
+    .nav-dropdown-footer { height: 3px; margin: 0; }
+
+    @media (min-width: 1025px) {
+      .nav-dropdown { width: 960px; border-radius: 20px; }
+      .nav-dropdown-inner { grid-template-columns: 1fr 340px; }
+      .nav-dropdown-links { padding: 40px 16px; }
+      .nav-dropdown-item { font-size: 0.76rem; letter-spacing: 0.12em; padding: 15px 22px; gap: 14px; white-space: normal; }
+      .nav-dropdown-item:hover { padding-left: 26px; }
+      .nav-dropdown-item::before { height: 20px; }
+      .nav-dropdown-item:hover::before, .nav-dropdown-item.is-active::before { height: 24px; }
+      .nav-dropdown-preview { padding: 18px; }
+      .nav-dropdown-img-wrap { border-radius: 12px; }
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 18px; }
+    .btn-book {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #111; border: 1px solid rgba(0,0,0,0.5); border-radius: 100px;
+      padding: 9px 22px; transition: background 0.25s, border-color 0.25s, color 0.25s; white-space: nowrap;
+    }
+    .btn-book:hover { background: #c0000a; border-color: #c0000a; color: #fff; }
+
+    .nav-hamburger {
+      display: none; flex-direction: column; justify-content: center; align-items: flex-end;
+      gap: 6px; width: 26px; height: 20px; background: none; border: none; padding: 0; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-hamburger span {
+      display: block; height: 2px; width: 100%; background: #111; border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+    }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    @media (max-width: 900px) { .nav-tabs { gap: 24px; } }
+
+    /* Tablet + phone: no hover slideshow; arrow expands sub-categories */
+    @media (max-width: 1024px) {
+      .nav-dropdown { width: min(460px, calc(100vw - 48px)); height: auto !important; max-height: 72vh; }
+      .nav-dropdown-inner { display: block; overflow-y: auto; max-height: 72vh; }
+      .nav-dropdown-preview { display: none; }
+      .nav-dropdown-links { display: flex; flex-direction: column; overflow: visible; padding: 8px 12px 14px; gap: 0; }
+      .nav-dd-group { border-bottom: 1px solid rgba(255,255,255,0.16); }
+      .nav-dropdown-item.nav-dd-parent { font-size: 0.76rem; padding: 14px 10px; }
+      .nav-dropdown-item.nav-dd-parent::before { height: 16px; }
+      .nav-dd-toggle {
+        display: flex; align-items: center; justify-content: center;
+        width: 46px; height: 46px; flex-shrink: 0;
+        background: none; border: none; color: #fff; cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .nav-dd-row { display: flex; align-items: center; }
+      .nav-dd-toggle svg { width: 11px; height: 7px; transition: transform 0.25s ease; }
+      .nav-dd-group.is-expanded .nav-dd-toggle svg { transform: rotate(180deg); }
+      .nav-dd-subs { display: flex; flex-direction: column; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+      .nav-dd-group.is-expanded .nav-dd-subs { max-height: 600px; padding-bottom: 8px; }
+      .nav-dropdown-item.nav-dd-cta { margin-top: 4px; padding: 16px 10px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 18px 20px; flex-wrap: nowrap; }
+      .nav-logo img { height: 70px; }
+      .nav-hamburger { display: flex; }
+
+      .nav-tabs {
+        position: fixed; top: 0; left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 0; width: 100%;
+        max-height: 0; overflow: hidden; opacity: 0; visibility: hidden;
+        background: rgba(255,255,255,0.98);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        transition: max-height 0.35s ease, opacity 0.3s ease;
+        z-index: 999;
+      }
+      .nav-tabs.is-open {
+        max-height: calc(100vh - 60px); opacity: 1; visibility: visible; overflow-y: auto;
+        padding: 10px 24px 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      }
+      .nav-tab { width: 100%; padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+
+      .nav-dropdown-wrap { width: 100%; flex-direction: column; align-items: stretch; }
+      .nav-dropdown-trigger { width: 100%; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+      .nav-trigger-label { padding: 0; }
+
+      .nav-dropdown {
+        position: static !important; top: auto !important; left: auto !important; transform: none !important;
+        width: 100% !important; height: auto !important; max-height: 0; overflow: hidden;
+        opacity: 1 !important; visibility: visible !important; pointer-events: none;
+        box-shadow: none; border-radius: 0; background: transparent; transition: max-height 0.3s ease;
+      }
+      .nav-dropdown-wrap.is-open .nav-dropdown { max-height: 1100px; pointer-events: auto; margin-bottom: 4px; }
+      .nav-dropdown-inner { display: block; overflow: visible; max-height: none; }
+      .nav-dropdown-links { padding: 4px 0 12px; }
+      .nav-dd-group { border-bottom: 1px solid rgba(0,0,0,0.08); }
+      .nav-dd-toggle { color: #111; }
+      .nav-dropdown-item { color: rgba(0,0,0,0.7); padding: 10px 4px; white-space: normal; }
+      .nav-dropdown-item::before { background: rgba(0,0,0,0.25); }
+      .nav-dropdown-item.nav-dd-parent { color: #111; padding: 12px 4px; font-size: 0.74rem; }
+      .nav-dropdown-item.nav-dd-sub { padding: 8px 4px 8px 18px; }
+      .nav-dropdown-item:hover { background: transparent; color: #c0000a; }
+      .nav-dropdown-item.nav-dd-parent:hover { padding-left: 4px; }
+      .nav-dropdown-item.nav-dd-sub:hover { padding-left: 18px; }
+      .nav-dropdown-item.nav-dd-cta { padding: 14px 4px; color: #111; }
+      .nav-dropdown-item.is-active { color: #c0000a; }
+      .nav-dropdown-item.is-active::before { background: #c0000a; }
+
+      .btn-book { font-size: 0.6rem; padding: 7px 16px; }
+    }
+
+    /* ── Header ── */
+    .page-head {
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
+      min-height: 320px; padding: 40px 40px 40px; text-align: left;
+    }
+    .page-head > * { position: relative; z-index: 1; }
+    .page-intro {
+      font-family: 'Cormorant Garamond', serif; font-weight: 400;
+      font-size: clamp(1.1rem, 1.5vw, 1.3rem); line-height: 1.7;
+      color: rgba(0,0,0,0.7); max-width: 620px;
+      margin-top: 22px; padding-left: 20px; border-left: 2px solid #c0000a;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif; font-weight: 400;
+      font-size: clamp(3.4rem, 9vw, 7.5rem); letter-spacing: 0.06em; line-height: 0.95;
+    }
+
+    /* ── Sub-category blocks ── */
+    .subs { max-width: 1240px; margin: 0 auto; padding: 56px 40px 40px; }
+
+    .sub {
+      display: grid; grid-template-columns: 340px 1fr; gap: 56px; align-items: center;
+      padding: 64px 0; border-top: 1px solid rgba(192,0,10,0.2);
+      scroll-margin-top: 90px;
+    }
+    .cat-group[hidden] { display: none; }
+    .sub:first-child { border-top: none; }
+    .sub:nth-child(even) { grid-template-columns: 1fr 340px; }
+    .sub:nth-child(even) .sub-info { order: 2; }
+
+    .sub-name {
+      font-family: 'Bebas Neue', sans-serif; font-weight: 400;
+      font-size: clamp(2.2rem, 4vw, 3.4rem); letter-spacing: 0.05em; line-height: 1; margin: 0 0 14px;
+    }
+    .sub-name::before {
+      content: ''; display: block; width: 36px; height: 2px; background: #c0000a; margin-bottom: 16px;
+    }
+    .sub-desc {
+      font-family: 'Cormorant Garamond', serif; font-weight: 400;
+      font-size: 1.2rem; line-height: 1.65; color: rgba(0,0,0,0.65); margin-bottom: 26px;
+    }
+    .sub-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #111; border: 1px solid rgba(0,0,0,0.35); border-radius: 100px; padding: 13px 28px;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+    }
+    .sub-link span { transition: transform 0.2s, color 0.2s; color: #c0000a; }
+    .sub-link:hover { background: #c0000a; border-color: #c0000a; color: #fff; }
+    .sub-link:hover span { color: #fff; transform: translateX(4px); }
+
+    /* Mosaic: 1 large + 3 small */
+    .mosaic {
+      display: grid; gap: 12px; height: 460px;
+      grid-template-columns: 1.5fr 1fr;
+      grid-template-rows: repeat(3, 1fr);
+    }
+    .mosaic .shot:first-child { grid-row: 1 / -1; }
+    .mosaic.n-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+    .mosaic.n-2 { grid-template-rows: 1fr; }
+    .mosaic.n-3 { grid-template-rows: repeat(2, 1fr); }
+
+    .shot {
+      position: relative; overflow: hidden; border-radius: 4px; display: block;
+      background: #eee;
+    }
+    .shot img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: brightness(0.88);
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s;
+    }
+    .shot:hover img { transform: scale(1.05); filter: brightness(1); }
+    .shot::after {
+      content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 3px;
+      background: #c0000a; transition: width 0.35s ease;
+    }
+    .shot:hover::after { width: 100%; }
+
+    .shot-more {
+      color: #fff;
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      background: rgba(10,10,10,0.55); transition: background 0.3s;
+    }
+    .shot:hover .shot-more { background: rgba(192,0,10,0.72); }
+    .shot-more b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.9rem; letter-spacing: 0.08em; }
+    .shot-more small { font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+
+    /* ── Bottom CTA ── */
+    .cta { text-align: center; padding: 72px 24px 96px; border-top: 1px solid rgba(0,0,0,0.1); }
+    .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 3.6vw, 2.8rem); letter-spacing: 0.06em; margin-bottom: 12px; }
+    .cta-text { font-size: 0.85rem; line-height: 1.65; color: rgba(0,0,0,0.6); max-width: 520px; margin: 0 auto 26px; }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    .footer {
+      background: #0d0d0d;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 40px 40px;
+    }
+
+    /* Top row */
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-logo {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      opacity: 0.85;
+      margin-bottom: 14px;
+    }
+
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgb(255, 255, 255);
+    }rgb(255, 255, 255)
+
+    /* WhatsApp CTA */
+    .footer-whatsapp { max-width: 360px; }
+
+    .footer-wa-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .footer-wa-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .footer-wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #c0000a;
+      border: none;
+      border-radius: 100px;
+      padding: 12px 26px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.22s, transform 0.18s;
+    }
+
+    .footer-wa-btn:hover {
+      background: #a0000a;
+      transform: translateY(-1px);
+    }
+
+    .footer-wa-icon {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      flex-shrink: 0;
+    }
+
+    /* Link columns */
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      padding: 56px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .footer-col-head {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 6px;
+    }
+
+    .footer-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.62);
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: #fff; }
+
+    /* Bottom bar */
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-legal-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.28);
+      transition: color 0.2s;
+    }
+
+    .footer-legal-link:hover { color: rgba(255,255,255,0.7); }
+
+    @media (max-width: 900px) {
+      .footer-inner { padding: 56px 28px 32px; }
+      .footer-top { flex-direction: column; gap: 36px; }
+      .footer-whatsapp { max-width: 100%; }
+      .footer-links { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 540px) {
+      .footer-links { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* Entrance */
+    .sub { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .sub.in { opacity: 1; transform: none; }
+
+    @media (max-width: 960px) {
+      .page-head { padding: 32px 20px 24px; min-height: 220px; }
+      .subs { padding: 32px 20px 20px; }
+      .sub, .sub:nth-child(even) { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+      .sub:nth-child(even) .sub-info { order: 0; }
+      .mosaic { height: 380px; }
+    }
+    @media (max-width: 560px) {
+      .page-head { min-height: 180px; }
+      .mosaic { height: 320px; gap: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sub { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <a href="index.html"><img src="images/nav-logo.png" alt="Clean Media Pictures" /></a>
+    </div>
+
+    <div class="nav-tabs" id="navTabs">
+      <a href="index.html#about" class="nav-tab">About Studio</a>
+
+      <!-- Portfolio mega dropdown (the category + sub-category links are generated from CATEGORIES below) -->
+      <div class="nav-dropdown-wrap">
+        <button class="nav-dropdown-trigger" id="portfolioDropdownBtn" aria-label="Toggle portfolio categories" aria-expanded="false">
+          <a href="index.html#portfolio" class="nav-trigger-label">Portfolio</a>
+          <svg class="nav-dropdown-chevron" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="nav-dropdown" id="portfolioDropdown" role="menu">
+          <div class="nav-dropdown-inner">
+            <div class="nav-dropdown-links" id="navDdLinks"></div>
+            <div class="nav-dropdown-preview">
+              <div class="nav-dropdown-img-wrap">
+                <img class="nav-dd-img is-shown is-logo" id="navDdImg" src="images/nav-logo.png" alt="Clean Media Pictures" />
+                <img class="nav-dd-img is-logo" id="navDdImgB" src="images/nav-logo.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="nav-dropdown-footer"></div>
+        </div>
+      </div>
+
+      <a href="index.html#testimonials" class="nav-tab">Testimonials</a>
+      <a href="index.html#faqs" class="nav-tab">FAQs</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="booking.html" class="btn-book">Book a Session</a>
+      <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navTabs">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="page-head">
+    <h1 class="page-title" id="pageTitle">Lifestyle</h1>
+    <p class="page-intro" id="pageIntro"></p>
+  </section>
+
+  <main class="subs" id="subs">
+    <!-- Each photo below is a normal <img>. To add yours: change its src to the path in the
+         "Replace with" comment above it (put the files in images/portfolio/). -->
+    <div class="cat-group" data-category="corporate" hidden>
+      <section class="sub" id="professional-headshots">
+        <div class="sub-info">
+          <h2 class="sub-name">Professional Headshots</h2>
+          <p class="sub-desc">Sharp, flattering portraits for LinkedIn, company websites and press kits.</p>
+          <a class="sub-link" href="gallery-professional-headshots.html" aria-label="View the Professional Headshots gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/professional-headshots-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-professional-headshots.html" aria-label="Professional Headshots gallery">
+            <img src="https://picsum.photos/seed/cmp-professional-headshots-1/900/900" alt="Professional Headshots photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/professional-headshots-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-professional-headshots.html" aria-label="Professional Headshots gallery">
+            <img src="https://picsum.photos/seed/cmp-professional-headshots-2/600/400" alt="Professional Headshots photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/professional-headshots-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-professional-headshots.html" aria-label="Professional Headshots gallery">
+            <img src="https://picsum.photos/seed/cmp-professional-headshots-3/600/400" alt="Professional Headshots photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/professional-headshots-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-professional-headshots.html" aria-label="Professional Headshots gallery">
+            <img src="https://picsum.photos/seed/cmp-professional-headshots-4/600/400" alt="Professional Headshots photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Professional Headshots</small></div>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="cat-group" data-category="lifestyle" hidden>
+      <section class="sub" id="maternity">
+        <div class="sub-info">
+          <h2 class="sub-name">Maternity</h2>
+          <p class="sub-desc">Soft, timeless portraits that celebrate this chapter of your story.</p>
+          <a class="sub-link" href="lifestyle-gallery/maternity-gallery.html" aria-label="View the Maternity gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/maternity-1.jpg  (large tile) -->
+          <a class="shot" href="lifestyle-gallery/maternity-gallery.html" aria-label="Maternity gallery">
+            <img src="https://picsum.photos/seed/cmp-maternity-1/900/900" alt="Maternity photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/maternity-2.jpg  (small tile) -->
+          <a class="shot" href="lifestyle-gallery/maternity-gallery.html" aria-label="Maternity gallery">
+            <img src="https://picsum.photos/seed/cmp-maternity-2/600/400" alt="Maternity photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/maternity-3.jpg  (small tile) -->
+          <a class="shot" href="lifestyle-gallery/maternity-gallery.html" aria-label="Maternity gallery">
+            <img src="https://picsum.photos/seed/cmp-maternity-3/600/400" alt="Maternity photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/maternity-4.jpg  (small tile) -->
+          <a class="shot" href="lifestyle-gallery/maternity-gallery.html" aria-label="Maternity gallery">
+            <img src="https://picsum.photos/seed/cmp-maternity-4/600/400" alt="Maternity photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Maternity</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="matric-farewell">
+        <div class="sub-info">
+          <h2 class="sub-name">Matric Farewell</h2>
+          <p class="sub-desc">Glamorous portraits to mark the end of school, from outfit to final frame.</p>
+          <a class="sub-link" href="gallery-matric-farewell.html" aria-label="View the Matric Farewell gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/matric-farewell-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-matric-farewell.html" aria-label="Matric Farewell gallery">
+            <img src="https://picsum.photos/seed/cmp-matric-farewell-1/900/900" alt="Matric Farewell photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/matric-farewell-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-matric-farewell.html" aria-label="Matric Farewell gallery">
+            <img src="https://picsum.photos/seed/cmp-matric-farewell-2/600/400" alt="Matric Farewell photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/matric-farewell-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-matric-farewell.html" aria-label="Matric Farewell gallery">
+            <img src="https://picsum.photos/seed/cmp-matric-farewell-3/600/400" alt="Matric Farewell photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/matric-farewell-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-matric-farewell.html" aria-label="Matric Farewell gallery">
+            <img src="https://picsum.photos/seed/cmp-matric-farewell-4/600/400" alt="Matric Farewell photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Matric Farewell</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="graduation">
+        <div class="sub-info">
+          <h2 class="sub-name">Graduation</h2>
+          <p class="sub-desc">Cap-and-gown portraits that capture years of hard work in a single image.</p>
+          <a class="sub-link" href="gallery-graduation.html" aria-label="View the Graduation gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/graduation-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-graduation.html" aria-label="Graduation gallery">
+            <img src="https://picsum.photos/seed/cmp-graduation-1/900/900" alt="Graduation photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/graduation-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-graduation.html" aria-label="Graduation gallery">
+            <img src="https://picsum.photos/seed/cmp-graduation-2/600/400" alt="Graduation photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/graduation-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-graduation.html" aria-label="Graduation gallery">
+            <img src="https://picsum.photos/seed/cmp-graduation-3/600/400" alt="Graduation photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/graduation-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-graduation.html" aria-label="Graduation gallery">
+            <img src="https://picsum.photos/seed/cmp-graduation-4/600/400" alt="Graduation photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Graduation</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="birthday">
+        <div class="sub-info">
+          <h2 class="sub-name">Birthday</h2>
+          <p class="sub-desc">Playful, personality-filled shoots for the birthday that deserves more than a phone snap.</p>
+          <a class="sub-link" href="gallery-birthday.html" aria-label="View the Birthday gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/birthday-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-birthday.html" aria-label="Birthday gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-1/900/900" alt="Birthday photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/birthday-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-birthday.html" aria-label="Birthday gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-2/600/400" alt="Birthday photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/birthday-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-birthday.html" aria-label="Birthday gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-3/600/400" alt="Birthday photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/birthday-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-birthday.html" aria-label="Birthday gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-4/600/400" alt="Birthday photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Birthday</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="outdoor-photography">
+        <div class="sub-info">
+          <h2 class="sub-name">Outdoor Photography</h2>
+          <p class="sub-desc">Natural light, open spaces and relaxed, candid energy.</p>
+          <a class="sub-link" href="gallery-outdoor-photography.html" aria-label="View the Outdoor Photography gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/outdoor-photography-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-outdoor-photography.html" aria-label="Outdoor Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-outdoor-photography-1/900/900" alt="Outdoor Photography photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/outdoor-photography-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-outdoor-photography.html" aria-label="Outdoor Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-outdoor-photography-2/600/400" alt="Outdoor Photography photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/outdoor-photography-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-outdoor-photography.html" aria-label="Outdoor Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-outdoor-photography-3/600/400" alt="Outdoor Photography photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/outdoor-photography-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-outdoor-photography.html" aria-label="Outdoor Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-outdoor-photography-4/600/400" alt="Outdoor Photography photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Outdoor Photography</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="studio-photography">
+        <div class="sub-info">
+          <h2 class="sub-name">Studio Photography</h2>
+          <p class="sub-desc">Controlled lighting and clean backdrops for striking, editorial results.</p>
+          <a class="sub-link" href="gallery-studio-photography.html" aria-label="View the Studio Photography gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/studio-photography-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-studio-photography.html" aria-label="Studio Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-studio-photography-1/900/900" alt="Studio Photography photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/studio-photography-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-studio-photography.html" aria-label="Studio Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-studio-photography-2/600/400" alt="Studio Photography photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/studio-photography-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-studio-photography.html" aria-label="Studio Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-studio-photography-3/600/400" alt="Studio Photography photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/studio-photography-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-studio-photography.html" aria-label="Studio Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-studio-photography-4/600/400" alt="Studio Photography photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Studio Photography</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="housecall-birthday-photography">
+        <div class="sub-info">
+          <h2 class="sub-name">Housecall Birthday Photography</h2>
+          <p class="sub-desc">We bring the studio to you and photograph the celebration at home.</p>
+          <a class="sub-link" href="gallery-housecall-birthday-photography.html" aria-label="View the Housecall Birthday Photography gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/housecall-birthday-photography-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-housecall-birthday-photography.html" aria-label="Housecall Birthday Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-housecall-birthday-photography-1/900/900" alt="Housecall Birthday Photography photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/housecall-birthday-photography-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-housecall-birthday-photography.html" aria-label="Housecall Birthday Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-housecall-birthday-photography-2/600/400" alt="Housecall Birthday Photography photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/housecall-birthday-photography-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-housecall-birthday-photography.html" aria-label="Housecall Birthday Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-housecall-birthday-photography-3/600/400" alt="Housecall Birthday Photography photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/housecall-birthday-photography-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-housecall-birthday-photography.html" aria-label="Housecall Birthday Photography gallery">
+            <img src="https://picsum.photos/seed/cmp-housecall-birthday-photography-4/600/400" alt="Housecall Birthday Photography photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Housecall Birthday Photography</small></div>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="cat-group" data-category="events" hidden>
+      <section class="sub" id="weddings">
+        <div class="sub-info">
+          <h2 class="sub-name">Weddings</h2>
+          <p class="sub-desc">From quiet preparations to the final send-off, told as one cohesive story.</p>
+          <a class="sub-link" href="gallery-weddings.html" aria-label="View the Weddings gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/weddings-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-weddings.html" aria-label="Weddings gallery">
+            <img src="https://picsum.photos/seed/cmp-weddings-1/900/900" alt="Weddings photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/weddings-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-weddings.html" aria-label="Weddings gallery">
+            <img src="https://picsum.photos/seed/cmp-weddings-2/600/400" alt="Weddings photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/weddings-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-weddings.html" aria-label="Weddings gallery">
+            <img src="https://picsum.photos/seed/cmp-weddings-3/600/400" alt="Weddings photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/weddings-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-weddings.html" aria-label="Weddings gallery">
+            <img src="https://picsum.photos/seed/cmp-weddings-4/600/400" alt="Weddings photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Weddings</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="functions">
+        <div class="sub-info">
+          <h2 class="sub-name">Functions</h2>
+          <p class="sub-desc">Corporate and private functions covered discreetly and professionally.</p>
+          <a class="sub-link" href="gallery-functions.html" aria-label="View the Functions gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/functions-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-functions.html" aria-label="Functions gallery">
+            <img src="https://picsum.photos/seed/cmp-functions-1/900/900" alt="Functions photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/functions-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-functions.html" aria-label="Functions gallery">
+            <img src="https://picsum.photos/seed/cmp-functions-2/600/400" alt="Functions photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/functions-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-functions.html" aria-label="Functions gallery">
+            <img src="https://picsum.photos/seed/cmp-functions-3/600/400" alt="Functions photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/functions-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-functions.html" aria-label="Functions gallery">
+            <img src="https://picsum.photos/seed/cmp-functions-4/600/400" alt="Functions photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Functions</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="birthday-lunch">
+        <div class="sub-info">
+          <h2 class="sub-name">Birthday Lunches</h2>
+          <p class="sub-desc">Relaxed daytime celebrations, from table details to candid laughter.</p>
+          <a class="sub-link" href="gallery-birthday-lunch.html" aria-label="View the Birthday Lunches gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/birthday-lunch-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-birthday-lunch.html" aria-label="Birthday Lunches gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-lunch-1/900/900" alt="Birthday Lunches photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/birthday-lunch-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-birthday-lunch.html" aria-label="Birthday Lunches gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-lunch-2/600/400" alt="Birthday Lunches photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/birthday-lunch-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-birthday-lunch.html" aria-label="Birthday Lunches gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-lunch-3/600/400" alt="Birthday Lunches photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/birthday-lunch-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-birthday-lunch.html" aria-label="Birthday Lunches gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-lunch-4/600/400" alt="Birthday Lunches photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Birthday Lunches</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="birthday-dinner">
+        <div class="sub-info">
+          <h2 class="sub-name">Birthday Dinners</h2>
+          <p class="sub-desc">Warm, moody evening coverage that does justice to the occasion.</p>
+          <a class="sub-link" href="gallery-birthday-dinner.html" aria-label="View the Birthday Dinners gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/birthday-dinner-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-birthday-dinner.html" aria-label="Birthday Dinners gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-dinner-1/900/900" alt="Birthday Dinners photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/birthday-dinner-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-birthday-dinner.html" aria-label="Birthday Dinners gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-dinner-2/600/400" alt="Birthday Dinners photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/birthday-dinner-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-birthday-dinner.html" aria-label="Birthday Dinners gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-dinner-3/600/400" alt="Birthday Dinners photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/birthday-dinner-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-birthday-dinner.html" aria-label="Birthday Dinners gallery">
+            <img src="https://picsum.photos/seed/cmp-birthday-dinner-4/600/400" alt="Birthday Dinners photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Birthday Dinners</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="celebration">
+        <div class="sub-info">
+          <h2 class="sub-name">Celebrations</h2>
+          <p class="sub-desc">Engagements, anniversaries, baby showers and everything worth toasting.</p>
+          <a class="sub-link" href="gallery-celebration.html" aria-label="View the Celebrations gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/celebration-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-celebration.html" aria-label="Celebrations gallery">
+            <img src="https://picsum.photos/seed/cmp-celebration-1/900/900" alt="Celebrations photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/celebration-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-celebration.html" aria-label="Celebrations gallery">
+            <img src="https://picsum.photos/seed/cmp-celebration-2/600/400" alt="Celebrations photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/celebration-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-celebration.html" aria-label="Celebrations gallery">
+            <img src="https://picsum.photos/seed/cmp-celebration-3/600/400" alt="Celebrations photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/celebration-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-celebration.html" aria-label="Celebrations gallery">
+            <img src="https://picsum.photos/seed/cmp-celebration-4/600/400" alt="Celebrations photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Celebrations</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="party">
+        <div class="sub-info">
+          <h2 class="sub-name">Parties</h2>
+          <p class="sub-desc">High-energy coverage that keeps up with the night.</p>
+          <a class="sub-link" href="gallery-party.html" aria-label="View the Parties gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/party-1.jpg  (large tile) -->
+          <a class="shot" href="gallery-party.html" aria-label="Parties gallery">
+            <img src="https://picsum.photos/seed/cmp-party-1/900/900" alt="Parties photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/party-2.jpg  (small tile) -->
+          <a class="shot" href="gallery-party.html" aria-label="Parties gallery">
+            <img src="https://picsum.photos/seed/cmp-party-2/600/400" alt="Parties photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/party-3.jpg  (small tile) -->
+          <a class="shot" href="gallery-party.html" aria-label="Parties gallery">
+            <img src="https://picsum.photos/seed/cmp-party-3/600/400" alt="Parties photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/party-4.jpg  (small tile) -->
+          <a class="shot" href="gallery-party.html" aria-label="Parties gallery">
+            <img src="https://picsum.photos/seed/cmp-party-4/600/400" alt="Parties photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Parties</small></div>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <section class="cta">
+    <p class="cta-title">Not what you're looking for?</p>
+    <p class="cta-text">Have a different kind of shoot in mind? Book a session and describe the photography you want &mdash; we'll take it from there.</p>
+    <a href="booking.html" class="btn-book">Book a Session</a>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+
+      <!-- Top row: brand + whatsapp -->
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo-link">
+            <img src="images/nav-logo.png" alt="Clean Media Pictures" class="footer-logo" />
+          </a>
+          <p class="footer-tagline">Light. Story. Craft.</p>
+        </div>
+
+        <div class="footer-whatsapp">
+          <p class="footer-wa-label">Chat with us on WhatsApp</p>
+          <p class="footer-wa-sub">Ready to book or have questions? Message us directly — we respond fast.</p>
+          <a href="https://wa.me/27000000000" target="_blank" rel="noopener" class="footer-wa-btn">
+            <svg class="footer-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Message Us on WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- Middle row: links -->
+      <div class="footer-links">
+        <div class="footer-col">
+          <p class="footer-col-head">Studio</p>
+          <a href="index.html#portfolio" class="footer-link">Portfolio</a>
+          <a href="index.html#about"     class="footer-link">About Studio</a>
+          <a href="index.html#faqs"      class="footer-link">FAQs</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Sessions</p>
+          <a href="index.html#book" class="footer-link">Book a Session</a>
+          <a href="index.html#book" class="footer-link">Corporate Portraits</a>
+          <a href="index.html#book" class="footer-link">Product Photography</a>
+          <a href="index.html#book" class="footer-link">Editorial &amp; Fashion</a>
+          <a href="index.html#book" class="footer-link">Video Production</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Connect</p>
+          <a href="mailto:hello@cleanmediapictures.com" class="footer-link">hello@cleanmediapictures.com</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-link">Instagram</a>
+          <a href="https://facebook.com"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
+          <a href="https://tiktok.com"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 Clean Media Pictures. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#" class="footer-legal-link">Privacy Policy</a>
+          <a href="#" class="footer-legal-link">Terms of Use</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script>
+    /* ════════════════════════════════════════════════════════════
+       CONFIG — category text, links and dropdown. (Photos are edited in the HTML, not here.)
+
+       For every sub-category:
+         href   : the page the "View Gallery" button, the photos and the dropdown link go to.
+                  Change it to the real gallery page when you build it.
+
+       The dropdown's hover slideshow works like index.html: it reads images/portfolio/<slug>.jpg
+       (e.g. maternity.jpg, weddings.jpg) and each category's "cover" image is shown first.
+       The 4 photos in each sub-category's preview are plain <img> tags in the HTML (search for "Replace with").
+       ════════════════════════════════════════════════════════════ */
+    const CATEGORY_PAGE = 'lifestyle-subcategories.html';   // this page; categories open as ?category=<key>
+
+    const CATEGORIES = {
+      corporate: {
+        title: 'Corporate',
+        cover: 'images/headshots.jpg',      // shown in the dropdown preview before the slideshow starts
+        intro: 'From executive headshots to full brand campaigns, we craft imagery that positions your business with confidence and clarity. Every frame is intentional \u2014 built to communicate professionalism, trust, and vision.',
+        subs: [
+          { name: 'Professional Headshots', href: 'gallery-professional-headshots.html',
+            desc: 'Sharp, flattering portraits for LinkedIn, company websites and press kits.', }
+        ]
+      },
+      lifestyle: {
+        title: 'Lifestyle',
+        cover: 'images/branding.jpg',
+        intro: 'From the glow of maternity to the pride of graduation day, we photograph the milestones that shape your story. Every frame is intentional \u2014 guided by natural light, honest emotion, and a deep respect for the moment.',
+        subs: [
+          { name: 'Maternity', href: 'lifestyle-gallery/maternity-gallery.html',
+            desc: 'Soft, timeless portraits that celebrate this chapter of your story.', },
+          { name: 'Matric Farewell', href: 'gallery-matric-farewell.html',
+            desc: 'Glamorous portraits to mark the end of school, from outfit to final frame.', },
+          { name: 'Graduation', href: 'gallery-graduation.html',
+            desc: 'Cap-and-gown portraits that capture years of hard work in a single image.', },
+          { name: 'Birthday', href: 'gallery-birthday.html',
+            desc: 'Playful, personality-filled shoots for the birthday that deserves more than a phone snap.', },
+          { name: 'Outdoor Photography', href: 'gallery-outdoor-photography.html',
+            desc: 'Natural light, open spaces and relaxed, candid energy.', },
+          { name: 'Studio Photography', href: 'gallery-studio-photography.html',
+            desc: 'Controlled lighting and clean backdrops for striking, editorial results.', },
+          { name: 'Housecall Birthday Photography', href: 'gallery-housecall-birthday-photography.html',
+            desc: 'We bring the studio to you and photograph the celebration at home.', }
+        ]
+      },
+      events: {
+        title: 'Events',
+        cover: 'images/events.jpg',
+        intro: 'From intimate dinners to full-scale weddings, we capture the energy of the day and the moments you will want to relive. Every frame is intentional \u2014 discreet, atmospheric, and true to the occasion.',
+        subs: [
+          { name: 'Weddings', href: 'gallery-weddings.html',
+            desc: 'From quiet preparations to the final send-off, told as one cohesive story.', },
+          { name: 'Functions', href: 'gallery-functions.html',
+            desc: 'Corporate and private functions covered discreetly and professionally.', },
+          { name: 'Birthday Lunches', href: 'gallery-birthday-lunch.html',
+            desc: 'Relaxed daytime celebrations, from table details to candid laughter.', },
+          { name: 'Birthday Dinners', href: 'gallery-birthday-dinner.html',
+            desc: 'Warm, moody evening coverage that does justice to the occasion.', },
+          { name: 'Celebrations', href: 'gallery-celebration.html',
+            desc: 'Engagements, anniversaries, baby showers and everything worth toasting.', },
+          { name: 'Parties', href: 'gallery-party.html',
+            desc: 'High-energy coverage that keeps up with the night.', }
+        ]
+      }
+    };
+
+    /* ════════════════ Which category is this page showing? ════════════════ */
+    const params = new URLSearchParams(location.search);
+    let currentKey = (params.get('category') || 'lifestyle').toLowerCase();
+    if (!CATEGORIES[currentKey]) currentKey = 'lifestyle';
+
+    /* ════════════════ Page content ════════════════ */
+    (function () {
+      const cat = CATEGORIES[currentKey];
+      document.title = cat.title + ' Gallery | Clean Media Pictures';
+      document.getElementById('pageTitle').textContent = cat.title;
+      document.getElementById('pageIntro').textContent = cat.intro;
+
+      document.querySelectorAll('.cat-group').forEach(function (g) {
+        g.hidden = g.dataset.category !== currentKey;
+      });
+
+      const blocks = document.querySelectorAll('.cat-group:not([hidden]) .sub');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        blocks.forEach(function (b) { io.observe(b); });
+      } else {
+        blocks.forEach(function (b) { b.classList.add('in'); });
+      }
+    })();
+
+    /* ════════════════ Portfolio mega dropdown (built from CATEGORIES) ════════════════ */
+    (function () {
+      const btn      = document.getElementById('portfolioDropdownBtn');
+      const dropdown = document.getElementById('portfolioDropdown');
+      const wrap     = btn.closest('.nav-dropdown-wrap');
+      const linksEl  = document.getElementById('navDdLinks');
+      const CHEVRON  = '<svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+      /* ---------- build the links ---------- */
+      Object.keys(CATEGORIES).forEach(function (key) {
+        const cat = CATEGORIES[key];
+        const group = document.createElement('div');
+        group.className = 'nav-dd-group';
+
+        const row = document.createElement('div');
+        row.className = 'nav-dd-row';
+        const parent = document.createElement('a');
+        parent.className = 'nav-dropdown-item nav-dd-parent' + (key === currentKey ? ' is-active' : '');
+        parent.href = CATEGORY_PAGE + '?category=' + key;
+        parent.dataset.cat = key;
+        parent.textContent = cat.title;
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'nav-dd-toggle';
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Show ' + cat.title + ' sub-categories');
+        toggle.innerHTML = CHEVRON;
+        row.appendChild(parent);
+        row.appendChild(toggle);
+
+        const subs = document.createElement('div');
+        subs.className = 'nav-dd-subs';
+        cat.subs.forEach(function (s) {
+          const a = document.createElement('a');
+          a.className = 'nav-dropdown-item nav-dd-sub';
+          a.href = s.href;
+          a.textContent = s.name;
+          subs.appendChild(a);
+        });
+
+        group.appendChild(row);
+        group.appendChild(subs);
+        linksEl.appendChild(group);
+
+        toggle.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const open = group.classList.toggle('is-expanded');
+          toggle.setAttribute('aria-expanded', open);
+        });
+        const slugs = cat.subs.map(slugOf);
+        parent.addEventListener('mouseenter', function () { startSlideshow(slugs, cat.cover); });
+        parent.addEventListener('focus',      function () { startSlideshow(slugs, cat.cover); });
+      });
+
+      const cta = document.createElement('a');
+      cta.className = 'nav-dropdown-item nav-dd-cta';
+      cta.href = 'booking.html';
+      cta.textContent = "Not what you're looking for?";
+      linksEl.appendChild(cta);
+
+      /* ---------- desktop hover slideshow (first image of each sub-category) ---------- */
+      const TABLET_MAX = 1024;
+      const isDesktop = function () { return window.innerWidth > TABLET_MAX; };
+      const SLIDE_MS = 1800;
+      const ddImgs = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
+      const LOGO_SRC = ddImgs[0].getAttribute('src');
+      let active = 0, timer = null, runId = 0;
+      const SLIDE_DIR  = 'images/portfolio/';          // slideshow images: images/portfolio/<slug>.jpg (or .webp/.png/.jpeg)
+      const SLIDE_EXTS = ['jpg', 'webp', 'png', 'jpeg'];
+      const resolved = {};
+
+      function resolveSlide(slug) {
+        if (resolved[slug]) return resolved[slug];
+        resolved[slug] = new Promise(function (resolve) {
+          let i = 0;
+          (function next() {
+            if (i >= SLIDE_EXTS.length) return resolve(null);
+            const url = SLIDE_DIR + slug + '.' + SLIDE_EXTS[i++];
+            const im = new Image();
+            im.onload = function () { resolve(url); };
+            im.onerror = next;
+            im.src = url;
+          })();
+        });
+        return resolved[slug];
+      }
+
+      function slugOf(sub) { return sub.href.split('/').pop().replace(/^gallery-/, '').replace(/-gallery\.html$/, '').replace(/\.html$/, ''); }
+
+      function show(src) {
+        const next = ddImgs[1 - active], cur = ddImgs[active];
+        if (cur.getAttribute('src') === src) return;
+        next.src = src;
+        next.classList.toggle('is-logo', src === LOGO_SRC);
+        next.classList.add('is-shown');
+        cur.classList.remove('is-shown');
+        active = 1 - active;
+      }
+
+      function stopSlideshow() {
+        runId++;
+        if (timer) { clearInterval(timer); timer = null; }
+      }
+      function resetPreview() { stopSlideshow(); show(LOGO_SRC); }
+
+      // Same behaviour as index.html: show the category's cover image straight away, then cycle through
+      // its sub-category images (images/portfolio/<slug>.jpg). Missing ones are skipped; if none exist
+      // the cover image stays.
+      async function startSlideshow(slugs, cover) {
+        if (!isDesktop()) return;
+        stopSlideshow();
+        const id = runId;
+        show(cover);                                           // instant feedback
+        const urls = await Promise.all(slugs.map(resolveSlide));
+        if (id !== runId) return;
+        const slides = urls.filter(Boolean);
+        if (!slides.length) return;                            // no images yet: keep the cover
+        let n = 0;
+        show(slides[0]);
+        if (slides.length > 1) {
+          timer = setInterval(function () { n = (n + 1) % slides.length; show(slides[n]); }, SLIDE_MS);
+        }
+      }
+
+      // "Not what you're looking for?" has its own image too: images/portfolio/custom-shoot.jpg
+      // (falls back to the logo until that file exists).
+      cta.addEventListener('mouseenter', function () { startSlideshow(['custom-shoot'], LOGO_SRC); });
+      cta.addEventListener('focus',      function () { startSlideshow(['custom-shoot'], LOGO_SRC); });
+      linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
+
+      /* ---------- positioning ---------- */
+      // Same sizing rule as index.html: on desktop the panel stretches down to just above where the
+      // big "Clean Media / Pictures" hero title sits there. This page has no hero, so that title's
+      // position is calculated from the viewport using the same CSS values as index.html
+      // (title font sizes + 12vh bottom padding), which keeps the panel the same size/proportions.
+      function virtualHeroTitleTop() {
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const mainPx = Math.min(Math.max(64, vw * 0.145), 256);    // .line-main: clamp(4rem, 14.5vw, 16rem)
+        const subPx  = Math.min(Math.max(12.8, vw * 0.04), 192);   // .line-sub:  clamp(0.8rem, 4vw, 12rem)
+        const titleH = mainPx * 0.88 + subPx;                      // line-heights 0.88 and 1
+        return vh - vh * 0.12 - titleH;                            // title block ends 12vh above the bottom
+      }
+
+      function positionDropdown(keepHeight) {
+        const top = btn.getBoundingClientRect().bottom + 16;
+        dropdown.style.top = top + 'px';
+        if (!isDesktop()) { dropdown.style.height = ''; return; }
+        if (keepHeight) return;                  // scrolling only moves the panel, never resizes it
+        const available = virtualHeroTitleTop() - top - 28;
+        const maxH = 620;
+        const safeFloor = Math.min(180, available);
+        dropdown.style.height = Math.max(safeFloor, Math.min(available, maxH)) + 'px';
+      }
+
+      /* ---------- open / close ---------- */
+      function closeDropdown() {
+        wrap.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        resetPreview();
+      }
+
+      const label = btn.querySelector('.nav-trigger-label');
+      label.addEventListener('click', function (e) { e.stopPropagation(); });
+
+      btn.addEventListener('click', function (e) {
+        if (label.contains(e.target)) return;
+        e.stopPropagation();
+        const isOpen = wrap.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen);
+        if (isOpen) positionDropdown(); else resetPreview();
+      });
+
+      window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });
+      window.addEventListener('scroll', function () { if (wrap.classList.contains('is-open')) positionDropdown(true); }, true);
+      document.addEventListener('click', function (e) {
+        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
+      });
+    })();
+
+    /* ════════════════ Mobile hamburger nav ════════════════ */
+    (function () {
+      const hamburger = document.getElementById('navHamburger');
+      const navTabs   = document.getElementById('navTabs');
+      const nav       = document.querySelector('.nav');
+
+      function positionPanel() { navTabs.style.top = nav.getBoundingClientRect().bottom + 'px'; }
+
+      function closeMenu() {
+        navTabs.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.querySelectorAll('.nav-dropdown-wrap.is-open').forEach(function (w) {
+          w.classList.remove('is-open');
+          const t = w.querySelector('.nav-dropdown-trigger');
+          if (t) t.setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      hamburger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const isOpen = navTabs.classList.toggle('is-open');
+        hamburger.setAttribute('aria-expanded', isOpen);
+        if (isOpen) positionPanel(); else closeMenu();
+      });
+
+      navTabs.addEventListener('click', function (e) {
+        if (e.target.closest('a') && !e.target.closest('.nav-dropdown-trigger')) closeMenu();
+      });
+
+      document.addEventListener('click', function (e) {
+        if (navTabs.classList.contains('is-open') && !navTabs.contains(e.target) && !hamburger.contains(e.target)) closeMenu();
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) closeMenu();
+        else if (navTabs.classList.contains('is-open')) positionPanel();
+      });
+    })();
+  </script>
+</body>
+</html>

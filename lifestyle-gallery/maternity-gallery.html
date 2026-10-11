@@ -29,34 +29,6 @@
       padding: 28px 40px;
     }
 
-    .back-bar {
-      padding: 0 40px 22px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #1a1a1a;
-    }
-
-    .back-link svg {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-      color: #1a1a1a;
-      transition: transform 0.2s ease;
-    }
-
-    .back-link:hover svg { transform: translateX(-4px); }
-
     .nav-logo img {
       height: 95px;
       width: auto;
@@ -119,7 +91,7 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #1a1a1a;
-      opacity: 0.78;
+      opacity: 0.82;
       transition: opacity 0.2s;
       position: relative;
       text-decoration: none;
@@ -141,7 +113,7 @@
       width: 9px; height: 6px;
       flex-shrink: 0;
       color: #1a1a1a;
-      opacity: 0.5;
+      opacity: 0.7;
       transition: transform 0.25s ease, opacity 0.2s;
       display: block;
       margin-top: 1px;
@@ -152,8 +124,10 @@
       opacity: 1;
     }
 
+    /* ── Centered floating panel ── */
     .nav-dropdown {
       position: fixed;
+      /* JS sets top; CSS handles horizontal centering */
       left: 50% !important;
       transform: translateX(-50%) translateY(-10px);
       background: #c0000a;
@@ -184,23 +158,44 @@
       transform: translateX(-50%) translateY(0);
     }
 
+    /* No caret — centered panel doesn't need one */
     .nav-dropdown::before { display: none; }
 
+    /* ── Inner two-column layout ── */
     .nav-dropdown-inner {
       display: grid;
       grid-template-columns: 1fr 230px;
-      grid-template-rows: 1fr;
+      grid-template-rows: minmax(0, 1fr);
       flex: 1;
       min-height: 0;
-      align-items: stretch;
     }
 
+    /* LEFT: links — laid out as a 2-column grid, no divider border (original design) */
     .nav-dropdown-links {
       padding: 28px 8px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      align-content: space-between;
+      align-content: space-evenly;   /* original used space-between; evenly looks better with only 2 rows */
       column-gap: 4px;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .nav-dd-group { display: block; }
+    .nav-dd-row { display: block; }
+    .nav-dd-row .nav-dd-parent { width: 100%; }
+
+    /* Desktop: sub-categories are shown as a slideshow in the image box, not as a list.
+       The markup stays in the page so tablet/mobile can expand it and so each
+       sub-category can be linked to its own page later. */
+    .nav-dd-toggle { display: none; }
+    .nav-dd-subs { display: none; }
+
+    /* Sub-category + third level (tablet / mobile only) */
+    .nav-dropdown-item.nav-dd-sub { padding-left: 30px; padding-top: 8px; padding-bottom: 8px; white-space: normal; }
+    .nav-dropdown-item.nav-dd-subsub {
+      padding-left: 48px; padding-top: 7px; padding-bottom: 7px;
+      font-size: 0.6rem; color: rgba(255,255,255,0.62);
     }
 
     .nav-dropdown-item {
@@ -219,6 +214,7 @@
       text-decoration: none;
     }
 
+    /* Thin left bar accent */
     .nav-dropdown-item::before {
       content: '';
       width: 1px;
@@ -249,11 +245,11 @@
       height: 18px;
     }
 
+    /* RIGHT: image panel */
     .nav-dropdown-preview {
       display: flex;
       flex-direction: column;
       padding: 14px;
-      align-self: stretch;
     }
 
     .nav-dropdown-img-wrap {
@@ -271,11 +267,37 @@
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
+      opacity: 0;
+      transition: opacity 0.7s ease;
     }
 
+    .nav-dropdown-img-wrap img.nav-dd-img.is-shown { opacity: 1; }
+
+    /* Bottom strip — kept as a spacer, no longer a different shade */
     .nav-dropdown-footer {
       height: 3px;
       margin: 0;
+    }
+
+    /* Desktop only: fewer categories, so the panel is larger */
+    @media (min-width: 1025px) {
+      .nav-dropdown { width: 960px; border-radius: 20px; }
+      .nav-dropdown-inner { grid-template-columns: 1fr 340px; }
+      .nav-dropdown-links { padding: 40px 16px; }
+      .nav-dropdown-item { font-size: 0.76rem; letter-spacing: 0.12em; padding: 15px 22px; gap: 14px; white-space: normal; }
+      .nav-dropdown-item:hover { padding-left: 26px; }
+      .nav-dropdown-item::before { height: 20px; }
+      .nav-dropdown-item:hover::before,
+      .nav-dropdown-item.is-active::before { height: 24px; }
+      .nav-dropdown-preview { padding: 18px; }
+      .nav-dropdown-img-wrap { border-radius: 12px; }
+    }
+
+    /* Logo shown in the preview box when no category is hovered */
+    .nav-dropdown-img-wrap img.nav-dd-img.is-logo {
+      object-fit: contain;
+      padding: 14%;
+      background: rgb(255, 255, 255);
     }
 
     .nav-right { display: flex; align-items: center; gap: 18px; }
@@ -330,6 +352,36 @@
     .nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
     .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 100%; }
 
+    /* Tablet + phone: no hover slideshow; categories get a drop-down arrow for sub-categories */
+    @media (max-width: 1024px) {
+      .nav-dropdown { width: min(460px, calc(100vw - 48px)); height: auto !important; max-height: 72vh; }
+      .nav-dropdown-inner { display: block; overflow-y: auto; max-height: 72vh; }
+      .nav-dropdown-preview { display: none; }
+      .nav-dropdown-links { display: flex; flex-direction: column; overflow: visible; padding: 8px 12px 14px; gap: 0; }
+
+      .nav-dd-group { border-bottom: 1px solid rgba(255,255,255,0.16); }
+      .nav-dropdown-item.nav-dd-parent { font-size: 0.76rem; padding: 14px 10px; }
+      .nav-dropdown-item.nav-dd-parent::before { height: 16px; }
+
+      .nav-dd-toggle {
+        display: flex; align-items: center; justify-content: center;
+        width: 46px; height: 46px; flex-shrink: 0;
+        background: none; border: none; color: #fff; cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .nav-dd-toggle svg { width: 11px; height: 7px; transition: transform 0.25s ease; }
+      .nav-dd-group.is-expanded .nav-dd-toggle svg { transform: rotate(180deg); }
+
+      .nav-dd-subs {
+        display: flex; flex-direction: column;
+        max-height: 0; overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      .nav-dd-group.is-expanded .nav-dd-subs { max-height: 600px; padding-bottom: 8px; }
+
+      .nav-dropdown-item.nav-dd-cta { margin-top: 4px; border-top: none; padding: 16px 10px; }
+    }
+
     @media (max-width: 768px) {
       .nav { padding: 18px 20px; flex-wrap: nowrap; }
       .nav-hamburger { display: flex; }
@@ -378,21 +430,32 @@
         transition: max-height 0.3s ease;
       }
       .nav-dropdown-wrap.is-open .nav-dropdown {
-        max-height: 600px;
+        max-height: 1100px;
         pointer-events: auto;
         margin-bottom: 4px;
       }
-      .nav-dropdown-inner { display: block; }
+      .nav-dropdown-inner { display: block; overflow: visible; max-height: none; }
       .nav-dropdown-preview { display: none; }
-      .nav-dropdown-links { grid-template-columns: 1fr; align-content: start; padding: 4px 0 12px; gap: 0; }
-      .nav-dropdown-item { padding: 10px 4px; white-space: normal; color: rgba(10,10,10,0.72); }
+      .nav-dropdown-links { display: flex; flex-direction: column; padding: 4px 0 12px; gap: 0; overflow: visible; }
+      .nav-dd-group { border-bottom: 1px solid rgba(10,10,10,0.08); }
+      .nav-dd-toggle { color: #1a1a1a; }
+      .nav-dropdown-item { color: rgba(10,10,10,0.72); padding: 10px 4px; white-space: normal; }
+      .nav-dropdown-item::before { background: rgba(10,10,10,0.25); }
+      .nav-dropdown-item:hover { color: #1a1a1a; background: rgba(10,10,10,0.04); }
+      .nav-dropdown-item.nav-dd-parent { color: #1a1a1a; padding: 12px 4px; font-size: 0.74rem; }
+      .nav-dropdown-item.nav-dd-sub { padding: 8px 4px 8px 18px; }
+      .nav-dropdown-item.nav-dd-subsub { padding: 7px 4px 7px 36px; color: rgba(10,10,10,0.6); }
+      .nav-dropdown-item.nav-dd-sub:hover,
+      .nav-dropdown-item.nav-dd-subsub:hover,
+      .nav-dropdown-item.nav-dd-parent:hover { padding-left: 4px; }
+      .nav-dropdown-item.nav-dd-sub:hover { padding-left: 18px; }
+      .nav-dropdown-item.nav-dd-subsub:hover { padding-left: 36px; }
+      .nav-dropdown-item.nav-dd-cta { padding: 14px 4px; color: #1a1a1a; }
       .nav-dropdown-item.is-active { color: #c0000a; }
       .nav-dropdown-item.is-active::before { background: #c0000a; }
 
       .btn-book { font-size: 0.6rem; padding: 7px 16px; }
       .nav-logo img { height: 95px; }
-      .back-bar { padding: 0 20px 18px; }
-      .back-link { font-size: 0.64rem; }
     }
 
     @media (max-width: 900px) {
@@ -478,7 +541,6 @@
       width: auto;
       object-fit: contain;
       display: block;
-      filter: brightness(0) invert(1);
       opacity: 0.85;
       margin-bottom: 14px;
     }
@@ -489,7 +551,7 @@
       font-weight: 300;
       letter-spacing: 0.28em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.38);
+      color: rgb(255, 255, 255);
     }
 
     .footer-whatsapp { max-width: 360px; }
@@ -705,16 +767,16 @@
   <!-- ── Header ───────────────────────────────────────────── -->
   <nav class="nav">
     <div class="nav-logo">
-      <a href="index.html"><img src="images/nav-logo.png" alt="Clean Media Pictures" /></a>
+      <a href="../index.html"><img src="../images/nav-logo.png" alt="Clean Media Pictures" /></a>
     </div>
 
     <div class="nav-tabs" id="navTabs">
-      <a href="index.html#about" class="nav-tab">About Studio</a>
+      <a href="../index.html#about" class="nav-tab">About Studio</a>
 
       <!-- Portfolio dropdown -->
       <div class="nav-dropdown-wrap">
         <button class="nav-dropdown-trigger" id="portfolioDropdownBtn" aria-label="Toggle portfolio categories" aria-expanded="false">
-          <a href="index.html#portfolio" class="nav-tab nav-trigger-label">Portfolio</a>
+          <a href="../index.html#portfolio" class="nav-tab nav-trigger-label">Portfolio</a>
           <svg class="nav-dropdown-chevron" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -723,20 +785,59 @@
         <div class="nav-dropdown" id="portfolioDropdown" role="menu">
           <div class="nav-dropdown-inner">
 
-            <!-- LEFT: category links -->
-            <div class="nav-dropdown-links">
-              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/headshots.jpg">Corporate &amp; Headshots</a>
-              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/product.jpg">Product Photography</a>
-              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/fashion.jpg">Editorial &amp; Fashion</a>
-              <a href="events-celebrations.html" class="nav-dropdown-item is-active" data-img="images/events.jpg">Events &amp; Celebrations</a>
-              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="weddings/wedding1.webp">Video Production</a>
-              <a href="index.html#portfolio" class="nav-dropdown-item" data-img="images/branding.jpg">Portraits &amp; Branding</a>
+            <!-- LEFT: 3 main categories (desktop = hover slideshow, tablet/phone = arrow expands sub-categories) -->
+            <div class="nav-dropdown-links" id="navDdLinks">
+
+            <div class="nav-dd-group" data-group="corporate">
+              <div class="nav-dd-row">
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-parent" data-img="../images/headshots.jpg" data-slides="professional-headshots|Professional Headshots">Corporate</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Professional Headshots</a>
+              </div>
             </div>
 
-            <!-- RIGHT: image preview -->
+            <div class="nav-dd-group" data-group="lifestyle">
+              <div class="nav-dd-row">
+                <a href="../lifestyle-subcategories.html" class="nav-dropdown-item nav-dd-parent is-active" data-img="../images/branding.jpg" data-slides="maternity|Maternity,matric-farewell|Matric Farewell,graduation|Graduation,birthday|Birthday,outdoor-photography|Outdoor Photography,studio-photography|Studio Photography,housecall-birthday-photography|Housecall Birthday Photography">Lifestyle</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Lifestyle sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="../maternity-gallery.html" class="nav-dropdown-item nav-dd-sub is-active">Maternity</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Matric Farewell</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Graduation</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Birthday</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Outdoor Photography</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Studio Photography</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Housecall Birthday Photography</a>
+              </div>
+            </div>
+
+            <div class="nav-dd-group" data-group="events">
+              <div class="nav-dd-row">
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-parent" data-img="../images/events.jpg" data-slides="weddings|Weddings,birthday-lunch|Birthday Lunch,birthday-dinner|Birthday Dinner,celebration|Celebration,party|Party">Events</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Weddings</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Functions</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-subsub">Birthday Lunch</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-subsub">Birthday Dinner</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-subsub">Celebration</a>
+                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-subsub">Party</a>
+              </div>
+            </div>
+
+            <a href="../booking.html" class="nav-dropdown-item nav-dd-cta" id="navDdCta" data-img="../images/nav-logo.png" data-slides="custom-shoot|Not what you're looking for?">Not what you're looking for?</a>
+
+            </div>
+
+            <!-- RIGHT: image preview (logo shows until a category is hovered) -->
             <div class="nav-dropdown-preview">
               <div class="nav-dropdown-img-wrap" id="navDdImgWrap">
-                <img class="nav-dd-img" id="navDdImg" src="images/events.jpg" alt="Portfolio preview" />
+                <img class="nav-dd-img is-shown is-logo" id="navDdImg" src="../images/nav-logo.png" alt="Clean Media Pictures" />
+                <img class="nav-dd-img is-logo" id="navDdImgB" src="../images/nav-logo.png" alt="" />
               </div>
             </div>
 
@@ -745,26 +846,17 @@
         </div>
       </div>
 
-      <a href="index.html#testimonials" class="nav-tab">Testimonials</a>
-      <a href="index.html#faqs"         class="nav-tab">FAQs</a>
+      <a href="../index.html#testimonials" class="nav-tab">Testimonials</a>
+      <a href="../index.html#faqs"         class="nav-tab">FAQs</a>
     </div>
 
     <div class="nav-right">
-      <a href="index.html#book" class="btn-book">Book a Session</a>
+      <a href="../index.html#book" class="btn-book">Book a Session</a>
       <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navTabs">
         <span></span><span></span><span></span>
       </button>
     </div>
   </nav>
-
-  <div class="back-bar">
-    <a href="index.html#portfolio" class="back-link">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Back to Portfolio Categories
-    </a>
-  </div>
 
   <!-- ── Gallery ──────────────────────────────────────────── -->
   <section class="gallery" id="gallery">
@@ -900,7 +992,7 @@
       <div class="footer-top">
         <div class="footer-brand">
           <a href="index.html" class="footer-logo-link">
-            <img src="images/nav-logo.png" alt="Clean Media Pictures" class="footer-logo" />
+            <img src="../images/nav-logo.png" alt="Clean Media Pictures" class="footer-logo" />
           </a>
           <p class="footer-tagline">Light. Story. Craft.</p>
         </div>
@@ -969,17 +1061,130 @@
   </div>
 
   <script>
-    /* ── Portfolio nav dropdown ── */
+    /* ── Portfolio nav dropdown: desktop hover slideshow + tablet/phone accordion ── */
     (function () {
       const btn      = document.getElementById('portfolioDropdownBtn');
       const dropdown = document.getElementById('portfolioDropdown');
       const wrap     = btn ? btn.closest('.nav-dropdown-wrap') : null;
       if (!btn || !wrap || !dropdown) return;
 
+      const TABLET_MAX = 1024;                       // must match the CSS breakpoint
+      const isDesktop = () => window.innerWidth > TABLET_MAX;
+
+      /* ---------- positioning ---------- */
       function positionDropdown() {
         const rect = btn.getBoundingClientRect();
-        dropdown.style.top = (rect.bottom + 16) + 'px';
-        dropdown.style.height = '210px';
+        const top  = rect.bottom + 16;
+        dropdown.style.top = top + 'px';
+        if (!isDesktop()) { dropdown.style.height = ''; return; }
+        // Same sizing as index.html: stretch the panel down to where the home-page
+        // "Clean Media" title would start (this page has no hero, so it is computed
+        // from the same CSS: 12vh bottom padding, 14.5vw + 4vw type, 0.88 line-height).
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const mainPx = Math.min(Math.max(vw * 0.145, 64), 256);
+        const subPx  = Math.min(Math.max(vw * 0.04, 12.8), 192);
+        const titleTop = vh - vh * 0.12 - (mainPx * 0.88 + subPx);
+        const available = titleTop - top - 28;
+        const maxH = 620;
+        const safeFloor = Math.min(180, available);
+        dropdown.style.height = Math.max(safeFloor, Math.min(available, maxH)) + 'px';
+      }
+
+      /* ---------- desktop slideshow ---------- */
+      const SLIDE_DIR  = '../images/portfolio/';        // sub-category images: images/portfolio/<slug>.jpg
+      const SLIDE_EXTS = ['jpg', 'webp', 'png', 'jpeg'];
+      const SLIDE_MS   = 1800;
+
+      const ddImgs  = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
+      const linksEl = document.getElementById('navDdLinks');
+      const defaultSrc = ddImgs[0] ? ddImgs[0].getAttribute('src') : '';
+      let active = 0, timer = null, runId = 0;
+      const resolved = {};
+
+      function resolveSlide(slug) {
+        if (resolved[slug]) return resolved[slug];
+        resolved[slug] = new Promise(function (resolve) {
+          let i = 0;
+          (function next() {
+            if (i >= SLIDE_EXTS.length) return resolve(null);
+            const url = SLIDE_DIR + slug + '.' + SLIDE_EXTS[i++];
+            const im = new Image();
+            im.onload = function () { resolve(url); };
+            im.onerror = next;
+            im.src = url;
+          })();
+        });
+        return resolved[slug];
+      }
+
+      function parseSlides(item) {
+        return (item.dataset.slides || '').split(',').map(function (t) {
+          const parts = t.trim().split('|');
+          return { slug: parts[0], label: parts[1] || '' };
+        }).filter(function (d) { return d.slug; });
+      }
+
+      const LOGO_SRC = defaultSrc;
+
+      function show(src) {
+        if (!ddImgs[0] || !ddImgs[1]) return;
+        const next = ddImgs[1 - active], cur = ddImgs[active];
+        if (cur.getAttribute('src') !== src) {
+          next.src = src;
+          next.classList.toggle('is-logo', src === LOGO_SRC);
+          next.classList.add('is-shown');
+          cur.classList.remove('is-shown');
+          active = 1 - active;
+        }
+      }
+
+      function stopSlideshow() {
+        runId++;
+        if (timer) { clearInterval(timer); timer = null; }
+      }
+
+      function resetPreview() {
+        stopSlideshow();
+        show(defaultSrc);
+      }
+
+      async function startSlideshow(item) {
+        if (!isDesktop()) return;
+        stopSlideshow();
+        const id = runId;
+        const defs = parseSlides(item);
+        show(item.dataset.img || defaultSrc);                             // instant feedback
+        const urls = await Promise.all(defs.map(function (d) { return resolveSlide(d.slug); }));
+        if (id !== runId) return;
+        const slides = urls.filter(Boolean);
+        if (!slides.length) return;                                       // no images yet -> keep fallback
+        let n = 0;
+        show(slides[0]);
+        if (slides.length > 1) {
+          timer = setInterval(function () {
+            n = (n + 1) % slides.length;
+            show(slides[n]);
+          }, SLIDE_MS);
+        }
+      }
+
+      function preloadAll() {
+        document.querySelectorAll('.nav-dd-parent, .nav-dd-cta').forEach(function (it) {
+          parseSlides(it).forEach(function (d) { resolveSlide(d.slug); });
+        });
+      }
+
+      document.querySelectorAll('.nav-dd-parent, .nav-dd-cta').forEach(function (it) {
+        it.addEventListener('mouseenter', function () { startSlideshow(this); });
+        it.addEventListener('focus',      function () { startSlideshow(this); });
+      });
+      if (linksEl) linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
+
+      /* ---------- open / close ---------- */
+      function closeDropdown() {
+        wrap.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        resetPreview();
       }
 
       const label = btn.querySelector('.nav-trigger-label');
@@ -992,25 +1197,34 @@
         e.stopPropagation();
         const isOpen = wrap.classList.toggle('is-open');
         btn.setAttribute('aria-expanded', isOpen);
-        if (isOpen) positionDropdown();
+        if (isOpen) { positionDropdown(); if (isDesktop()) preloadAll(); } else { resetPreview(); }
       });
 
-      window.addEventListener('resize', () => { if (wrap.classList.contains('is-open')) positionDropdown(); });
-      window.addEventListener('scroll', () => { if (wrap.classList.contains('is-open')) positionDropdown(); }, true);
+      window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });
+      window.addEventListener('scroll', function () { if (wrap.classList.contains('is-open')) positionDropdown(); }, true);
 
       document.addEventListener('click', function (e) {
-        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) {
-          wrap.classList.remove('is-open');
-          btn.setAttribute('aria-expanded', 'false');
-        }
+        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
       });
 
-      const ddImg = document.getElementById('navDdImg');
-      document.querySelectorAll('.nav-dropdown-item').forEach(item => {
-        item.addEventListener('mouseenter', function () {
-          if (ddImg && this.dataset.img) ddImg.src = this.dataset.img;
+      /* ---------- tablet / phone: expand sub-categories ---------- */
+      document.querySelectorAll('.nav-dd-toggle').forEach(function (t) {
+        t.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const group = t.closest('.nav-dd-group');
+          const open = group.classList.toggle('is-expanded');
+          t.setAttribute('aria-expanded', open);
         });
       });
+
+      // Lifestyle is the current section, so start it expanded on tablet/phone
+      const current = document.querySelector('.nav-dd-group[data-group="lifestyle"]');
+      if (current) {
+        current.classList.add('is-expanded');
+        const tg = current.querySelector('.nav-dd-toggle');
+        if (tg) tg.setAttribute('aria-expanded', 'true');
+      }
     })();
   </script>
 
