@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Events &amp; Celebrations | Clean Media Pictures</title>
+  <title>Maternity | Clean Media Pictures</title>
   <!-- Cormorant Garamond: high-fashion editorial serif -->
   <!-- Bebas Neue: cinematic all-caps display -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -462,10 +462,56 @@
       .nav-tabs { gap: 24px; }
     }
 
+    /* ── Page header ─────────────────────────────────────── */
+    .page-header {
+      background: #fff;
+      text-align: center;
+      padding: 56px 40px 0;
+    }
+
+    .page-header-inner { max-width: 720px; margin: 0 auto; }
+
+    .page-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #c0000a;
+      margin-bottom: 18px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      line-height: 1.05;
+      color: #0d0d0d;
+    }
+
+    .page-rule {
+      width: 48px;
+      height: 1px;
+      background: #c0000a;
+      margin: 26px auto;
+    }
+
+    .page-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(10,10,10,0.62);
+    }
+
+    @media (max-width: 900px) {
+      .page-header { padding: 40px 24px 0; }
+    }
+
     /* ── Gallery ─────────────────────────────────────────── */
     .gallery {
       background: #fff;
-      padding: 64px 40px 112px;
+      padding: 56px 40px 112px;
     }
 
     /* 4 portrait frames, then 2 landscape frames — same row height,
@@ -788,46 +834,46 @@
             <!-- LEFT: 3 main categories (desktop = hover slideshow, tablet/phone = arrow expands sub-categories) -->
             <div class="nav-dropdown-links" id="navDdLinks">
 
+            
             <div class="nav-dd-group" data-group="corporate">
               <div class="nav-dd-row">
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-parent" data-img="../images/headshots.jpg" data-slides="professional-headshots|Professional Headshots">Corporate</a>
+                <a href="../corporate-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="../images/headshots.jpg" data-slides="professional-headshots|Professional Headshots,fashion|Fashion">Corporate</a>
                 <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
               </div>
               <div class="nav-dd-subs">
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Professional Headshots</a>
+                <a href="../corporate-gallery/professional-headshots-gallery.html" class="nav-dropdown-item nav-dd-sub">Professional Headshots</a>
+                <a href="../corporate-gallery/fashion-gallery.html" class="nav-dropdown-item nav-dd-sub">Fashion</a>
               </div>
             </div>
 
             <div class="nav-dd-group" data-group="lifestyle">
               <div class="nav-dd-row">
-                <a href="../lifestyle-subcategories.html" class="nav-dropdown-item nav-dd-parent is-active" data-img="../images/branding.jpg" data-slides="maternity|Maternity,matric-farewell|Matric Farewell,graduation|Graduation,birthday|Birthday,outdoor-photography|Outdoor Photography,studio-photography|Studio Photography,housecall-birthday-photography|Housecall Birthday Photography">Lifestyle</a>
+                <a href="../lifestyle-subcategories.html" class="nav-dropdown-item nav-dd-parent is-active" data-img="../images/branding.jpg" data-slides="maternity|Maternity,matric-farewell|Matric Farewell,graduation|Graduation,birthday|Birthday,outdoor-photography|Outdoor Photography,studio-photography|Studio Photography,cake-smash-photography|Cake Smash Photography">Lifestyle</a>
                 <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Lifestyle sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
               </div>
               <div class="nav-dd-subs">
-                <a href="../maternity-gallery.html" class="nav-dropdown-item nav-dd-sub is-active">Maternity</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Matric Farewell</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Graduation</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Birthday</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Outdoor Photography</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Studio Photography</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Housecall Birthday Photography</a>
+                <a href="../lifestyle-gallery/maternity-gallery.html" class="nav-dropdown-item nav-dd-sub is-active">Maternity</a>
+                <a href="../lifestyle-gallery/matric-farewell-gallery.html" class="nav-dropdown-item nav-dd-sub">Matric Farewell</a>
+                <a href="../lifestyle-gallery/graduation-gallery.html" class="nav-dropdown-item nav-dd-sub">Graduation</a>
+                <a href="../lifestyle-gallery/birthday-gallery.html" class="nav-dropdown-item nav-dd-sub">Birthday</a>
+                <a href="../lifestyle-gallery/outdoor-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Outdoor Photography</a>
+                <a href="../lifestyle-gallery/studio-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Studio Photography</a>
+                <a href="../lifestyle-gallery/cake-smash-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Cake Smash Photography</a>
               </div>
             </div>
 
             <div class="nav-dd-group" data-group="events">
               <div class="nav-dd-row">
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-parent" data-img="../images/events.jpg" data-slides="weddings|Weddings,birthday-lunch|Birthday Lunch,birthday-dinner|Birthday Dinner,celebration|Celebration,party|Party">Events</a>
+                <a href="../event-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="../images/events.jpg" data-slides="weddings|Weddings,celebration|Celebration,festive|Festive">Events</a>
                 <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
               </div>
               <div class="nav-dd-subs">
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Weddings</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-sub">Functions</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-subsub">Birthday Lunch</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-subsub">Birthday Dinner</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-subsub">Celebration</a>
-                <a href="../index.html#portfolio" class="nav-dropdown-item nav-dd-subsub">Party</a>
+                <a href="../events-gallery/weddings-gallery.html" class="nav-dropdown-item nav-dd-sub">Weddings</a>
+                <a href="../events-gallery/celebration-gallery.html" class="nav-dropdown-item nav-dd-sub">Celebration</a>
+                <a href="../events-gallery/festive.html" class="nav-dropdown-item nav-dd-sub">Festive</a>
               </div>
             </div>
+
 
             <a href="../booking.html" class="nav-dropdown-item nav-dd-cta" id="navDdCta" data-img="../images/nav-logo.png" data-slides="custom-shoot|Not what you're looking for?">Not what you're looking for?</a>
 
@@ -851,135 +897,151 @@
     </div>
 
     <div class="nav-right">
-      <a href="../index.html#book" class="btn-book">Book a Session</a>
+      <a href="../booking.html" class="btn-book">Book a Session</a>
       <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navTabs">
         <span></span><span></span><span></span>
       </button>
     </div>
   </nav>
 
+  <!-- ── Page header ──────────────────────────────────────── -->
+  <header class="page-header">
+    <div class="page-header-inner">
+      <p class="page-eyebrow">Lifestyle</p>
+      <h1 class="page-title">Maternity</h1>
+      <div class="page-rule"></div>
+      <p class="page-desc">
+        Expect soft, timeless portraits that celebrate the beauty of this season of life.
+        From elegant studio sessions with flowing gowns and gentle lighting to golden-hour
+        outdoor shoots, you'll find tender moments between mum-to-be and partner, family
+        portraits with siblings, and quiet close-ups of the bump. Every frame is crafted to
+        feel warm, natural and deeply personal.
+      </p>
+    </div>
+  </header>
+
   <!-- ── Gallery ──────────────────────────────────────────── -->
   <section class="gallery" id="gallery">
     <div class="gallery-grid">
 
-      <!-- Replace with: images/gallery/events/portrait-1.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-1.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-1/600/900" alt="Event photography 1" />
+        <img src="../lifestyle-gallery/images/maternity/70.webp" alt="Maternity photography 1" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-2.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-2.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-2/600/900" alt="Event photography 2" />
+        <img src="../lifestyle-gallery/images/maternity/20.webp" alt="Maternity photography 2" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-3.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-2.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-3/600/900" alt="Event photography 3" />
+        <img src="../lifestyle-gallery/images/maternity/80.webp" alt="Maternity photography 2" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-4.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-4.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-4/600/900" alt="Event photography 4" />
+        <img src="../lifestyle-gallery/images/maternity/7.webp" alt="Maternity photography 4" />
       </div>
 
-      <!-- Replace with: images/gallery/events/landscape-1.jpg -->
+      <!-- Replace with: images/gallery/maternity/landscape-1.jpg -->
       <div class="gallery-item gallery-item--landscape">
-        <img src="https://picsum.photos/seed/cmp-events-landscape-1/1200/800" alt="Event photography landscape 1" />
+        <img src="../lifestyle-gallery/images/maternity/57.webp" alt="Maternity photography landscape 1" />
       </div>
 
-      <!-- Replace with: images/gallery/events/landscape-2.jpg -->
+      <!-- Replace with: images/gallery/maternity/landscape-2.jpg -->
       <div class="gallery-item gallery-item--landscape">
-        <img src="https://picsum.photos/seed/cmp-events-landscape-2/1200/800" alt="Event photography landscape 2" />
+        <img src="../lifestyle-gallery/images/maternity/4.webp" alt="Maternity photography landscape 2" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-5.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-5.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-5/600/900" alt="Event photography 5" />
+        <img src="../lifestyle-gallery/images/maternity/5.webp" alt="Maternity photography 5" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-6.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-6.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-6/600/900" alt="Event photography 6" />
+        <img src="../lifestyle-gallery/images/maternity/50.webp" alt="Maternity photography 6" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-7.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-7.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-7/600/900" alt="Event photography 7" />
+        <img src="../lifestyle-gallery/images/maternity/36.webp" alt="Maternity photography 7" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-8.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-8.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-8/600/900" alt="Event photography 8" />
+        <img src="../lifestyle-gallery/images/maternity/48.webp" alt="Maternity photography 8" />
       </div>
 
-      <!-- Replace with: images/gallery/events/landscape-3.jpg -->
+      <!-- Replace with: images/gallery/maternity/landscape-3.jpg -->
       <div class="gallery-item gallery-item--landscape">
-        <img src="https://picsum.photos/seed/cmp-events-landscape-3/1200/800" alt="Event photography landscape 3" />
+        <img src="../lifestyle-gallery/images/maternity/3.webp" alt="Maternity photography landscape 3" />
       </div>
 
-      <!-- Replace with: images/gallery/events/landscape-4.jpg -->
+      <!-- Replace with: images/gallery/maternity/landscape-4.jpg -->
       <div class="gallery-item gallery-item--landscape">
-        <img src="https://picsum.photos/seed/cmp-events-landscape-4/1200/800" alt="Event photography landscape 4" />
+        <img src="../lifestyle-gallery/images/maternity/26.webp" alt="Maternity photography landscape 4" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-9.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-9.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-9/600/900" alt="Event photography 9" />
+        <img src="../lifestyle-gallery/images/maternity/9.webp" alt="Maternity photography 9" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-10.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-10.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-10/600/900" alt="Event photography 10" />
+        <img src="../lifestyle-gallery/images/maternity/55.webp" alt="Maternity photography 10" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-11.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-11.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-11/600/900" alt="Event photography 11" />
+        <img src="../lifestyle-gallery/images/maternity/11.webp" alt="Maternity photography 11" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-12.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-12.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-12/600/900" alt="Event photography 12" />
+        <img src="../lifestyle-gallery/images/maternity/88.webp" alt="Maternity photography 12" />
       </div>
 
-      <!-- Replace with: images/gallery/events/landscape-5.jpg -->
+      <!-- Replace with: images/gallery/maternity/landscape-5.jpg -->
       <div class="gallery-item gallery-item--landscape">
-        <img src="https://picsum.photos/seed/cmp-events-landscape-5/1200/800" alt="Event photography landscape 5" />
+        <img src="../lifestyle-gallery/images/maternity/8.webp" alt="Maternity photography landscape 5" />
       </div>
 
-      <!-- Replace with: images/gallery/events/landscape-6.jpg -->
+      <!-- Replace with: images/gallery/maternity/landscape-6.jpg -->
       <div class="gallery-item gallery-item--landscape">
-        <img src="https://picsum.photos/seed/cmp-events-landscape-6/1200/800" alt="Event photography landscape 6" />
+        <img src="../lifestyle-gallery/images/maternity/6.webp" alt="Maternity photography landscape 6" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-13.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-13.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-13/600/900" alt="Event photography 13" />
+        <img src="../lifestyle-gallery/images/maternity/16.webp" alt="Maternity photography 13" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-14.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-14.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-14/600/900" alt="Event photography 14" />
+        <img src="../lifestyle-gallery/images/maternity/17.webp" alt="Maternity photography 14" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-15.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-15.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-15/600/900" alt="Event photography 15" />
+        <img src="../lifestyle-gallery/images/maternity/18.webp" alt="Maternity photography 15" />
       </div>
 
-      <!-- Replace with: images/gallery/events/portrait-16.jpg -->
+      <!-- Replace with: images/gallery/maternity/portrait-16.jpg -->
       <div class="gallery-item gallery-item--portrait">
-        <img src="https://picsum.photos/seed/cmp-events-portrait-16/600/900" alt="Event photography 16" />
+        <img src="../lifestyle-gallery/images/maternity/19.webp" alt="Maternity photography 16" />
       </div>
 
-      <!-- Replace with: images/gallery/events/landscape-7.jpg -->
+      <!-- Replace with: images/gallery/maternity/landscape-7.jpg -->
       <div class="gallery-item gallery-item--landscape">
-        <img src="https://picsum.photos/seed/cmp-events-landscape-7/1200/800" alt="Event photography landscape 7" />
+        <img src="../lifestyle-gallery/images/maternity/91.webp" alt="Maternity photography landscape 7" />
       </div>
 
-      <!-- Replace with: images/gallery/events/landscape-8.jpg -->
+      <!-- Replace with: images/gallery/maternity/landscape-8.jpg -->
       <div class="gallery-item gallery-item--landscape">
-        <img src="https://picsum.photos/seed/cmp-events-landscape-8/1200/800" alt="Event photography landscape 8" />
+        <img src="../lifestyle-gallery/images/maternity/89.webp" alt="Maternity photography landscape 8" />
       </div>
 
     </div>
@@ -991,7 +1053,7 @@
 
       <div class="footer-top">
         <div class="footer-brand">
-          <a href="index.html" class="footer-logo-link">
+          <a href="../index.html" class="footer-logo-link">
             <img src="../images/nav-logo.png" alt="Clean Media Pictures" class="footer-logo" />
           </a>
           <p class="footer-tagline">Light. Story. Craft.</p>
@@ -1000,7 +1062,7 @@
         <div class="footer-whatsapp">
           <p class="footer-wa-label">Chat with us on WhatsApp</p>
           <p class="footer-wa-sub">Ready to book or have questions? Message us directly — we respond fast.</p>
-          <a href="https://wa.me/27000000000" target="_blank" rel="noopener" class="footer-wa-btn">
+          <a href="https://wa.me/27670237264" target="_blank" rel="noopener" class="footer-wa-btn">
             <svg class="footer-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
@@ -1012,32 +1074,33 @@
       <div class="footer-links">
         <div class="footer-col">
           <p class="footer-col-head">Studio</p>
-          <a href="index.html#portfolio" class="footer-link">Portfolio</a>
-          <a href="index.html#about"     class="footer-link">About Studio</a>
-          <a href="index.html#faqs"      class="footer-link">FAQs</a>
+          <a href="../index.html#portfolio" class="footer-link">Portfolio</a>
+          <a href="../index.html#about"     class="footer-link">About Studio</a>
+          <a href="../index.html#faqs"      class="footer-link">FAQs</a>
+          <a href="../privacy-policy.html" class="footer-link">Privacy Policy</a>
+          <a href="../terms-of-use.html" class="footer-link">Terms of Use</a>
         </div>
         <div class="footer-col">
           <p class="footer-col-head">Sessions</p>
-          <a href="index.html#book" class="footer-link">Book a Session</a>
-          <a href="index.html#book" class="footer-link">Corporate Portraits</a>
-          <a href="index.html#book" class="footer-link">Product Photography</a>
-          <a href="index.html#book" class="footer-link">Editorial &amp; Fashion</a>
-          <a href="index.html#book" class="footer-link">Video Production</a>
+          <a href="../booking.html" class="footer-link">Book a Session</a>
+          <a href="../lifestyle-subcategories.html" class="footer-link">Lifestyle Photography</a>
+          <a href="../event-subcategories.html" class="footer-link">Events Photography</a>
+          <a href="../corporate-subcategories.html" class="footer-link">Corporate Headshots</a>
         </div>
         <div class="footer-col">
           <p class="footer-col-head">Connect</p>
-          <a href="mailto:hello@cleanmediapictures.com" class="footer-link">hello@cleanmediapictures.com</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-link">Instagram</a>
-          <a href="https://facebook.com"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
-          <a href="https://tiktok.com"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
+          <a href="mailto:cleanmediapictures@gmail.com" class="footer-link">cleanmediapictures@gmail.com</a>
+          <a href="https://www.instagram.com/clean_media_pictures/" target="_blank" rel="noopener" class="footer-link">Instagram</a>
+          <a href="https://www.facebook.com/cleanmediaphotography/"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
+          <a href="https://www.tiktok.com/@clean_media_pictures"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
         </div>
       </div>
 
       <div class="footer-bottom">
         <p class="footer-copy">© 2025 Clean Media Pictures. All rights reserved.</p>
         <div class="footer-legal">
-          <a href="#" class="footer-legal-link">Privacy Policy</a>
-          <a href="#" class="footer-legal-link">Terms of Use</a>
+          <a href="../privacy-policy.html" class="footer-legal-link">Privacy Policy</a>
+          <a href="../terms-of-use.html" class="footer-legal-link">Terms of Use</a>
         </div>
       </div>
 

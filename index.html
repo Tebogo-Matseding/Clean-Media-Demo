@@ -1259,6 +1259,85 @@
     }
 
     /* ── Stats Strip (before footer) ────────────────────── */
+    /* ── FAQs ───────────────────────────────────────────── */
+    .faqs {
+      background: #fff;
+      padding: 96px 40px 104px;
+    }
+
+    .faqs-header { text-align: center; margin-bottom: 52px; }
+
+    .faqs-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #c0000a;
+      margin-bottom: 14px;
+    }
+
+    .faqs-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: #0d0d0d;
+      line-height: 1;
+    }
+
+    .faqs-list { max-width: 820px; margin: 0 auto; border-top: 1px solid rgba(10,10,10,0.12); }
+
+    .faq-item { border-bottom: 1px solid rgba(10,10,10,0.12); }
+
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #0d0d0d;
+      transition: color 0.2s;
+    }
+
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary:hover { color: #c0000a; }
+
+    .faq-item summary::after {
+      content: '+';
+      font-size: 1.4rem;
+      font-weight: 300;
+      line-height: 1;
+      color: #c0000a;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+
+    .faq-answer {
+      padding: 0 4px 26px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: rgba(10,10,10,0.65);
+      max-width: 700px;
+    }
+
+    .faq-answer a { color: #c0000a; text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 900px) {
+      .faqs { padding: 64px 24px 72px; }
+      .faq-item summary { font-size: 0.74rem; padding: 20px 2px; }
+    }
+
     .stats {
       background: #000;
       padding: 80px 40px 88px;
@@ -1366,42 +1445,40 @@
 
                 <div class="nav-dd-group" data-group="corporate">
                   <div class="nav-dd-row">
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-parent" data-filter="corporate" data-img="images/headshots.jpg" data-slides="professional-headshots|Professional Headshots">Corporate</a>
+                    <a href="corporate-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/headshots.jpg" data-slides="professional-headshots|Professional Headshots,fashion|Fashion">Corporate</a>
                     <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                   </div>
                   <div class="nav-dd-subs">
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="corporate" data-sub="professional-headshots" data-sub-pending>Professional Headshots</a>
+                    <a href="corporate-gallery/professional-headshots-gallery.html" class="nav-dropdown-item nav-dd-sub">Professional Headshots</a>
+                    <a href="corporate-gallery/fashion-gallery.html" class="nav-dropdown-item nav-dd-sub">Fashion</a>
                   </div>
                 </div>
 
                 <div class="nav-dd-group" data-group="lifestyle">
                   <div class="nav-dd-row">
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-parent" data-filter="lifestyle" data-img="images/branding.jpg" data-slides="maternity|Maternity,matric-farewell|Matric Farewell,graduation|Graduation,birthday|Birthday,outdoor-photography|Outdoor Photography,studio-photography|Studio Photography,housecall-birthday-photography|Housecall Birthday Photography">Lifestyle</a>
+                    <a href="lifestyle-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/branding.jpg" data-slides="maternity|Maternity,matric-farewell|Matric Farewell,graduation|Graduation,birthday|Birthday,outdoor-photography|Outdoor Photography,studio-photography|Studio Photography,cake-smash-photography|Cake Smash Photography">Lifestyle</a>
                     <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Lifestyle sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                   </div>
                   <div class="nav-dd-subs">
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="maternity" data-sub-pending>Maternity</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="matric-farewell" data-sub-pending>Matric Farewell</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="graduation" data-sub-pending>Graduation</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="birthday" data-sub-pending>Birthday</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="outdoor-photography" data-sub-pending>Outdoor Photography</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="studio-photography" data-sub-pending>Studio Photography</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="lifestyle" data-sub="housecall-birthday-photography" data-sub-pending>Housecall Birthday Photography</a>
+                    <a href="lifestyle-gallery/maternity-gallery.html" class="nav-dropdown-item nav-dd-sub">Maternity</a>
+                    <a href="lifestyle-gallery/matric-farewell-gallery.html" class="nav-dropdown-item nav-dd-sub">Matric Farewell</a>
+                    <a href="lifestyle-gallery/graduation-gallery.html" class="nav-dropdown-item nav-dd-sub">Graduation</a>
+                    <a href="lifestyle-gallery/birthday-gallery.html" class="nav-dropdown-item nav-dd-sub">Birthday</a>
+                    <a href="lifestyle-gallery/outdoor-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Outdoor Photography</a>
+                    <a href="lifestyle-gallery/studio-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Studio Photography</a>
+                    <a href="lifestyle-gallery/cake-smash-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Cake Smash Photography</a>
                   </div>
                 </div>
 
                 <div class="nav-dd-group" data-group="events">
                   <div class="nav-dd-row">
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-parent" data-filter="events" data-img="images/events.jpg" data-slides="weddings|Weddings,birthday-lunch|Birthday Lunch,birthday-dinner|Birthday Dinner,celebration|Celebration,party|Party">Events</a>
+                    <a href="event-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/events.jpg" data-slides="weddings|Weddings,celebration|Celebration,festive|Festive">Events</a>
                     <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                   </div>
                   <div class="nav-dd-subs">
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="events" data-sub="weddings" data-sub-pending>Weddings</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-sub" data-filter="events" data-sub="functions" data-sub-pending>Functions</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-subsub" data-filter="events" data-sub="birthday-lunch" data-sub-pending>Birthday Lunch</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-subsub" data-filter="events" data-sub="birthday-dinner" data-sub-pending>Birthday Dinner</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-subsub" data-filter="events" data-sub="celebration" data-sub-pending>Celebration</a>
-                    <a href="#portfolio" class="nav-dropdown-item nav-dd-subsub" data-filter="events" data-sub="party" data-sub-pending>Party</a>
+                    <a href="events-gallery/weddings-gallery.html" class="nav-dropdown-item nav-dd-sub">Weddings</a>
+                    <a href="events-gallery/celebration-gallery.html" class="nav-dropdown-item nav-dd-sub">Celebration</a>
+                    <a href="events-gallery/festive.html" class="nav-dropdown-item nav-dd-sub">Festive</a>
                   </div>
                 </div>
 
@@ -1506,13 +1583,14 @@
     <div class="portfolio-grid">
 
       <!-- Card 1: Corporate -->
-      <a href="#portfolio" class="portfolio-card" data-category="corporate">
+      <a href="corporate-subcategories.html" class="portfolio-card" data-category="corporate">
         <img class="portfolio-card-img" src="images/headshots.jpg" alt="Corporate" />
         <div class="portfolio-card-overlay"></div>
         <div class="portfolio-card-label">
           <span class="portfolio-card-title">Corporate</span>
           <ul class="portfolio-card-shoots">
             <li>Professional Headshots</li>
+            <li>Fashion Photography</li>
           </ul>
           <span class="portfolio-card-arrow">View Gallery →</span>
         </div>
@@ -1531,24 +1609,22 @@
             <li>Birthday</li>
             <li>Outdoor Photography</li>
             <li>Studio Photography</li>
-            <li>Housecall Birthday Photography</li>
+            <li>Cake Smash Photography</li>
           </ul>
           <span class="portfolio-card-arrow">View Gallery →</span>
         </div>
       </a>
 
       <!-- Card 3: Events -->
-      <a href="#portfolio" class="portfolio-card" data-category="events">
+      <a href="event-subcategories.html" class="portfolio-card" data-category="events">
         <img class="portfolio-card-img" src="images/events.jpg" alt="Events" />
         <div class="portfolio-card-overlay"></div>
         <div class="portfolio-card-label">
           <span class="portfolio-card-title">Events</span>
           <ul class="portfolio-card-shoots">
             <li>Weddings</li>
-            <li>Birthday Lunches</li>
-            <li>Birthday Dinners</li>
-            <li>Celebrations</li>
-            <li>Parties</li>
+            <li>Celebration</li>
+            <li>Festive</li>
           </ul>
           <span class="portfolio-card-arrow">View Gallery →</span>
         </div>
@@ -1651,6 +1727,41 @@
 
   </section>
 
+  <!-- ── FAQs ──────────────────────────────────────────────── -->
+  <section class="faqs" id="faqs">
+    <div class="faqs-header">
+      <p class="faqs-eyebrow">Good to Know</p>
+      <h2 class="faqs-heading">FAQs</h2>
+    </div>
+
+    <div class="faqs-list">
+      <details class="faq-item">
+        <summary>How do I book a session?</summary>
+        <p class="faq-answer">Use the <a href="booking.html">booking page</a> or message us on WhatsApp. Tell us the type of shoot you have in mind and your preferred date, and we will confirm availability with you.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What types of photography do you offer?</summary>
+        <p class="faq-answer">Our Lifestyle work covers maternity, matric farewell, graduation, birthday, outdoor, studio and cake smash sessions. We also cover events such as weddings and celebrations, and corporate portraits and headshots.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Where do the shoots take place?</summary>
+        <p class="faq-answer">We are based in Johannesburg and shoot both in the studio and on location, depending on the session. Let us know what you have in mind and we will recommend the best option.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What should I wear?</summary>
+        <p class="faq-answer">It depends on the shoot. Once your session is booked we will send styling guidance for your type of shoot, so you arrive knowing what works best on camera.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How long until I receive my photos?</summary>
+        <p class="faq-answer">Turnaround depends on the type of session and how many images are involved. We will confirm the delivery timeline with you when you book.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I reschedule or cancel my session?</summary>
+        <p class="faq-answer">Yes. Please contact us as early as possible on WhatsApp or by email and we will find a new date that suits you.</p>
+      </details>
+    </div>
+  </section>
+
   <!-- ── Stats Strip ───────────────────────────────────────── -->
   <section class="stats">
     <h2 class="stats-title">Our Milestones</h2>
@@ -1686,7 +1797,7 @@
         <div class="footer-whatsapp">
           <p class="footer-wa-label">Chat with us on WhatsApp</p>
           <p class="footer-wa-sub">Ready to book or have questions? Message us directly — we respond fast.</p>
-          <a href="https://wa.me/27000000000" target="_blank" rel="noopener" class="footer-wa-btn">
+          <a href="https://wa.me/27670237264" target="_blank" rel="noopener" class="footer-wa-btn">
             <svg class="footer-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
@@ -1702,21 +1813,22 @@
           <a href="#portfolio" class="footer-link">Portfolio</a>
           <a href="#about"     class="footer-link">About Studio</a>
           <a href="#faqs"      class="footer-link">FAQs</a>
+          <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+          <a href="terms-of-use.html" class="footer-link">Terms of Use</a>
         </div>
         <div class="footer-col">
           <p class="footer-col-head">Sessions</p>
-          <a href="#book" class="footer-link">Book a Session</a>
-          <a href="#book" class="footer-link">Corporate Portraits</a>
-          <a href="#book" class="footer-link">Product Photography</a>
-          <a href="#book" class="footer-link">Editorial &amp; Fashion</a>
-          <a href="#book" class="footer-link">Video Production</a>
+          <a href="booking.html" class="footer-link">Book a Session</a>
+          <a href="lifestyle-subcategories.html" class="footer-link">Lifestyle Photography</a>
+          <a href="event-subcategories.html" class="footer-link">Events Photography</a>
+          <a href="corporate-subcategories.html" class="footer-link">Corporate Headshots</a>
         </div>
         <div class="footer-col">
           <p class="footer-col-head">Connect</p>
-          <a href="mailto:hello@cleanmediapictures.com" class="footer-link">hello@cleanmediapictures.com</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-link">Instagram</a>
-          <a href="https://facebook.com"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
-          <a href="https://tiktok.com"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
+          <a href="mailto:cleanmediapictures@gmail.com" class="footer-link">cleanmediapictures@gmail.com</a>
+          <a href="https://www.instagram.com/clean_media_pictures/" target="_blank" rel="noopener" class="footer-link">Instagram</a>
+          <a href="https://www.facebook.com/cleanmediaphotography/"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
+          <a href="https://www.tiktok.com/@clean_media_pictures"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
         </div>
       </div>
 
@@ -1724,8 +1836,8 @@
       <div class="footer-bottom">
         <p class="footer-copy">© 2025 Clean Media Pictures. All rights reserved.</p>
         <div class="footer-legal">
-          <a href="#" class="footer-legal-link">Privacy Policy</a>
-          <a href="#" class="footer-legal-link">Terms of Use</a>
+          <a href="privacy-policy.html" class="footer-legal-link">Privacy Policy</a>
+          <a href="terms-of-use.html" class="footer-legal-link">Terms of Use</a>
         </div>
       </div>
 

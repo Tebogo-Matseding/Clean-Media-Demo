@@ -525,7 +525,48 @@
 
         <div class="nav-dropdown" id="portfolioDropdown" role="menu">
           <div class="nav-dropdown-inner">
-            <div class="nav-dropdown-links" id="navDdLinks"></div>
+            <div class="nav-dropdown-links" id="navDdLinks">
+            <div class="nav-dd-group" data-group="corporate">
+              <div class="nav-dd-row">
+                <a href="corporate-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/headshots.jpg" data-slides="professional-headshots|Professional Headshots,fashion|Fashion">Corporate</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="corporate-gallery/professional-headshots-gallery.html" class="nav-dropdown-item nav-dd-sub">Professional Headshots</a>
+                <a href="corporate-gallery/fashion-gallery.html" class="nav-dropdown-item nav-dd-sub">Fashion</a>
+              </div>
+            </div>
+
+            <div class="nav-dd-group" data-group="lifestyle">
+              <div class="nav-dd-row">
+                <a href="lifestyle-subcategories.html" class="nav-dropdown-item nav-dd-parent is-active" data-img="images/branding.jpg" data-slides="maternity|Maternity,matric-farewell|Matric Farewell,graduation|Graduation,birthday|Birthday,outdoor-photography|Outdoor Photography,studio-photography|Studio Photography,cake-smash-photography|Cake Smash Photography">Lifestyle</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Lifestyle sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="lifestyle-gallery/maternity-gallery.html" class="nav-dropdown-item nav-dd-sub">Maternity</a>
+                <a href="lifestyle-gallery/matric-farewell-gallery.html" class="nav-dropdown-item nav-dd-sub">Matric Farewell</a>
+                <a href="lifestyle-gallery/graduation-gallery.html" class="nav-dropdown-item nav-dd-sub">Graduation</a>
+                <a href="lifestyle-gallery/birthday-gallery.html" class="nav-dropdown-item nav-dd-sub">Birthday</a>
+                <a href="lifestyle-gallery/outdoor-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Outdoor Photography</a>
+                <a href="lifestyle-gallery/studio-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Studio Photography</a>
+                <a href="lifestyle-gallery/cake-smash-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Cake Smash Photography</a>
+              </div>
+            </div>
+
+            <div class="nav-dd-group" data-group="events">
+              <div class="nav-dd-row">
+                <a href="event-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/events.jpg" data-slides="weddings|Weddings,celebration|Celebration,festive|Festive">Events</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="events-gallery/weddings-gallery.html" class="nav-dropdown-item nav-dd-sub">Weddings</a>
+                <a href="events-gallery/celebration-gallery.html" class="nav-dropdown-item nav-dd-sub">Celebration</a>
+                <a href="events-gallery/festive.html" class="nav-dropdown-item nav-dd-sub">Festive</a>
+              </div>
+            </div>
+
+            <a href="booking.html" class="nav-dropdown-item nav-dd-cta" id="navDdCta">Not what you're looking for?</a>
+          </div>
             <div class="nav-dropdown-preview">
               <div class="nav-dropdown-img-wrap">
                 <img class="nav-dd-img is-shown is-logo" id="navDdImg" src="images/nav-logo.png" alt="Clean Media Pictures" />
@@ -557,39 +598,7 @@
   <main class="subs" id="subs">
     <!-- Each photo below is a normal <img>. To add yours: change its src to the path in the
          "Replace with" comment above it (put the files in images/portfolio/). -->
-    <div class="cat-group" data-category="corporate" hidden>
-      <section class="sub" id="professional-headshots">
-        <div class="sub-info">
-          <h2 class="sub-name">Professional Headshots</h2>
-          <p class="sub-desc">Sharp, flattering portraits for LinkedIn, company websites and press kits.</p>
-          <a class="sub-link" href="gallery-professional-headshots.html" aria-label="View the Professional Headshots gallery">View Gallery <span>&rarr;</span></a>
-        </div>
-        <div class="mosaic n-4">
-          <!-- Replace with: images/portfolio/professional-headshots-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-professional-headshots.html" aria-label="Professional Headshots gallery">
-            <img src="https://picsum.photos/seed/cmp-professional-headshots-1/900/900" alt="Professional Headshots photo 1" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/professional-headshots-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-professional-headshots.html" aria-label="Professional Headshots gallery">
-            <img src="https://picsum.photos/seed/cmp-professional-headshots-2/600/400" alt="Professional Headshots photo 2" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/professional-headshots-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-professional-headshots.html" aria-label="Professional Headshots gallery">
-            <img src="https://picsum.photos/seed/cmp-professional-headshots-3/600/400" alt="Professional Headshots photo 3" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/professional-headshots-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-professional-headshots.html" aria-label="Professional Headshots gallery">
-            <img src="https://picsum.photos/seed/cmp-professional-headshots-4/600/400" alt="Professional Headshots photo 4" loading="lazy" />
-            <div class="shot-more"><b>View All</b><small>Professional Headshots</small></div>
-          </a>
-        </div>
-      </section>
-    </div>
-
-    <div class="cat-group" data-category="lifestyle" hidden>
+    <div class="cat-group" data-category="lifestyle">
       <section class="sub" id="maternity">
         <div class="sub-info">
           <h2 class="sub-name">Maternity</h2>
@@ -599,22 +608,22 @@
         <div class="mosaic n-4">
           <!-- Replace with: images/portfolio/maternity-1.jpg  (large tile) -->
           <a class="shot" href="lifestyle-gallery/maternity-gallery.html" aria-label="Maternity gallery">
-            <img src="https://picsum.photos/seed/cmp-maternity-1/900/900" alt="Maternity photo 1" loading="lazy" />
+            <img src="lifestyle-gallery/images/maternity/12.webp" alt="Maternity photo 1" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/maternity-2.jpg  (small tile) -->
           <a class="shot" href="lifestyle-gallery/maternity-gallery.html" aria-label="Maternity gallery">
-            <img src="https://picsum.photos/seed/cmp-maternity-2/600/400" alt="Maternity photo 2" loading="lazy" />
+            <img src="lifestyle-gallery/images/maternity/4.webp" alt="Maternity photo 2" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/maternity-3.jpg  (small tile) -->
           <a class="shot" href="lifestyle-gallery/maternity-gallery.html" aria-label="Maternity gallery">
-            <img src="https://picsum.photos/seed/cmp-maternity-3/600/400" alt="Maternity photo 3" loading="lazy" />
+            <img src="lifestyle-gallery/images/maternity/8.webp" alt="Maternity photo 3" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/maternity-4.jpg  (small tile) -->
           <a class="shot" href="lifestyle-gallery/maternity-gallery.html" aria-label="Maternity gallery">
-            <img src="https://picsum.photos/seed/cmp-maternity-4/600/400" alt="Maternity photo 4" loading="lazy" />
+            <img src="lifestyle-gallery/images/maternity/57.webp" alt="Maternity photo 4" loading="lazy" />
             <div class="shot-more"><b>View All</b><small>Maternity</small></div>
           </a>
         </div>
@@ -624,27 +633,27 @@
         <div class="sub-info">
           <h2 class="sub-name">Matric Farewell</h2>
           <p class="sub-desc">Glamorous portraits to mark the end of school, from outfit to final frame.</p>
-          <a class="sub-link" href="gallery-matric-farewell.html" aria-label="View the Matric Farewell gallery">View Gallery <span>&rarr;</span></a>
+          <a class="sub-link" href="lifestyle-gallery/matric-farewell-gallery.html" aria-label="View the Matric Farewell gallery">View Gallery <span>&rarr;</span></a>
         </div>
         <div class="mosaic n-4">
           <!-- Replace with: images/portfolio/matric-farewell-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-matric-farewell.html" aria-label="Matric Farewell gallery">
-            <img src="https://picsum.photos/seed/cmp-matric-farewell-1/900/900" alt="Matric Farewell photo 1" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/matric-farewell-gallery.html" aria-label="Matric Farewell gallery">
+            <img src="lifestyle-gallery/images/matric-farewell/23.webp" alt="Matric Farewell photo 1" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/matric-farewell-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-matric-farewell.html" aria-label="Matric Farewell gallery">
-            <img src="https://picsum.photos/seed/cmp-matric-farewell-2/600/400" alt="Matric Farewell photo 2" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/matric-farewell-gallery.html" aria-label="Matric Farewell gallery">
+            <img src="lifestyle-gallery/images/matric-farewell/83.webp" alt="Matric Farewell photo 2" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/matric-farewell-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-matric-farewell.html" aria-label="Matric Farewell gallery">
-            <img src="https://picsum.photos/seed/cmp-matric-farewell-3/600/400" alt="Matric Farewell photo 3" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/matric-farewell-gallery.html" aria-label="Matric Farewell gallery">
+            <img src="lifestyle-gallery/images/matric-farewell/41.webp" alt="Matric Farewell photo 3" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/matric-farewell-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-matric-farewell.html" aria-label="Matric Farewell gallery">
-            <img src="https://picsum.photos/seed/cmp-matric-farewell-4/600/400" alt="Matric Farewell photo 4" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/matric-farewell-gallery.html" aria-label="Matric Farewell gallery">
+            <img src="lifestyle-gallery/images/matric-farewell/147.webp" alt="Matric Farewell photo 4" loading="lazy" />
             <div class="shot-more"><b>View All</b><small>Matric Farewell</small></div>
           </a>
         </div>
@@ -654,27 +663,27 @@
         <div class="sub-info">
           <h2 class="sub-name">Graduation</h2>
           <p class="sub-desc">Cap-and-gown portraits that capture years of hard work in a single image.</p>
-          <a class="sub-link" href="gallery-graduation.html" aria-label="View the Graduation gallery">View Gallery <span>&rarr;</span></a>
+          <a class="sub-link" href="lifestyle-gallery/graduation-gallery.html" aria-label="View the Graduation gallery">View Gallery <span>&rarr;</span></a>
         </div>
         <div class="mosaic n-4">
           <!-- Replace with: images/portfolio/graduation-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-graduation.html" aria-label="Graduation gallery">
-            <img src="https://picsum.photos/seed/cmp-graduation-1/900/900" alt="Graduation photo 1" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/graduation-gallery.html" aria-label="Graduation gallery">
+            <img src="lifestyle-gallery/images/graduation/138.webp" alt="Graduation photo 1" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/graduation-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-graduation.html" aria-label="Graduation gallery">
-            <img src="https://picsum.photos/seed/cmp-graduation-2/600/400" alt="Graduation photo 2" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/graduation-gallery.html" aria-label="Graduation gallery">
+            <img src="lifestyle-gallery/images/graduation/198.webp" alt="Graduation photo 2" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/graduation-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-graduation.html" aria-label="Graduation gallery">
-            <img src="https://picsum.photos/seed/cmp-graduation-3/600/400" alt="Graduation photo 3" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/graduation-gallery.html" aria-label="Graduation gallery">
+            <img src="lifestyle-gallery/images/graduation/61.webp" alt="Graduation photo 3" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/graduation-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-graduation.html" aria-label="Graduation gallery">
-            <img src="https://picsum.photos/seed/cmp-graduation-4/600/400" alt="Graduation photo 4" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/graduation-gallery.html" aria-label="Graduation gallery">
+            <img src="lifestyle-gallery/images/graduation/113.webp" alt="Graduation photo 4" loading="lazy" />
             <div class="shot-more"><b>View All</b><small>Graduation</small></div>
           </a>
         </div>
@@ -684,27 +693,27 @@
         <div class="sub-info">
           <h2 class="sub-name">Birthday</h2>
           <p class="sub-desc">Playful, personality-filled shoots for the birthday that deserves more than a phone snap.</p>
-          <a class="sub-link" href="gallery-birthday.html" aria-label="View the Birthday gallery">View Gallery <span>&rarr;</span></a>
+          <a class="sub-link" href="lifestyle-gallery/birthday-gallery.html" aria-label="View the Birthday gallery">View Gallery <span>&rarr;</span></a>
         </div>
         <div class="mosaic n-4">
           <!-- Replace with: images/portfolio/birthday-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-birthday.html" aria-label="Birthday gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-1/900/900" alt="Birthday photo 1" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/birthday-gallery.html" aria-label="Birthday gallery">
+            <img src="lifestyle-gallery/images/birthday/45.webp" alt="Birthday photo 1" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/birthday-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-birthday.html" aria-label="Birthday gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-2/600/400" alt="Birthday photo 2" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/birthday-gallery.html" aria-label="Birthday gallery">
+            <img src="lifestyle-gallery/images/birthday/158.webp" alt="Birthday photo 2" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/birthday-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-birthday.html" aria-label="Birthday gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-3/600/400" alt="Birthday photo 3" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/birthday-gallery.html" aria-label="Birthday gallery">
+            <img src="lifestyle-gallery/images/birthday/100.webp" alt="Birthday photo 3" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/birthday-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-birthday.html" aria-label="Birthday gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-4/600/400" alt="Birthday photo 4" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/birthday-gallery.html" aria-label="Birthday gallery">
+            <img src="lifestyle-gallery/images/birthday/7.webp" alt="Birthday photo 4" loading="lazy" />
             <div class="shot-more"><b>View All</b><small>Birthday</small></div>
           </a>
         </div>
@@ -714,27 +723,27 @@
         <div class="sub-info">
           <h2 class="sub-name">Outdoor Photography</h2>
           <p class="sub-desc">Natural light, open spaces and relaxed, candid energy.</p>
-          <a class="sub-link" href="gallery-outdoor-photography.html" aria-label="View the Outdoor Photography gallery">View Gallery <span>&rarr;</span></a>
+          <a class="sub-link" href="lifestyle-gallery/outdoor-photography-gallery.html" aria-label="View the Outdoor Photography gallery">View Gallery <span>&rarr;</span></a>
         </div>
         <div class="mosaic n-4">
           <!-- Replace with: images/portfolio/outdoor-photography-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-outdoor-photography.html" aria-label="Outdoor Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-outdoor-photography-1/900/900" alt="Outdoor Photography photo 1" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/outdoor-photography-gallery.html" aria-label="Outdoor Photography gallery">
+            <img src="lifestyle-gallery/images/outdoor-photography/1.webp" alt="Outdoor Photography photo 1" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/outdoor-photography-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-outdoor-photography.html" aria-label="Outdoor Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-outdoor-photography-2/600/400" alt="Outdoor Photography photo 2" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/outdoor-photography-gallery.html" aria-label="Outdoor Photography gallery">
+            <img src="lifestyle-gallery/images/outdoor-photography/68.webp" alt="Outdoor Photography photo 2" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/outdoor-photography-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-outdoor-photography.html" aria-label="Outdoor Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-outdoor-photography-3/600/400" alt="Outdoor Photography photo 3" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/outdoor-photography-gallery.html" aria-label="Outdoor Photography gallery">
+            <img src="lifestyle-gallery/images/outdoor-photography/20.webp" alt="Outdoor Photography photo 3" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/outdoor-photography-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-outdoor-photography.html" aria-label="Outdoor Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-outdoor-photography-4/600/400" alt="Outdoor Photography photo 4" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/outdoor-photography-gallery.html" aria-label="Outdoor Photography gallery">
+            <img src="lifestyle-gallery/images/outdoor-photography/27.webp" alt="Outdoor Photography photo 4" loading="lazy" />
             <div class="shot-more"><b>View All</b><small>Outdoor Photography</small></div>
           </a>
         </div>
@@ -744,244 +753,63 @@
         <div class="sub-info">
           <h2 class="sub-name">Studio Photography</h2>
           <p class="sub-desc">Controlled lighting and clean backdrops for striking, editorial results.</p>
-          <a class="sub-link" href="gallery-studio-photography.html" aria-label="View the Studio Photography gallery">View Gallery <span>&rarr;</span></a>
+          <a class="sub-link" href="lifestyle-gallery/studio-photography-gallery.html" aria-label="View the Studio Photography gallery">View Gallery <span>&rarr;</span></a>
         </div>
         <div class="mosaic n-4">
           <!-- Replace with: images/portfolio/studio-photography-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-studio-photography.html" aria-label="Studio Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-studio-photography-1/900/900" alt="Studio Photography photo 1" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/studio-photography-gallery.html" aria-label="Studio Photography gallery">
+            <img src="lifestyle-gallery/images/studio-photography/1.webp" alt="Studio Photography photo 1" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/studio-photography-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-studio-photography.html" aria-label="Studio Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-studio-photography-2/600/400" alt="Studio Photography photo 2" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/studio-photography-gallery.html" aria-label="Studio Photography gallery">
+            <img src="lifestyle-gallery/images/studio-photography/17.webp" alt="Studio Photography photo 2" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/studio-photography-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-studio-photography.html" aria-label="Studio Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-studio-photography-3/600/400" alt="Studio Photography photo 3" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/studio-photography-gallery.html" aria-label="Studio Photography gallery">
+            <img src="lifestyle-gallery/images/studio-photography/81.webp" alt="Studio Photography photo 3" loading="lazy" />
           </a>
 
           <!-- Replace with: images/portfolio/studio-photography-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-studio-photography.html" aria-label="Studio Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-studio-photography-4/600/400" alt="Studio Photography photo 4" loading="lazy" />
+          <a class="shot" href="lifestyle-gallery/studio-photography-gallery.html" aria-label="Studio Photography gallery">
+            <img src="lifestyle-gallery/images/studio-photography/39.webp" alt="Studio Photography photo 4" loading="lazy" />
             <div class="shot-more"><b>View All</b><small>Studio Photography</small></div>
           </a>
         </div>
       </section>
 
-      <section class="sub" id="housecall-birthday-photography">
+      <section class="sub" id="cake-smash-photography">
         <div class="sub-info">
-          <h2 class="sub-name">Housecall Birthday Photography</h2>
-          <p class="sub-desc">We bring the studio to you and photograph the celebration at home.</p>
-          <a class="sub-link" href="gallery-housecall-birthday-photography.html" aria-label="View the Housecall Birthday Photography gallery">View Gallery <span>&rarr;</span></a>
+          <h2 class="sub-name">Cake Smash Photography</h2>
+          <p class="sub-desc">Playful, messy first-birthday cake smash sessions, styled in studio or photographed at home.</p>
+          <a class="sub-link" href="lifestyle-gallery/cake-smash-photography-gallery.html" aria-label="View the Cake Smash Photography gallery">View Gallery <span>&rarr;</span></a>
         </div>
         <div class="mosaic n-4">
-          <!-- Replace with: images/portfolio/housecall-birthday-photography-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-housecall-birthday-photography.html" aria-label="Housecall Birthday Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-housecall-birthday-photography-1/900/900" alt="Housecall Birthday Photography photo 1" loading="lazy" />
+          <!-- Replace with: images/portfolio/cake-smash-photography-1.jpg  (large tile) -->
+          <a class="shot" href="lifestyle-gallery/cake-smash-photography-gallery.html" aria-label="Cake Smash Photography gallery">
+            <img src="lifestyle-gallery/images/cake-smash-photography/51.webp" alt="Cake Smash Photography photo 1" loading="lazy" />
           </a>
 
-          <!-- Replace with: images/portfolio/housecall-birthday-photography-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-housecall-birthday-photography.html" aria-label="Housecall Birthday Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-housecall-birthday-photography-2/600/400" alt="Housecall Birthday Photography photo 2" loading="lazy" />
+          <!-- Replace with: images/portfolio/cake-smash-photography-2.jpg  (small tile) -->
+          <a class="shot" href="lifestyle-gallery/cake-smash-photography-gallery.html" aria-label="Cake Smash Photography gallery">
+            <img src="lifestyle-gallery/images/cake-smash-photography/33.webp" alt="Cake Smash Photography photo 2" loading="lazy" />
           </a>
 
-          <!-- Replace with: images/portfolio/housecall-birthday-photography-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-housecall-birthday-photography.html" aria-label="Housecall Birthday Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-housecall-birthday-photography-3/600/400" alt="Housecall Birthday Photography photo 3" loading="lazy" />
+          <!-- Replace with: images/portfolio/cake-smash-photography-3.jpg  (small tile) -->
+          <a class="shot" href="lifestyle-gallery/cake-smash-photography-gallery.html" aria-label="Cake Smash Photography gallery">
+            <img src="lifestyle-gallery/images/cake-smash-photography/9.webp" alt="Cake Smash Photography photo 3" loading="lazy" />
           </a>
 
-          <!-- Replace with: images/portfolio/housecall-birthday-photography-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-housecall-birthday-photography.html" aria-label="Housecall Birthday Photography gallery">
-            <img src="https://picsum.photos/seed/cmp-housecall-birthday-photography-4/600/400" alt="Housecall Birthday Photography photo 4" loading="lazy" />
-            <div class="shot-more"><b>View All</b><small>Housecall Birthday Photography</small></div>
+          <!-- Replace with: images/portfolio/cake-smash-photography-4.jpg  (small tile) -->
+          <a class="shot" href="lifestyle-gallery/cake-smash-photography-gallery.html" aria-label="Cake Smash Photography gallery">
+            <img src="lifestyle-gallery/images/cake-smash-photography/116.webp" alt="Cake Smash Photography photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Cake Smash Photography</small></div>
           </a>
         </div>
       </section>
     </div>
 
-    <div class="cat-group" data-category="events" hidden>
-      <section class="sub" id="weddings">
-        <div class="sub-info">
-          <h2 class="sub-name">Weddings</h2>
-          <p class="sub-desc">From quiet preparations to the final send-off, told as one cohesive story.</p>
-          <a class="sub-link" href="gallery-weddings.html" aria-label="View the Weddings gallery">View Gallery <span>&rarr;</span></a>
-        </div>
-        <div class="mosaic n-4">
-          <!-- Replace with: images/portfolio/weddings-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-weddings.html" aria-label="Weddings gallery">
-            <img src="https://picsum.photos/seed/cmp-weddings-1/900/900" alt="Weddings photo 1" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/weddings-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-weddings.html" aria-label="Weddings gallery">
-            <img src="https://picsum.photos/seed/cmp-weddings-2/600/400" alt="Weddings photo 2" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/weddings-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-weddings.html" aria-label="Weddings gallery">
-            <img src="https://picsum.photos/seed/cmp-weddings-3/600/400" alt="Weddings photo 3" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/weddings-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-weddings.html" aria-label="Weddings gallery">
-            <img src="https://picsum.photos/seed/cmp-weddings-4/600/400" alt="Weddings photo 4" loading="lazy" />
-            <div class="shot-more"><b>View All</b><small>Weddings</small></div>
-          </a>
-        </div>
-      </section>
-
-      <section class="sub" id="functions">
-        <div class="sub-info">
-          <h2 class="sub-name">Functions</h2>
-          <p class="sub-desc">Corporate and private functions covered discreetly and professionally.</p>
-          <a class="sub-link" href="gallery-functions.html" aria-label="View the Functions gallery">View Gallery <span>&rarr;</span></a>
-        </div>
-        <div class="mosaic n-4">
-          <!-- Replace with: images/portfolio/functions-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-functions.html" aria-label="Functions gallery">
-            <img src="https://picsum.photos/seed/cmp-functions-1/900/900" alt="Functions photo 1" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/functions-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-functions.html" aria-label="Functions gallery">
-            <img src="https://picsum.photos/seed/cmp-functions-2/600/400" alt="Functions photo 2" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/functions-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-functions.html" aria-label="Functions gallery">
-            <img src="https://picsum.photos/seed/cmp-functions-3/600/400" alt="Functions photo 3" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/functions-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-functions.html" aria-label="Functions gallery">
-            <img src="https://picsum.photos/seed/cmp-functions-4/600/400" alt="Functions photo 4" loading="lazy" />
-            <div class="shot-more"><b>View All</b><small>Functions</small></div>
-          </a>
-        </div>
-      </section>
-
-      <section class="sub" id="birthday-lunch">
-        <div class="sub-info">
-          <h2 class="sub-name">Birthday Lunches</h2>
-          <p class="sub-desc">Relaxed daytime celebrations, from table details to candid laughter.</p>
-          <a class="sub-link" href="gallery-birthday-lunch.html" aria-label="View the Birthday Lunches gallery">View Gallery <span>&rarr;</span></a>
-        </div>
-        <div class="mosaic n-4">
-          <!-- Replace with: images/portfolio/birthday-lunch-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-birthday-lunch.html" aria-label="Birthday Lunches gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-lunch-1/900/900" alt="Birthday Lunches photo 1" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/birthday-lunch-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-birthday-lunch.html" aria-label="Birthday Lunches gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-lunch-2/600/400" alt="Birthday Lunches photo 2" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/birthday-lunch-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-birthday-lunch.html" aria-label="Birthday Lunches gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-lunch-3/600/400" alt="Birthday Lunches photo 3" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/birthday-lunch-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-birthday-lunch.html" aria-label="Birthday Lunches gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-lunch-4/600/400" alt="Birthday Lunches photo 4" loading="lazy" />
-            <div class="shot-more"><b>View All</b><small>Birthday Lunches</small></div>
-          </a>
-        </div>
-      </section>
-
-      <section class="sub" id="birthday-dinner">
-        <div class="sub-info">
-          <h2 class="sub-name">Birthday Dinners</h2>
-          <p class="sub-desc">Warm, moody evening coverage that does justice to the occasion.</p>
-          <a class="sub-link" href="gallery-birthday-dinner.html" aria-label="View the Birthday Dinners gallery">View Gallery <span>&rarr;</span></a>
-        </div>
-        <div class="mosaic n-4">
-          <!-- Replace with: images/portfolio/birthday-dinner-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-birthday-dinner.html" aria-label="Birthday Dinners gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-dinner-1/900/900" alt="Birthday Dinners photo 1" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/birthday-dinner-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-birthday-dinner.html" aria-label="Birthday Dinners gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-dinner-2/600/400" alt="Birthday Dinners photo 2" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/birthday-dinner-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-birthday-dinner.html" aria-label="Birthday Dinners gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-dinner-3/600/400" alt="Birthday Dinners photo 3" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/birthday-dinner-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-birthday-dinner.html" aria-label="Birthday Dinners gallery">
-            <img src="https://picsum.photos/seed/cmp-birthday-dinner-4/600/400" alt="Birthday Dinners photo 4" loading="lazy" />
-            <div class="shot-more"><b>View All</b><small>Birthday Dinners</small></div>
-          </a>
-        </div>
-      </section>
-
-      <section class="sub" id="celebration">
-        <div class="sub-info">
-          <h2 class="sub-name">Celebrations</h2>
-          <p class="sub-desc">Engagements, anniversaries, baby showers and everything worth toasting.</p>
-          <a class="sub-link" href="gallery-celebration.html" aria-label="View the Celebrations gallery">View Gallery <span>&rarr;</span></a>
-        </div>
-        <div class="mosaic n-4">
-          <!-- Replace with: images/portfolio/celebration-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-celebration.html" aria-label="Celebrations gallery">
-            <img src="https://picsum.photos/seed/cmp-celebration-1/900/900" alt="Celebrations photo 1" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/celebration-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-celebration.html" aria-label="Celebrations gallery">
-            <img src="https://picsum.photos/seed/cmp-celebration-2/600/400" alt="Celebrations photo 2" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/celebration-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-celebration.html" aria-label="Celebrations gallery">
-            <img src="https://picsum.photos/seed/cmp-celebration-3/600/400" alt="Celebrations photo 3" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/celebration-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-celebration.html" aria-label="Celebrations gallery">
-            <img src="https://picsum.photos/seed/cmp-celebration-4/600/400" alt="Celebrations photo 4" loading="lazy" />
-            <div class="shot-more"><b>View All</b><small>Celebrations</small></div>
-          </a>
-        </div>
-      </section>
-
-      <section class="sub" id="party">
-        <div class="sub-info">
-          <h2 class="sub-name">Parties</h2>
-          <p class="sub-desc">High-energy coverage that keeps up with the night.</p>
-          <a class="sub-link" href="gallery-party.html" aria-label="View the Parties gallery">View Gallery <span>&rarr;</span></a>
-        </div>
-        <div class="mosaic n-4">
-          <!-- Replace with: images/portfolio/party-1.jpg  (large tile) -->
-          <a class="shot" href="gallery-party.html" aria-label="Parties gallery">
-            <img src="https://picsum.photos/seed/cmp-party-1/900/900" alt="Parties photo 1" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/party-2.jpg  (small tile) -->
-          <a class="shot" href="gallery-party.html" aria-label="Parties gallery">
-            <img src="https://picsum.photos/seed/cmp-party-2/600/400" alt="Parties photo 2" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/party-3.jpg  (small tile) -->
-          <a class="shot" href="gallery-party.html" aria-label="Parties gallery">
-            <img src="https://picsum.photos/seed/cmp-party-3/600/400" alt="Parties photo 3" loading="lazy" />
-          </a>
-
-          <!-- Replace with: images/portfolio/party-4.jpg  (small tile) -->
-          <a class="shot" href="gallery-party.html" aria-label="Parties gallery">
-            <img src="https://picsum.photos/seed/cmp-party-4/600/400" alt="Parties photo 4" loading="lazy" />
-            <div class="shot-more"><b>View All</b><small>Parties</small></div>
-          </a>
-        </div>
-      </section>
-    </div>
   </main>
 
   <section class="cta">
@@ -1006,7 +834,7 @@
         <div class="footer-whatsapp">
           <p class="footer-wa-label">Chat with us on WhatsApp</p>
           <p class="footer-wa-sub">Ready to book or have questions? Message us directly — we respond fast.</p>
-          <a href="https://wa.me/27000000000" target="_blank" rel="noopener" class="footer-wa-btn">
+          <a href="https://wa.me/27670237264" target="_blank" rel="noopener" class="footer-wa-btn">
             <svg class="footer-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
@@ -1022,21 +850,22 @@
           <a href="index.html#portfolio" class="footer-link">Portfolio</a>
           <a href="index.html#about"     class="footer-link">About Studio</a>
           <a href="index.html#faqs"      class="footer-link">FAQs</a>
+          <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+          <a href="terms-of-use.html" class="footer-link">Terms of Use</a>
         </div>
         <div class="footer-col">
           <p class="footer-col-head">Sessions</p>
-          <a href="index.html#book" class="footer-link">Book a Session</a>
-          <a href="index.html#book" class="footer-link">Corporate Portraits</a>
-          <a href="index.html#book" class="footer-link">Product Photography</a>
-          <a href="index.html#book" class="footer-link">Editorial &amp; Fashion</a>
-          <a href="index.html#book" class="footer-link">Video Production</a>
+          <a href="booking.html" class="footer-link">Book a Session</a>
+          <a href="lifestyle-subcategories.html" class="footer-link">Lifestyle Photography</a>
+          <a href="event-subcategories.html" class="footer-link">Events Photography</a>
+          <a href="corporate-subcategories.html" class="footer-link">Corporate Headshots</a>
         </div>
         <div class="footer-col">
           <p class="footer-col-head">Connect</p>
-          <a href="mailto:hello@cleanmediapictures.com" class="footer-link">hello@cleanmediapictures.com</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-link">Instagram</a>
-          <a href="https://facebook.com"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
-          <a href="https://tiktok.com"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
+          <a href="mailto:cleanmediapictures@gmail.com" class="footer-link">cleanmediapictures@gmail.com</a>
+          <a href="https://www.instagram.com/clean_media_pictures/" target="_blank" rel="noopener" class="footer-link">Instagram</a>
+          <a href="https://www.facebook.com/cleanmediaphotography/"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
+          <a href="https://www.tiktok.com/@clean_media_pictures"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
         </div>
       </div>
 
@@ -1044,8 +873,8 @@
       <div class="footer-bottom">
         <p class="footer-copy">© 2025 Clean Media Pictures. All rights reserved.</p>
         <div class="footer-legal">
-          <a href="#" class="footer-legal-link">Privacy Policy</a>
-          <a href="#" class="footer-legal-link">Terms of Use</a>
+          <a href="privacy-policy.html" class="footer-legal-link">Privacy Policy</a>
+          <a href="terms-of-use.html" class="footer-legal-link">Terms of Use</a>
         </div>
       </div>
 
@@ -1083,18 +912,18 @@
         subs: [
           { name: 'Maternity', href: 'lifestyle-gallery/maternity-gallery.html',
             desc: 'Soft, timeless portraits that celebrate this chapter of your story.', },
-          { name: 'Matric Farewell', href: 'gallery-matric-farewell.html',
+          { name: 'Matric Farewell', href: 'lifestyle-gallery/matric-farewell-gallery.html',
             desc: 'Glamorous portraits to mark the end of school, from outfit to final frame.', },
-          { name: 'Graduation', href: 'gallery-graduation.html',
+          { name: 'Graduation', href: 'lifestyle-gallery/graduation-gallery.html',
             desc: 'Cap-and-gown portraits that capture years of hard work in a single image.', },
-          { name: 'Birthday', href: 'gallery-birthday.html',
+          { name: 'Birthday', href: 'lifestyle-gallery/birthday-gallery.html',
             desc: 'Playful, personality-filled shoots for the birthday that deserves more than a phone snap.', },
-          { name: 'Outdoor Photography', href: 'gallery-outdoor-photography.html',
+          { name: 'Outdoor Photography', href: 'lifestyle-gallery/outdoor-photography-gallery.html',
             desc: 'Natural light, open spaces and relaxed, candid energy.', },
-          { name: 'Studio Photography', href: 'gallery-studio-photography.html',
+          { name: 'Studio Photography', href: 'lifestyle-gallery/studio-photography-gallery.html',
             desc: 'Controlled lighting and clean backdrops for striking, editorial results.', },
-          { name: 'Housecall Birthday Photography', href: 'gallery-housecall-birthday-photography.html',
-            desc: 'We bring the studio to you and photograph the celebration at home.', }
+          { name: 'Cake Smash Photography', href: 'lifestyle-gallery/cake-smash-photography-gallery.html',
+            desc: 'Playful, messy first-birthday cake smash sessions, styled in studio or photographed at home.', }
         ]
       },
       events: {
@@ -1121,7 +950,7 @@
     /* ════════════════ Which category is this page showing? ════════════════ */
     const params = new URLSearchParams(location.search);
     let currentKey = (params.get('category') || 'lifestyle').toLowerCase();
-    if (!CATEGORIES[currentKey]) currentKey = 'lifestyle';
+    if (!CATEGORIES[currentKey] || !document.querySelector('.cat-group[data-category="' + currentKey + '"]')) currentKey = 'lifestyle';
 
     /* ════════════════ Page content ════════════════ */
     (function () {
@@ -1153,58 +982,22 @@
       const linksEl  = document.getElementById('navDdLinks');
       const CHEVRON  = '<svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-      /* ---------- build the links ---------- */
-      Object.keys(CATEGORIES).forEach(function (key) {
-        const cat = CATEGORIES[key];
-        const group = document.createElement('div');
-        group.className = 'nav-dd-group';
-
-        const row = document.createElement('div');
-        row.className = 'nav-dd-row';
-        const parent = document.createElement('a');
-        parent.className = 'nav-dropdown-item nav-dd-parent' + (key === currentKey ? ' is-active' : '');
-        parent.href = CATEGORY_PAGE + '?category=' + key;
-        parent.dataset.cat = key;
-        parent.textContent = cat.title;
-        const toggle = document.createElement('button');
-        toggle.type = 'button';
-        toggle.className = 'nav-dd-toggle';
-        toggle.setAttribute('aria-expanded', 'false');
-        toggle.setAttribute('aria-label', 'Show ' + cat.title + ' sub-categories');
-        toggle.innerHTML = CHEVRON;
-        row.appendChild(parent);
-        row.appendChild(toggle);
-
-        const subs = document.createElement('div');
-        subs.className = 'nav-dd-subs';
-        cat.subs.forEach(function (s) {
-          const a = document.createElement('a');
-          a.className = 'nav-dropdown-item nav-dd-sub';
-          a.href = s.href;
-          a.textContent = s.name;
-          subs.appendChild(a);
-        });
-
-        group.appendChild(row);
-        group.appendChild(subs);
-        linksEl.appendChild(group);
-
+      /* ---------- links are plain HTML above; this only wires the hover slideshow + sub-category arrows ---------- */
+      document.querySelectorAll('.nav-dd-group').forEach(function (group) {
+        const parent = group.querySelector('.nav-dd-parent');
+        const toggle = group.querySelector('.nav-dd-toggle');
+        const slugs  = parent.dataset.slides.split(',').map(function (t) { return t.split('|')[0].trim(); });
+        const cover  = parent.dataset.img;
         toggle.addEventListener('click', function (e) {
           e.preventDefault();
           e.stopPropagation();
           const open = group.classList.toggle('is-expanded');
           toggle.setAttribute('aria-expanded', open);
         });
-        const slugs = cat.subs.map(slugOf);
-        parent.addEventListener('mouseenter', function () { startSlideshow(slugs, cat.cover); });
-        parent.addEventListener('focus',      function () { startSlideshow(slugs, cat.cover); });
+        parent.addEventListener('mouseenter', function () { startSlideshow(slugs, cover); });
+        parent.addEventListener('focus',      function () { startSlideshow(slugs, cover); });
       });
-
-      const cta = document.createElement('a');
-      cta.className = 'nav-dropdown-item nav-dd-cta';
-      cta.href = 'booking.html';
-      cta.textContent = "Not what you're looking for?";
-      linksEl.appendChild(cta);
+      const cta = document.getElementById('navDdCta');
 
       /* ---------- desktop hover slideshow (first image of each sub-category) ---------- */
       const TABLET_MAX = 1024;
