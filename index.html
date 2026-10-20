@@ -533,6 +533,9 @@
     }
 
     @media (max-width: 768px) {
+      /* Hero photo on phones: the photo is 16:9, so a portrait screen crops the sides.
+         The face sits at ~52.6% across the photo, which works out to 53.5% here. */
+      .hero-bg img { object-position: 53.5% 50%; }
       .line-main { font-size: clamp(3rem, 16vw, 6rem); }
       .line-sub  { font-size: clamp(0.7rem, 4vw, 1.8rem); letter-spacing: 0.35em; padding-left: 0.35em; }
     }
@@ -1444,7 +1447,7 @@
 
                 <div class="nav-dd-group" data-group="corporate">
                   <div class="nav-dd-row">
-                    <a href="corporate-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/headshots.jpg" data-slides="professional-headshots|Professional Headshots,fashion|Fashion">Corporate</a>
+                    <a href="corporate-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/47.webp" data-slides="professional-headshots|Professional Headshots,fashion|Fashion">Corporate</a>
                     <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                   </div>
                   <div class="nav-dd-subs">
