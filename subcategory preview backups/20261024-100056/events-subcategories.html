@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery Preview | Clean Media Pictures</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #fff;
+      color: #111;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Nav (same structure as index.html, dark text for the white page) ── */
+    .nav {
+      position: relative;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 40px;
+      background: #fff;
+    }
+    .nav-logo img { height: 95px; width: auto; display: block; object-fit: contain; }
+
+    .nav-tabs { display: flex; align-items: center; gap: 40px; }
+
+    .nav-tab, .nav-trigger-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #111; opacity: 0.82; transition: opacity 0.2s; position: relative;
+    }
+    .nav-tab::after, .nav-trigger-label::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+      background: #c0000a; transition: width 0.28s ease;
+    }
+    .nav-tab:hover, .nav-dropdown-trigger:hover .nav-trigger-label { opacity: 1; }
+    .nav-tab:hover::after, .nav-dropdown-trigger:hover .nav-trigger-label::after { width: 100%; }
+
+    /* Portfolio mega dropdown */
+    .nav-dropdown-wrap { position: relative; display: flex; align-items: center; }
+    .nav-dropdown-trigger {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: none; padding: 0; cursor: pointer; color: #111;
+    }
+    .nav-dropdown-chevron {
+      width: 9px; height: 6px; flex-shrink: 0; color: #111; opacity: 0.7;
+      transition: transform 0.25s ease, opacity 0.2s; display: block; margin-top: 1px;
+    }
+    .nav-dropdown-wrap.is-open .nav-dropdown-chevron { transform: rotate(180deg); opacity: 1; }
+
+    .nav-dropdown {
+      position: fixed;
+      left: 50% !important;
+      transform: translateX(-50%) translateY(-10px);
+      background: #c0000a;
+      border-radius: 18px;
+      padding: 0;
+      width: 760px;
+      display: flex; flex-direction: column;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.16,1,0.3,1), transform 0.28s cubic-bezier(0.16,1,0.3,1), visibility 0.28s;
+      z-index: 9999;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 8px 20px rgba(0,0,0,0.2), 0 24px 48px rgba(0,0,0,0.3), 0 48px 80px rgba(0,0,0,0.18);
+    }
+    .nav-dropdown-wrap.is-open .nav-dropdown {
+      opacity: 1; visibility: visible; pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown-inner {
+      display: grid; grid-template-columns: 1fr 230px; grid-template-rows: minmax(0, 1fr);
+      flex: 1; min-height: 0;
+    }
+    .nav-dropdown-links {
+      padding: 28px 8px; display: grid; grid-template-columns: 1fr 1fr;
+      align-content: space-evenly; column-gap: 4px; overflow-y: auto; min-height: 0;
+    }
+    .nav-dd-group, .nav-dd-row { display: block; }
+    .nav-dd-row .nav-dd-parent { width: 100%; }
+    .nav-dd-toggle, .nav-dd-subs { display: none; }
+
+    .nav-dropdown-item.nav-dd-sub { padding-left: 30px; padding-top: 8px; padding-bottom: 8px; white-space: normal; }
+
+    .nav-dropdown-item {
+      display: flex; align-items: center; gap: 12px;
+      font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.75); padding: 9px 16px;
+      transition: color 0.18s, background 0.18s, padding-left 0.18s;
+      white-space: nowrap;
+    }
+    .nav-dropdown-item::before {
+      content: ''; width: 1px; height: 14px; background: rgba(255,255,255,0.25);
+      flex-shrink: 0; transition: background 0.18s, height 0.18s; border-radius: 1px;
+    }
+    .nav-dropdown-item:hover { color: #fff; background: rgba(0,0,0,0.12); padding-left: 20px; }
+    .nav-dropdown-item:hover::before { background: #fff; height: 18px; }
+    .nav-dropdown-item.is-active { color: #fff; }
+    .nav-dropdown-item.is-active::before { background: #fff; height: 18px; }
+
+    .nav-dropdown-preview { display: flex; flex-direction: column; padding: 14px; }
+    .nav-dropdown-img-wrap {
+      flex: 1; border-radius: 10px; overflow: hidden; background: rgba(0,0,0,0.2);
+      position: relative; min-height: 0;
+    }
+    .nav-dropdown-img-wrap img.nav-dd-img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block; opacity: 0; transition: opacity 0.7s ease;
+    }
+    .nav-dropdown-img-wrap img.nav-dd-img.is-shown { opacity: 1; }
+    .nav-dropdown-img-wrap img.nav-dd-img.is-logo { object-fit: contain; padding: 14%; background: #fff; }
+    .nav-dropdown-footer { height: 3px; margin: 0; }
+
+    @media (min-width: 1025px) {
+      .nav-dropdown { width: 960px; border-radius: 20px; }
+      .nav-dropdown-inner { grid-template-columns: 1fr 340px; }
+      .nav-dropdown-links { padding: 40px 16px; }
+      .nav-dropdown-item { font-size: 0.76rem; letter-spacing: 0.12em; padding: 15px 22px; gap: 14px; white-space: normal; }
+      .nav-dropdown-item:hover { padding-left: 26px; }
+      .nav-dropdown-item::before { height: 20px; }
+      .nav-dropdown-item:hover::before, .nav-dropdown-item.is-active::before { height: 24px; }
+      .nav-dropdown-preview { padding: 18px; }
+      .nav-dropdown-img-wrap { border-radius: 12px; }
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 18px; }
+    .btn-book {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #111; border: 1px solid rgba(0,0,0,0.5); border-radius: 100px;
+      padding: 9px 22px; transition: background 0.25s, border-color 0.25s, color 0.25s; white-space: nowrap;
+    }
+    .btn-book:hover { background: #c0000a; border-color: #c0000a; color: #fff; }
+
+    .nav-hamburger {
+      display: none; flex-direction: column; justify-content: center; align-items: flex-end;
+      gap: 6px; width: 26px; height: 20px; background: none; border: none; padding: 0; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-hamburger span {
+      display: block; height: 2px; width: 100%; background: #111; border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+    }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ── Mobile menu ────────────────────────────────────────
+       At 1024px and below the hover / image-preview dropdown is not used.
+       The nav collapses into a hamburger menu: links, a Portfolio accordion,
+       and the WhatsApp + Book a Session pills. Desktop (1025px+) is unchanged. */
+    .mobile-menu { display: none; }
+
+    @media (max-width: 1024px) {
+      .nav { padding: 14px 24px; flex-wrap: nowrap; }
+      .nav.menu-open { z-index: 1000; }
+      .nav-logo img { height: 70px; }
+      .nav-tabs { display: none; }
+      .nav-right .btn-book { display: none; }
+
+      /* 44px tap target around the same 26x20 icon */
+      .nav-hamburger { display: flex; width: 44px; height: 44px; padding: 12px 9px; margin-right: -9px; }
+
+      html.menu-lock { overflow: hidden; }
+
+      .mobile-menu {
+        --mm-bg: #fff; --mm-fg: #111; --mm-muted: rgba(10,10,10,0.62);
+        --mm-line: rgba(10,10,10,0.1); --mm-line-strong: rgba(10,10,10,0.45);
+        display: block;
+        position: fixed; left: 0; right: 0; top: 100px; bottom: 0;
+        z-index: 999;
+        background: var(--mm-bg);
+        overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+        opacity: 0; visibility: hidden; transform: translateY(-8px);
+        transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s linear 0.28s;
+      }
+      .mobile-menu.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+      .mobile-menu--dark {
+        --mm-bg: rgba(10,10,10,0.98); --mm-fg: #fff; --mm-muted: rgba(255,255,255,0.66);
+        --mm-line: rgba(255,255,255,0.12); --mm-line-strong: rgba(255,255,255,0.55);
+      }
+
+      .mm-inner { max-width: 560px; margin: 0 auto; padding: 6px 24px calc(32px + env(safe-area-inset-bottom, 0px)); }
+
+      .mm-row { display: flex; align-items: stretch; border-bottom: 1px solid var(--mm-line); }
+      .mm-link {
+        flex: 1; display: flex; align-items: center; min-height: 56px;
+        font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
+        letter-spacing: 0.14em; text-transform: uppercase; color: var(--mm-fg);
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mm-link.is-active { color: #c0000a; }
+      .mm-chev {
+        width: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        background: none; border: none; color: var(--mm-fg); cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mm-chev svg { width: 12px; height: 8px; transition: transform 0.25s ease; }
+      .mm-item.is-open > .mm-row .mm-chev svg { transform: rotate(180deg); }
+
+      /* Accordion panels (Portfolio > category > sub-categories) */
+      .mm-panel {
+        display: grid; grid-template-rows: 0fr; visibility: hidden;
+        transition: grid-template-rows 0.3s ease, visibility 0s linear 0.3s;
+      }
+      .mm-item.is-open > .mm-panel { grid-template-rows: 1fr; visibility: visible; transition-delay: 0s; }
+      .mm-panel-inner { overflow: hidden; min-height: 0; }
+
+      .mm-cat .mm-link { font-size: 0.74rem; padding-left: 14px; min-height: 52px; }
+      .mm-link--small { font-size: 0.7rem; padding-left: 14px; min-height: 52px; color: var(--mm-muted); }
+      .mm-sub {
+        display: flex; align-items: center; gap: 12px; min-height: 46px; padding-left: 30px;
+        font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 500;
+        letter-spacing: 0.12em; text-transform: uppercase; color: var(--mm-muted);
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mm-sub::before { content: ''; width: 1px; height: 12px; background: currentColor; opacity: 0.45; flex-shrink: 0; }
+      .mm-sub.is-active { color: #c0000a; }
+      .mm-sub:last-child { margin-bottom: 8px; }
+
+      /* Pills */
+      .mm-actions { display: flex; flex-direction: column; gap: 12px; padding-top: 28px; }
+      .mm-pill {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        min-height: 52px; padding: 0 24px; border-radius: 100px; text-align: center;
+        font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        transition: background 0.22s, border-color 0.22s, color 0.22s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mm-pill--wa { background: #c0000a; border: 1px solid #c0000a; color: #fff; }
+      .mm-pill--wa:hover, .mm-pill--wa:active { background: #a0000a; border-color: #a0000a; }
+      .mm-pill--book { border: 1px solid var(--mm-line-strong); color: var(--mm-fg); }
+      .mm-pill--book:hover, .mm-pill--book:active { background: #c0000a; border-color: #c0000a; color: #fff; }
+      .mm-wa-icon { width: 20px; height: 20px; fill: #fff; flex-shrink: 0; }
+    }
+
+    @media (max-width: 380px) {
+      .nav { padding: 12px 16px; }
+      .mm-inner { padding-left: 18px; padding-right: 18px; }
+      .mm-pill { font-size: 0.66rem; letter-spacing: 0.08em; padding: 0 16px; }
+    }
+
+    /* ── Header ── */
+    .page-head {
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
+      min-height: 320px; padding: 40px 40px 40px; text-align: left;
+    }
+    .page-head > * { position: relative; z-index: 1; }
+    .page-intro {
+      font-family: 'Cormorant Garamond', serif; font-weight: 400;
+      font-size: clamp(1.1rem, 1.5vw, 1.3rem); line-height: 1.7;
+      color: rgba(0,0,0,0.7); max-width: 620px;
+      margin-top: 22px; padding-left: 20px; border-left: 2px solid #c0000a;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif; font-weight: 400;
+      font-size: clamp(3.4rem, 9vw, 7.5rem); letter-spacing: 0.06em; line-height: 0.95;
+    }
+
+    /* ── Sub-category blocks ── */
+    .subs { max-width: 1240px; margin: 0 auto; padding: 56px 40px 40px; }
+
+    .sub {
+      display: grid; grid-template-columns: 340px 1fr; gap: 56px; align-items: center;
+      padding: 64px 0; border-top: 1px solid rgba(192,0,10,0.2);
+      scroll-margin-top: 90px;
+    }
+    .cat-group[hidden] { display: none; }
+    .sub:first-child { border-top: none; }
+    .sub:nth-child(even) { grid-template-columns: 1fr 340px; }
+    .sub:nth-child(even) .sub-info { order: 2; }
+
+    .sub-name {
+      font-family: 'Bebas Neue', sans-serif; font-weight: 400;
+      font-size: clamp(2.2rem, 4vw, 3.4rem); letter-spacing: 0.05em; line-height: 1; margin: 0 0 14px;
+    }
+    .sub-name::before {
+      content: ''; display: block; width: 36px; height: 2px; background: #c0000a; margin-bottom: 16px;
+    }
+    .sub-desc {
+      font-family: 'Cormorant Garamond', serif; font-weight: 400;
+      font-size: 1.2rem; line-height: 1.65; color: rgba(0,0,0,0.65); margin-bottom: 26px;
+    }
+    .sub-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #111; border: 1px solid rgba(0,0,0,0.35); border-radius: 100px; padding: 13px 28px;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+    }
+    .sub-link span { transition: transform 0.2s, color 0.2s; color: #c0000a; }
+    .sub-link:hover { background: #c0000a; border-color: #c0000a; color: #fff; }
+    .sub-link:hover span { color: #fff; transform: translateX(4px); }
+
+    /* Mosaic: 1 large + 3 small */
+    .mosaic {
+      display: grid; gap: 12px; height: 460px;
+      grid-template-columns: 1.5fr 1fr;
+      grid-template-rows: repeat(3, 1fr);
+    }
+    .mosaic .shot:first-child { grid-row: 1 / -1; }
+    .mosaic.n-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+    .mosaic.n-2 { grid-template-rows: 1fr; }
+    .mosaic.n-3 { grid-template-rows: repeat(2, 1fr); }
+
+    .shot {
+      position: relative; overflow: hidden; border-radius: 4px; display: block;
+      background: #eee;
+    }
+    .shot img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: brightness(0.88);
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s;
+    }
+    .shot:hover img { transform: scale(1.05); filter: brightness(1); }
+    .shot::after {
+      content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 3px;
+      background: #c0000a; transition: width 0.35s ease;
+    }
+    .shot:hover::after { width: 100%; }
+
+    .shot-more {
+      color: #fff;
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      background: rgba(10,10,10,0.55); transition: background 0.3s;
+    }
+    .shot:hover .shot-more { background: rgba(192,0,10,0.72); }
+    .shot-more b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.9rem; letter-spacing: 0.08em; }
+    .shot-more small { font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+
+    /* ── Bottom CTA ── */
+    .cta { text-align: center; padding: 72px 24px 96px; border-top: 1px solid rgba(0,0,0,0.1); }
+    .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 3.6vw, 2.8rem); letter-spacing: 0.06em; margin-bottom: 12px; }
+    .cta-text { font-size: 0.85rem; line-height: 1.65; color: rgba(0,0,0,0.6); max-width: 520px; margin: 0 auto 26px; }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    .footer {
+      background: #0d0d0d;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 40px 40px;
+    }
+
+    /* Top row */
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-logo {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      opacity: 0.85;
+      margin-bottom: 14px;
+    }
+
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgb(255, 255, 255);
+    }
+
+    /* WhatsApp CTA */
+    .footer-whatsapp { max-width: 360px; }
+
+    .footer-wa-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .footer-wa-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .footer-wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #c0000a;
+      border: none;
+      border-radius: 100px;
+      padding: 12px 26px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.22s, transform 0.18s;
+    }
+
+    .footer-wa-btn:hover {
+      background: #a0000a;
+      transform: translateY(-1px);
+    }
+
+    .footer-wa-icon {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      flex-shrink: 0;
+    }
+
+    /* Link columns */
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      padding: 56px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .footer-col-head {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 6px;
+    }
+
+    .footer-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.62);
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: #fff; }
+
+    /* Bottom bar */
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-legal-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.28);
+      transition: color 0.2s;
+    }
+
+    .footer-legal-link:hover { color: rgba(255,255,255,0.7); }
+
+    @media (max-width: 900px) {
+      .footer-inner { padding: 56px 28px 32px; }
+      .footer-top { flex-direction: column; gap: 36px; }
+      .footer-whatsapp { max-width: 100%; }
+      .footer-links { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 540px) {
+      .footer-links { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* Entrance */
+    .sub { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .sub.in { opacity: 1; transform: none; }
+
+    @media (max-width: 960px) {
+      .page-head { padding: 32px 20px 24px; min-height: 220px; }
+      .subs { padding: 32px 20px 20px; }
+      .sub, .sub:nth-child(even) { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+      .sub:nth-child(even) .sub-info { order: 0; }
+      .mosaic { height: 380px; }
+    }
+    @media (max-width: 560px) {
+      .page-head { min-height: 180px; }
+      .mosaic { height: 320px; gap: 8px; }
+      .page-intro { padding-left: 14px; font-size: 1.05rem; }
+      .sub-link { width: 100%; justify-content: center; }
+      .cta { padding: 56px 20px 72px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sub { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <a href="index.html"><img src="images/nav-logo.png" alt="Clean Media Pictures" /></a>
+    </div>
+
+    <div class="nav-tabs" id="navTabs">
+      <a href="index.html#about" class="nav-tab">About Studio</a>
+
+      <!-- Portfolio mega dropdown (the category + sub-category links are generated from CATEGORIES below) -->
+      <div class="nav-dropdown-wrap">
+        <button class="nav-dropdown-trigger" id="portfolioDropdownBtn" aria-label="Toggle portfolio categories" aria-expanded="false">
+          <a href="index.html#portfolio" class="nav-trigger-label">Portfolio</a>
+          <svg class="nav-dropdown-chevron" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="nav-dropdown" id="portfolioDropdown" role="menu">
+          <div class="nav-dropdown-inner">
+            <div class="nav-dropdown-links" id="navDdLinks">
+            <div class="nav-dd-group" data-group="corporate">
+              <div class="nav-dd-row">
+                <a href="corporate-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/headshots.jpg" data-slides="professional-headshots|Professional Headshots,fashion|Fashion">Corporate</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="corporate-gallery/professional-headshots-gallery.html" class="nav-dropdown-item nav-dd-sub">Professional Headshots</a>
+                <a href="corporate-gallery/fashion-gallery.html" class="nav-dropdown-item nav-dd-sub">Fashion</a>
+              </div>
+            </div>
+
+            <div class="nav-dd-group" data-group="lifestyle">
+              <div class="nav-dd-row">
+                <a href="lifestyle-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/branding.jpg" data-slides="maternity|Maternity,matric-farewell|Matric Farewell,graduation|Graduation,birthday|Birthday,outdoor-photography|Outdoor Photography,studio-photography|Studio Photography,cake-smash-photography|Cake Smash Photography">Lifestyle</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Lifestyle sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="lifestyle-gallery/maternity-gallery.html" class="nav-dropdown-item nav-dd-sub">Maternity</a>
+                <a href="lifestyle-gallery/matric-farewell-gallery.html" class="nav-dropdown-item nav-dd-sub">Matric Farewell</a>
+                <a href="lifestyle-gallery/graduation-gallery.html" class="nav-dropdown-item nav-dd-sub">Graduation</a>
+                <a href="lifestyle-gallery/birthday-gallery.html" class="nav-dropdown-item nav-dd-sub">Birthday</a>
+                <a href="lifestyle-gallery/outdoor-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Outdoor Photography</a>
+                <a href="lifestyle-gallery/studio-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Studio Photography</a>
+                <a href="lifestyle-gallery/cake-smash-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Cake Smash Photography</a>
+              </div>
+            </div>
+
+            <div class="nav-dd-group" data-group="events">
+              <div class="nav-dd-row">
+                <a href="event-subcategories.html" class="nav-dropdown-item nav-dd-parent is-active" data-img="images/events.jpg" data-slides="weddings|Weddings,celebration|Celebration,festive|Festive">Events</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="events-gallery/weddings-gallery.html" class="nav-dropdown-item nav-dd-sub">Weddings</a>
+                <a href="events-gallery/celebration-gallery.html" class="nav-dropdown-item nav-dd-sub">Celebration</a>
+                <a href="events-gallery/festive.html" class="nav-dropdown-item nav-dd-sub">Festive</a>
+              </div>
+            </div>
+
+            <a href="booking.html" class="nav-dropdown-item nav-dd-cta" id="navDdCta">Not what you're looking for?</a>
+          </div>
+            <div class="nav-dropdown-preview">
+              <div class="nav-dropdown-img-wrap">
+                <img class="nav-dd-img is-shown is-logo" id="navDdImg" src="images/nav-logo.png" alt="Clean Media Pictures" />
+                <img class="nav-dd-img is-logo" id="navDdImgB" src="images/nav-logo.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="nav-dropdown-footer"></div>
+        </div>
+      </div>
+
+      <a href="index.html#testimonials" class="nav-tab">Testimonials</a>
+      <a href="index.html#faqs" class="nav-tab">FAQs</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="booking.html" class="btn-book">Book a Session</a>
+      <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu (1024px and below): hamburger panel, no image preview -->
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mm-inner">
+        <div class="mm-row"><a href="index.html#about" class="mm-link">About Studio</a></div>
+
+        <div class="mm-item">
+          <div class="mm-row">
+            <a href="index.html#portfolio" class="mm-link">Portfolio</a>
+            <button type="button" class="mm-chev" aria-expanded="false" aria-label="Show portfolio categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+          <div class="mm-panel"><div class="mm-panel-inner">
+            <div class="mm-item mm-cat">
+              <div class="mm-row">
+                <a href="corporate-subcategories.html" class="mm-link">Corporate</a>
+                <button type="button" class="mm-chev" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="mm-panel"><div class="mm-panel-inner">
+                <a href="corporate-gallery/professional-headshots-gallery.html" class="mm-sub">Professional Headshots</a>
+                <a href="corporate-gallery/fashion-gallery.html" class="mm-sub">Fashion</a>
+              </div></div>
+            </div>
+            <div class="mm-item mm-cat">
+              <div class="mm-row">
+                <a href="lifestyle-subcategories.html" class="mm-link">Lifestyle</a>
+                <button type="button" class="mm-chev" aria-expanded="false" aria-label="Show Lifestyle sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="mm-panel"><div class="mm-panel-inner">
+                <a href="lifestyle-gallery/maternity-gallery.html" class="mm-sub">Maternity</a>
+                <a href="lifestyle-gallery/matric-farewell-gallery.html" class="mm-sub">Matric Farewell</a>
+                <a href="lifestyle-gallery/graduation-gallery.html" class="mm-sub">Graduation</a>
+                <a href="lifestyle-gallery/birthday-gallery.html" class="mm-sub">Birthday</a>
+                <a href="lifestyle-gallery/outdoor-photography-gallery.html" class="mm-sub">Outdoor Photography</a>
+                <a href="lifestyle-gallery/studio-photography-gallery.html" class="mm-sub">Studio Photography</a>
+                <a href="lifestyle-gallery/cake-smash-photography-gallery.html" class="mm-sub">Cake Smash Photography</a>
+              </div></div>
+            </div>
+            <div class="mm-item mm-cat">
+              <div class="mm-row">
+                <a href="event-subcategories.html" class="mm-link is-active">Events</a>
+                <button type="button" class="mm-chev" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="mm-panel"><div class="mm-panel-inner">
+                <a href="events-gallery/weddings-gallery.html" class="mm-sub">Weddings</a>
+                <a href="events-gallery/celebration-gallery.html" class="mm-sub">Celebration</a>
+                <a href="events-gallery/festive.html" class="mm-sub">Festive</a>
+              </div></div>
+            </div>
+            <div class="mm-row"><a href="booking.html" class="mm-link mm-link--small">Not what you're looking for?</a></div>
+          </div></div>
+        </div>
+
+        <div class="mm-row"><a href="index.html#testimonials" class="mm-link">Testimonials</a></div>
+        <div class="mm-row"><a href="index.html#faqs" class="mm-link">FAQs</a></div>
+
+        <div class="mm-actions">
+          <a href="https://wa.me/27670237264" target="_blank" rel="noopener" class="mm-pill mm-pill--wa">
+            <svg class="mm-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Chat with us on WhatsApp
+          </a>
+          <a href="booking.html" class="mm-pill mm-pill--book">Book a Session</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-head">
+    <h1 class="page-title" id="pageTitle">Events</h1>
+    <p class="page-intro" id="pageIntro"></p>
+  </section>
+
+  <main class="subs" id="subs">
+    <!-- Each photo below is a normal <img>. To add yours: change its src to the path in the
+         "Replace with" comment above it (put the files in images/portfolio/). -->
+    <div class="cat-group" data-category="events">
+      <section class="sub" id="weddings">
+        <div class="sub-info">
+          <h2 class="sub-name">Weddings</h2>
+          <p class="sub-desc">From quiet preparations to the final send-off, told as one cohesive story.</p>
+          <a class="sub-link" href="events-gallery/weddings-gallery.html" aria-label="View the Weddings gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/weddings-1.jpg  (large tile) -->
+          <a class="shot" href="events-gallery/weddings-gallery.html" aria-label="Weddings gallery">
+            <img src="https://picsum.photos/seed/cmp-weddings-1/600/800" alt="Weddings photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/weddings-2.jpg  (small tile) -->
+          <a class="shot" href="events-gallery/weddings-gallery.html" aria-label="Weddings gallery">
+            <img src="https://picsum.photos/seed/cmp-weddings-2/600/800" alt="Weddings photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/weddings-3.jpg  (small tile) -->
+          <a class="shot" href="events-gallery/weddings-gallery.html" aria-label="Weddings gallery">
+            <img src="https://picsum.photos/seed/cmp-weddings-3/600/800" alt="Weddings photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/weddings-4.jpg  (small tile) -->
+          <a class="shot" href="events-gallery/weddings-gallery.html" aria-label="Weddings gallery">
+            <img src="https://picsum.photos/seed/cmp-weddings-4/600/800" alt="Weddings photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Weddings</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="celebration">
+        <div class="sub-info">
+          <h2 class="sub-name">Celebration</h2>
+          <p class="sub-desc">Engagements, anniversaries, baby showers and everything worth toasting.</p>
+          <a class="sub-link" href="events-gallery/celebration-gallery.html" aria-label="View the Celebration gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/celebration-1.jpg  (large tile) -->
+          <a class="shot" href="events-gallery/celebration-gallery.html" aria-label="Celebration gallery">
+            <img src="https://picsum.photos/seed/cmp-celebration-1/600/800" alt="Celebration photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/celebration-2.jpg  (small tile) -->
+          <a class="shot" href="events-gallery/celebration-gallery.html" aria-label="Celebration gallery">
+            <img src="https://picsum.photos/seed/cmp-celebration-2/600/800" alt="Celebration photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/celebration-3.jpg  (small tile) -->
+          <a class="shot" href="events-gallery/celebration-gallery.html" aria-label="Celebration gallery">
+            <img src="https://picsum.photos/seed/cmp-celebration-3/600/800" alt="Celebration photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/celebration-4.jpg  (small tile) -->
+          <a class="shot" href="events-gallery/celebration-gallery.html" aria-label="Celebration gallery">
+            <img src="https://picsum.photos/seed/cmp-celebration-4/600/800" alt="Celebration photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Celebration</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="sub" id="festive">
+        <div class="sub-info">
+          <h2 class="sub-name">Festive</h2>
+          <p class="sub-desc">Warm, atmospheric coverage of festive gatherings, from table details to candid laughter.</p>
+          <a class="sub-link" href="events-gallery/festive.html" aria-label="View the Festive gallery">View Gallery <span>&rarr;</span></a>
+        </div>
+        <div class="mosaic n-4">
+          <!-- Replace with: images/portfolio/festive-1.jpg  (large tile) -->
+          <a class="shot" href="events-gallery/festive.html" aria-label="Festive gallery">
+            <img src="https://picsum.photos/seed/cmp-festive-1/600/800" alt="Festive photo 1" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/festive-2.jpg  (small tile) -->
+          <a class="shot" href="events-gallery/festive.html" aria-label="Festive gallery">
+            <img src="https://picsum.photos/seed/cmp-festive-2/600/800" alt="Festive photo 2" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/festive-3.jpg  (small tile) -->
+          <a class="shot" href="events-gallery/festive.html" aria-label="Festive gallery">
+            <img src="https://picsum.photos/seed/cmp-festive-3/600/800" alt="Festive photo 3" loading="lazy" />
+          </a>
+
+          <!-- Replace with: images/portfolio/festive-4.jpg  (small tile) -->
+          <a class="shot" href="events-gallery/festive.html" aria-label="Festive gallery">
+            <img src="https://picsum.photos/seed/cmp-festive-4/600/800" alt="Festive photo 4" loading="lazy" />
+            <div class="shot-more"><b>View All</b><small>Festive</small></div>
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <section class="cta">
+    <p class="cta-title">Not what you're looking for?</p>
+    <p class="cta-text">Have a different kind of shoot in mind? Book a session and describe the photography you want &mdash; we'll take it from there.</p>
+    <a href="booking.html" class="btn-book">Book a Session</a>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+
+      <!-- Top row: brand + whatsapp -->
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo-link">
+            <img src="images/nav-logo.png" alt="Clean Media Pictures" class="footer-logo" />
+          </a>
+          <p class="footer-tagline">Light. Story. Craft.</p>
+        </div>
+
+        <div class="footer-whatsapp">
+          <p class="footer-wa-label">Chat with us on WhatsApp</p>
+          <p class="footer-wa-sub">Ready to book or have questions? Message us directly — we respond fast.</p>
+          <a href="https://wa.me/27670237264" target="_blank" rel="noopener" class="footer-wa-btn">
+            <svg class="footer-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Message Us on WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- Middle row: links -->
+      <div class="footer-links">
+        <div class="footer-col">
+          <p class="footer-col-head">Studio</p>
+          <a href="index.html#portfolio" class="footer-link">Portfolio</a>
+          <a href="index.html#about"     class="footer-link">About Studio</a>
+          <a href="index.html#faqs"      class="footer-link">FAQs</a>
+          <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+          <a href="terms-of-use.html" class="footer-link">Terms of Use</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Sessions</p>
+          <a href="booking.html" class="footer-link">Book a Session</a>
+          <a href="lifestyle-subcategories.html" class="footer-link">Lifestyle Photography</a>
+          <a href="event-subcategories.html" class="footer-link">Events Photography</a>
+          <a href="corporate-subcategories.html" class="footer-link">Corporate Headshots</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Connect</p>
+          <a href="mailto:cleanmediapictures@gmail.com" class="footer-link">cleanmediapictures@gmail.com</a>
+          <a href="https://www.instagram.com/clean_media_pictures/" target="_blank" rel="noopener" class="footer-link">Instagram</a>
+          <a href="https://www.facebook.com/cleanmediaphotography/"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
+          <a href="https://www.tiktok.com/@clean_media_pictures"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 Clean Media Pictures. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="privacy-policy.html" class="footer-legal-link">Privacy Policy</a>
+          <a href="terms-of-use.html" class="footer-legal-link">Terms of Use</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script>
+    /* ════════════════════════════════════════════════════════════
+       CONFIG — category text, links and dropdown. (Photos are edited in the HTML, not here.)
+
+       For every sub-category:
+         href   : the page the "View Gallery" button, the photos and the dropdown link go to.
+                  Change it to the real gallery page when you build it.
+
+       The dropdown's hover slideshow works like index.html: it reads images/portfolio/<slug>.jpg
+       (e.g. maternity.jpg, weddings.jpg) and each category's "cover" image is shown first.
+       The 4 photos in each sub-category's preview are plain <img> tags in the HTML (search for "Replace with").
+       ════════════════════════════════════════════════════════════ */
+    const CATEGORY_PAGE = 'event-subcategories.html';   // this page; categories open as ?category=<key>
+
+    const CATEGORIES = {
+      corporate: {
+        title: 'Corporate',
+        cover: 'images/headshots.jpg',
+        intro: 'From executive headshots to full brand campaigns, we craft imagery that positions your business with confidence and clarity. Every frame is intentional \u2014 built to communicate professionalism, trust, and vision.',
+        subs: [
+          { name: 'Professional Headshots', href: 'corporate-gallery/professional-headshots-gallery.html',
+            desc: 'Sharp, flattering portraits for LinkedIn, company websites and press kits.', },
+          { name: 'Fashion', href: 'corporate-gallery/fashion-gallery.html',
+            desc: 'Editorial, lookbook and brand fashion imagery with a confident, polished finish.', }
+        ]
+      },
+      lifestyle: {
+        title: 'Lifestyle',
+        cover: 'images/branding.jpg',
+        intro: 'From the glow of maternity to the pride of graduation day, we photograph the milestones that shape your story. Every frame is intentional \u2014 guided by natural light, honest emotion, and a deep respect for the moment.',
+        subs: [
+          { name: 'Maternity', href: 'lifestyle-gallery/maternity-gallery.html',
+            desc: 'Soft, timeless portraits that celebrate this chapter of your story.', },
+          { name: 'Matric Farewell', href: 'lifestyle-gallery/matric-farewell-gallery.html',
+            desc: 'Glamorous portraits to mark the end of school, from outfit to final frame.', },
+          { name: 'Graduation', href: 'lifestyle-gallery/graduation-gallery.html',
+            desc: 'Cap-and-gown portraits that capture years of hard work in a single image.', },
+          { name: 'Birthday', href: 'lifestyle-gallery/birthday-gallery.html',
+            desc: 'Playful, personality-filled shoots for the birthday that deserves more than a phone snap.', },
+          { name: 'Outdoor Photography', href: 'lifestyle-gallery/outdoor-photography-gallery.html',
+            desc: 'Natural light, open spaces and relaxed, candid energy.', },
+          { name: 'Studio Photography', href: 'lifestyle-gallery/studio-photography-gallery.html',
+            desc: 'Controlled lighting and clean backdrops for striking, editorial results.', },
+          { name: 'Cake Smash Photography', href: 'lifestyle-gallery/cake-smash-photography-gallery.html',
+            desc: 'Playful, messy first-birthday cake smash sessions, styled in studio or photographed at home.', }
+        ]
+      },
+      events: {
+        title: 'Events',
+        cover: 'images/events.jpg',
+        intro: 'From intimate dinners to full-scale weddings, we capture the energy of the day and the moments you will want to relive. Every frame is intentional \u2014 discreet, atmospheric, and true to the occasion.',
+        subs: [
+          { name: 'Weddings', href: 'events-gallery/weddings-gallery.html',
+            desc: 'From quiet preparations to the final send-off, told as one cohesive story.', },
+          { name: 'Celebration', href: 'events-gallery/celebration-gallery.html',
+            desc: 'Engagements, anniversaries, baby showers and everything worth toasting.', },
+          { name: 'Festive', href: 'events-gallery/festive.html',
+            desc: 'Warm, atmospheric coverage of festive gatherings, from table details to candid laughter.', }
+        ]
+      }
+    };
+
+    /* ════════════════ Which category is this page showing? ════════════════ */
+    const params = new URLSearchParams(location.search);
+    let currentKey = (params.get('category') || 'events').toLowerCase();
+    if (!CATEGORIES[currentKey] || !document.querySelector('.cat-group[data-category="' + currentKey + '"]')) currentKey = 'events';
+
+    /* ════════════════ Page content ════════════════ */
+    (function () {
+      const cat = CATEGORIES[currentKey];
+      document.title = cat.title + ' Gallery | Clean Media Pictures';
+      document.getElementById('pageTitle').textContent = cat.title;
+      document.getElementById('pageIntro').textContent = cat.intro;
+
+      document.querySelectorAll('.cat-group').forEach(function (g) {
+        g.hidden = g.dataset.category !== currentKey;
+      });
+
+      const blocks = document.querySelectorAll('.cat-group:not([hidden]) .sub');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        blocks.forEach(function (b) { io.observe(b); });
+      } else {
+        blocks.forEach(function (b) { b.classList.add('in'); });
+      }
+    })();
+
+    /* ════════════════ Portfolio mega dropdown (built from CATEGORIES) ════════════════ */
+    (function () {
+      const btn      = document.getElementById('portfolioDropdownBtn');
+      const dropdown = document.getElementById('portfolioDropdown');
+      const wrap     = btn.closest('.nav-dropdown-wrap');
+      const linksEl  = document.getElementById('navDdLinks');
+      const CHEVRON  = '<svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+      /* ---------- links are plain HTML above; this only wires the hover slideshow + sub-category arrows ---------- */
+      document.querySelectorAll('.nav-dd-group').forEach(function (group) {
+        const parent = group.querySelector('.nav-dd-parent');
+        const toggle = group.querySelector('.nav-dd-toggle');
+        const slugs  = parent.dataset.slides.split(',').map(function (t) { return t.split('|')[0].trim(); });
+        const cover  = parent.dataset.img;
+        toggle.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const open = group.classList.toggle('is-expanded');
+          toggle.setAttribute('aria-expanded', open);
+        });
+        parent.addEventListener('mouseenter', function () { startSlideshow(slugs, cover); });
+        parent.addEventListener('focus',      function () { startSlideshow(slugs, cover); });
+      });
+      const cta = document.getElementById('navDdCta');
+
+      /* ---------- desktop hover slideshow (first image of each sub-category) ---------- */
+      const TABLET_MAX = 1024;
+      const isDesktop = function () { return window.innerWidth > TABLET_MAX; };
+      const SLIDE_MS = 1800;
+      const ddImgs = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
+      const LOGO_SRC = ddImgs[0].getAttribute('src');
+      let active = 0, timer = null, runId = 0;
+      const SLIDE_DIR  = 'images/portfolio/';          // slideshow images: images/portfolio/<slug>.jpg (or .webp/.png/.jpeg)
+      const SLIDE_EXTS = ['jpg', 'webp', 'png', 'jpeg'];
+      const resolved = {};
+
+      function resolveSlide(slug) {
+        if (resolved[slug]) return resolved[slug];
+        resolved[slug] = new Promise(function (resolve) {
+          let i = 0;
+          (function next() {
+            if (i >= SLIDE_EXTS.length) return resolve(null);
+            const url = SLIDE_DIR + slug + '.' + SLIDE_EXTS[i++];
+            const im = new Image();
+            im.onload = function () { resolve(url); };
+            im.onerror = next;
+            im.src = url;
+          })();
+        });
+        return resolved[slug];
+      }
+
+      function slugOf(sub) { return sub.href.split('/').pop().replace(/^gallery-/, '').replace(/-gallery\.html$/, '').replace(/\.html$/, ''); }
+
+      function show(src) {
+        const next = ddImgs[1 - active], cur = ddImgs[active];
+        if (cur.getAttribute('src') === src) return;
+        next.src = src;
+        next.classList.toggle('is-logo', src === LOGO_SRC);
+        next.classList.add('is-shown');
+        cur.classList.remove('is-shown');
+        active = 1 - active;
+      }
+
+      function stopSlideshow() {
+        runId++;
+        if (timer) { clearInterval(timer); timer = null; }
+      }
+      function resetPreview() { stopSlideshow(); show(LOGO_SRC); }
+
+      // Same behaviour as index.html: show the category's cover image straight away, then cycle through
+      // its sub-category images (images/portfolio/<slug>.jpg). Missing ones are skipped; if none exist
+      // the cover image stays.
+      async function startSlideshow(slugs, cover) {
+        if (!isDesktop()) return;
+        stopSlideshow();
+        const id = runId;
+        show(cover);                                           // instant feedback
+        const urls = await Promise.all(slugs.map(resolveSlide));
+        if (id !== runId) return;
+        const slides = urls.filter(Boolean);
+        if (!slides.length) return;                            // no images yet: keep the cover
+        let n = 0;
+        show(slides[0]);
+        if (slides.length > 1) {
+          timer = setInterval(function () { n = (n + 1) % slides.length; show(slides[n]); }, SLIDE_MS);
+        }
+      }
+
+      // "Not what you're looking for?" has its own image too: images/portfolio/custom-shoot.jpg
+      // (falls back to the logo until that file exists).
+      cta.addEventListener('mouseenter', function () { startSlideshow(['custom-shoot'], LOGO_SRC); });
+      cta.addEventListener('focus',      function () { startSlideshow(['custom-shoot'], LOGO_SRC); });
+      linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
+
+      /* ---------- positioning ---------- */
+      // Same sizing rule as index.html: on desktop the panel stretches down to just above where the
+      // big "Clean Media / Pictures" hero title sits there. This page has no hero, so that title's
+      // position is calculated from the viewport using the same CSS values as index.html
+      // (title font sizes + 12vh bottom padding), which keeps the panel the same size/proportions.
+      function virtualHeroTitleTop() {
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const mainPx = Math.min(Math.max(64, vw * 0.145), 256);    // .line-main: clamp(4rem, 14.5vw, 16rem)
+        const subPx  = Math.min(Math.max(12.8, vw * 0.04), 192);   // .line-sub:  clamp(0.8rem, 4vw, 12rem)
+        const titleH = mainPx * 0.88 + subPx;                      // line-heights 0.88 and 1
+        return vh - vh * 0.12 - titleH;                            // title block ends 12vh above the bottom
+      }
+
+      function positionDropdown(keepHeight) {
+        const top = btn.getBoundingClientRect().bottom + 16;
+        dropdown.style.top = top + 'px';
+        if (!isDesktop()) { dropdown.style.height = ''; return; }
+        if (keepHeight) return;                  // scrolling only moves the panel, never resizes it
+        const available = virtualHeroTitleTop() - top - 28;
+        const maxH = 620;
+        const safeFloor = Math.min(180, available);
+        dropdown.style.height = Math.max(safeFloor, Math.min(available, maxH)) + 'px';
+      }
+
+      /* ---------- open / close ---------- */
+      function closeDropdown() {
+        wrap.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        resetPreview();
+      }
+
+      const label = btn.querySelector('.nav-trigger-label');
+      label.addEventListener('click', function (e) { e.stopPropagation(); });
+
+      btn.addEventListener('click', function (e) {
+        if (label.contains(e.target)) return;
+        e.stopPropagation();
+        const isOpen = wrap.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen);
+        if (isOpen) positionDropdown(); else resetPreview();
+      });
+
+      window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });
+      window.addEventListener('scroll', function () { if (wrap.classList.contains('is-open')) positionDropdown(true); }, true);
+      document.addEventListener('click', function (e) {
+        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
+      });
+    })();
+  </script>
+
+  <script>
+    /* ── Mobile menu (hamburger) ── */
+    (function () {
+      var nav    = document.querySelector('.nav');
+      var burger = document.getElementById('navHamburger');
+      var menu   = document.getElementById('mobileMenu');
+      if (!nav || !burger || !menu) return;
+      var MAX = 1024;                                 // must match the CSS breakpoint
+
+      function place() { menu.style.top = Math.max(0, nav.getBoundingClientRect().bottom) + 'px'; }
+
+      function collapseAll() {
+        menu.querySelectorAll('.mm-item.is-open').forEach(function (it) {
+          it.classList.remove('is-open');
+          var b = it.querySelector(':scope > .mm-row > .mm-chev');
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      function setOpen(open) {
+        if (open) place();
+        menu.classList.toggle('is-open', open);
+        nav.classList.toggle('menu-open', open);
+        document.documentElement.classList.toggle('menu-lock', open);
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        if (!open) collapseAll();
+      }
+
+      burger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setOpen(!menu.classList.contains('is-open'));
+      });
+
+      menu.querySelectorAll('.mm-chev').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var open = b.closest('.mm-item').classList.toggle('is-open');
+          b.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      });
+
+      menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+
+      document.addEventListener('click', function (e) {
+        if (menu.classList.contains('is-open') && !menu.contains(e.target) && !burger.contains(e.target)) setOpen(false);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu.classList.contains('is-open')) setOpen(false);
+      });
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > MAX) setOpen(false);
+        else if (menu.classList.contains('is-open')) place();
+      });
+    })();
+  </script>
+</body>
+</html>

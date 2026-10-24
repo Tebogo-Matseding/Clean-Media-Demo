@@ -908,13 +908,18 @@
     .portfolio-card:nth-child(even) { height: 500px; }
 
     .portfolio-card-img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: opacity 0.9s ease, transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       filter: brightness(0.82);
     }
+
+    /* Two stacked layers cross-fade for the hover slideshow */
+    .portfolio-card-img.is-off { opacity: 0; }
 
     /* Dark gradient overlay on each card */
     .portfolio-card-overlay {
@@ -1474,7 +1479,7 @@
 
                 <div class="nav-dd-group" data-group="events">
                   <div class="nav-dd-row">
-                    <a href="event-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/events.jpg" data-slides="weddings|Weddings,celebration|Celebration,festive|Festive">Events</a>
+                    <a href="events-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="images/events.jpg" data-slides="weddings|Weddings,celebration|Celebration,festive|Festive">Events</a>
                     <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                   </div>
                   <div class="nav-dd-subs">
@@ -1551,7 +1556,7 @@
             </div>
             <div class="mm-item mm-cat">
               <div class="mm-row">
-                <a href="event-subcategories.html" class="mm-link">Events</a>
+                <a href="events-subcategories.html" class="mm-link">Events</a>
                 <button type="button" class="mm-chev" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
               </div>
               <div class="mm-panel"><div class="mm-panel-inner">
@@ -1650,7 +1655,7 @@
 
       <!-- Card 1: Corporate -->
       <a href="corporate-subcategories.html" class="portfolio-card" data-category="corporate">
-        <img class="portfolio-card-img" src="images/headshots.jpg" alt="Corporate" />
+        <img class="portfolio-card-img" data-fallback="images/headshots.jpg" alt="Corporate" />
         <div class="portfolio-card-overlay"></div>
         <div class="portfolio-card-label">
           <span class="portfolio-card-title">Corporate</span>
@@ -1664,7 +1669,7 @@
 
       <!-- Card 2: Lifestyle -->
       <a href="lifestyle-subcategories.html" class="portfolio-card" data-category="lifestyle">
-        <img class="portfolio-card-img" src="images/branding.jpg" alt="Lifestyle" />
+        <img class="portfolio-card-img" data-fallback="images/branding.jpg" alt="Lifestyle" />
         <div class="portfolio-card-overlay"></div>
         <div class="portfolio-card-label">
           <span class="portfolio-card-title">Lifestyle</span>
@@ -1682,8 +1687,8 @@
       </a>
 
       <!-- Card 3: Events -->
-      <a href="event-subcategories.html" class="portfolio-card" data-category="events">
-        <img class="portfolio-card-img" src="images/events.jpg" alt="Events" />
+      <a href="events-subcategories.html" class="portfolio-card" data-category="events">
+        <img class="portfolio-card-img" data-fallback="images/events.jpg" alt="Events" />
         <div class="portfolio-card-overlay"></div>
         <div class="portfolio-card-label">
           <span class="portfolio-card-title">Events</span>
@@ -1886,7 +1891,7 @@
           <p class="footer-col-head">Sessions</p>
           <a href="booking.html" class="footer-link">Book a Session</a>
           <a href="lifestyle-subcategories.html" class="footer-link">Lifestyle Photography</a>
-          <a href="event-subcategories.html" class="footer-link">Events Photography</a>
+          <a href="events-subcategories.html" class="footer-link">Events Photography</a>
           <a href="corporate-subcategories.html" class="footer-link">Corporate Headshots</a>
         </div>
         <div class="footer-col">
@@ -2019,6 +2024,75 @@
       if (s) observer.observe(s);
     })();
   </script>
+  <!-- Image manifest: built by Build-Portfolio-Manifest.ps1 (portrait + landscape lists per sub-category) -->
+  <script src="portfolio-manifest.js"></script>
+  <script>
+    /* ── Image helpers shared by the #portfolio cards and the nav preview ── */
+    (function () {
+      var M    = window.PORTFOLIO_MANIFEST && window.PORTFOLIO_MANIFEST.categories;
+      var ROOT = '';                      // use '../' on pages that live inside a *-gallery folder
+
+      function shuffle(a) {
+        a = a.slice();
+        for (var i = a.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+        }
+        return a;
+      }
+
+      // One list per sub-category (in manifest order), empty lists dropped
+      function lists(cat, orient) {
+        var c = M && M[cat];
+        if (!c) return [];
+        return Object.keys(c).map(function (k) { return c[k][orient] || []; })
+                             .filter(function (l) { return l.length; });
+      }
+
+      function randomFrom(ls, avoid) {
+        if (!ls.length) return null;
+        var src = null;
+        for (var t = 0; t < 4; t++) {
+          var l = ls[Math.floor(Math.random() * ls.length)];
+          src = ROOT + l[Math.floor(Math.random() * l.length)];
+          if (src !== avoid) break;
+        }
+        return src;
+      }
+
+      window.CMP_IMG = {
+        preload: function (src) {
+          return new Promise(function (resolve) {
+            var im = new Image();
+            im.src = src;
+            if (im.decode) {            // fully decoded before it is shown, so the fade never stalls
+              im.decode().then(function () { resolve(src); }, function () { resolve(null); });
+            } else {
+              im.onload  = function () { resolve(src); };
+              im.onerror = function () { resolve(null); };
+            }
+          });
+        },
+        // Nav preview: a random landscape photo from the category
+        randomLandscape: function (cat, avoid) { return randomFrom(lists(cat, 'landscape'), avoid); },
+        // Card resting image: a random portrait photo from the category
+        randomPortrait:  function (cat, avoid) { return randomFrom(lists(cat, 'portrait'), avoid); },
+        // Card slideshow: portraits taken round-robin from every sub-category, random within each
+        portraitSequence: function (cat, max) {
+          var ls = lists(cat, 'portrait').map(shuffle), out = [], i = 0;
+          while (out.length < max) {
+            var added = false;
+            for (var k = 0; k < ls.length && out.length < max; k++) {
+              if (i < ls[k].length) { out.push(ROOT + ls[k][i]); added = true; }
+            }
+            if (!added) break;
+            i++;
+          }
+          return out;
+        }
+      };
+    })();
+  </script>
+
   <script>
     /* ── Portfolio nav dropdown: filter + desktop hover slideshow + tablet/phone accordion ── */
     (function () {
@@ -2050,44 +2124,14 @@
         }
       }
 
-      /* ---------- desktop slideshow ---------- */
-      const SLIDE_DIR  = 'images/portfolio/';        // put sub-category images here, named <slug>.jpg
-      const SLIDE_EXTS = ['jpg', 'webp', 'png', 'jpeg'];
-      const SLIDE_MS   = 1800;
-
+      /* ---------- desktop preview: a random landscape photo from the hovered category ---------- */
       const ddImgs  = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
-      const caption = document.getElementById('navDdCaption');
       const linksEl = document.getElementById('navDdLinks');
       const defaultSrc = ddImgs[0] ? ddImgs[0].getAttribute('src') : '';
-      let active = 0, timer = null, runId = 0;
-      const resolved = {};
-
-      function resolveSlide(slug) {
-        if (resolved[slug]) return resolved[slug];
-        resolved[slug] = new Promise(function (resolve) {
-          let i = 0;
-          (function next() {
-            if (i >= SLIDE_EXTS.length) return resolve(null);
-            const url = SLIDE_DIR + slug + '.' + SLIDE_EXTS[i++];
-            const im = new Image();
-            im.onload = function () { resolve(url); };
-            im.onerror = next;
-            im.src = url;
-          })();
-        });
-        return resolved[slug];
-      }
-
-      function parseSlides(item) {
-        return (item.dataset.slides || '').split(',').map(function (t) {
-          const parts = t.trim().split('|');
-          return { slug: parts[0], label: parts[1] || '' };
-        }).filter(function (d) { return d.slug; });
-      }
-
       const LOGO_SRC = defaultSrc;
+      let active = 0, runId = 0;
 
-      function show(src, label) {
+      function show(src) {
         if (!ddImgs[0] || !ddImgs[1]) return;
         const next = ddImgs[1 - active], cur = ddImgs[active];
         if (cur.getAttribute('src') !== src) {
@@ -2097,59 +2141,30 @@
           cur.classList.remove('is-shown');
           active = 1 - active;
         }
-        if (caption) {
-          caption.textContent = label || '';
-          caption.classList.toggle('is-visible', !!label);
-        }
-      }
-
-      function stopSlideshow() {
-        runId++;
-        if (timer) { clearInterval(timer); timer = null; }
       }
 
       function resetPreview() {
-        stopSlideshow();
-        show(defaultSrc, '');
+        runId++;
+        show(defaultSrc);
       }
 
-      async function startSlideshow(item) {
+      async function showCategory(item) {
         if (!isDesktop()) return;
-        stopSlideshow();
-        const id = runId;
-        const defs = parseSlides(item);
-        show(item.dataset.img || defaultSrc, item.textContent.trim());   // instant feedback
-        const urls = await Promise.all(defs.map(function (d) { return resolveSlide(d.slug); }));
+        const id    = ++runId;
+        const group = item.closest('.nav-dd-group');
+        const cat   = group ? group.dataset.group : '';
+        const api   = window.CMP_IMG;
+        const pick  = (api && cat) ? api.randomLandscape(cat, ddImgs[active].getAttribute('src')) : null;
+        if (!pick) { show(item.dataset.img || defaultSrc); return; }   // no manifest / no landscapes -> fallback
+        const ok = await api.preload(pick);
         if (id !== runId) return;
-        const slides = defs.map(function (d, i) { return { src: urls[i], label: d.label }; })
-                           .filter(function (sl) { return sl.src; });
-        if (!slides.length) return;                                       // no images yet → keep fallback
-        let n = 0;
-        show(slides[0].src, slides[0].label);
-        if (slides.length > 1) {
-          timer = setInterval(function () {
-            n = (n + 1) % slides.length;
-            show(slides[n].src, slides[n].label);
-          }, SLIDE_MS);
-        }
+        show(ok || item.dataset.img || defaultSrc);
       }
 
-      function preloadAll() {
-        items.forEach(function (it) { parseSlides(it).forEach(function (d) { resolveSlide(d.slug); }); });
-      }
-
-      document.querySelectorAll('.nav-dd-parent').forEach(function (it) {
-        it.addEventListener('mouseenter', function () { startSlideshow(this); });
-        it.addEventListener('focus',      function () { startSlideshow(this); });
+      document.querySelectorAll('.nav-dd-parent, .nav-dd-cta').forEach(function (it) {
+        it.addEventListener('mouseenter', function () { showCategory(this); });
+        it.addEventListener('focus',      function () { showCategory(this); });
       });
-
-      // "Not what you're looking for?" has its own image too: images/portfolio/custom-shoot.jpg
-      // (falls back to the logo until that file exists).
-      const cta = document.getElementById('navDdCta');
-      if (cta) {
-        cta.addEventListener('mouseenter', function () { startSlideshow(cta); });
-        cta.addEventListener('focus',      function () { startSlideshow(cta); });
-      }
       if (linksEl) linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
 
       /* ---------- open / close ---------- */
@@ -2169,7 +2184,7 @@
         e.stopPropagation();
         const isOpen = wrap.classList.toggle('is-open');
         btn.setAttribute('aria-expanded', isOpen);
-        if (isOpen) { positionDropdown(); if (isDesktop()) preloadAll(); } else { resetPreview(); }
+        if (isOpen) { positionDropdown(); } else { resetPreview(); }
       });
 
       window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });
@@ -2209,6 +2224,91 @@
           document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });
           if (!isDesktop()) closeDropdown();       // desktop panel stays open, as before
         });
+      });
+    })();
+  </script>
+
+  <script>
+    /* ── #portfolio cards: portrait photos from the sub-categories, slideshow on hover ── */
+    (function () {
+      var API   = window.CMP_IMG;
+      var cards = document.querySelectorAll('.portfolio-card[data-category]');
+      if (!cards.length) return;
+
+      var SLIDE_MS = 2600, SEQ_LEN = 12;     // time each photo stays up (ms); the fade itself is 0.9s in the CSS
+      // Touch screens and reduced-motion users get the resting photo only
+      var canAnimate = window.matchMedia('(hover: hover)').matches &&
+                       !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      cards.forEach(function (card) {
+        var cat = card.dataset.category;
+        var a   = card.querySelector('.portfolio-card-img');
+        if (!a) return;
+        var fb  = a.dataset.fallback || '';
+
+        // Resting photo: random portrait from the manifest, else the fallback
+        var rest = API ? API.randomPortrait(cat) : null;
+        a.onerror = function () { if (fb && a.getAttribute('src') !== fb) a.src = fb; };
+        a.src = rest || fb;
+        var restSrc = a.getAttribute('src');
+
+        if (!API || !canAnimate) return;
+
+        // Second layer for the cross-fade
+        var b = document.createElement('img');
+        b.className = 'portfolio-card-img is-off';
+        b.alt = '';
+        a.parentNode.insertBefore(b, a.nextSibling);
+
+        var shown = a, hidden = b, run = 0, timer = null;
+
+        function swap(src) {
+          hidden.src = src;
+          hidden.classList.remove('is-off');
+          shown.classList.add('is-off');
+          var t = shown; shown = hidden; hidden = t;
+        }
+
+        function stop() {
+          run++;
+          if (timer) { clearTimeout(timer); timer = null; }
+        }
+
+        // Each photo stays up for SLIDE_MS. The next one is loaded while the current one is
+        // on screen, so a slow connection delays a slide instead of bunching two together.
+        function start() {
+          stop();
+          var id  = run;
+          var seq = API.portraitSequence(cat, SEQ_LEN);
+          if (seq.length < 2) return;
+          var n = 0, fails = 0;
+          var ready = API.preload(seq[0]);
+          (function step() {
+            ready.then(function (ok) {
+              if (id !== run) return;
+              n = (n + 1) % seq.length;
+              if (ok) {
+                fails = 0;
+                swap(ok);
+                ready = API.preload(seq[n]);
+                timer = setTimeout(step, SLIDE_MS);
+              } else if (++fails < seq.length) {      // broken file: skip it straight away
+                ready = API.preload(seq[n]);
+                step();
+              }
+            });
+          })();
+        }
+
+        function leave() {
+          stop();
+          if (shown.getAttribute('src') !== restSrc) swap(restSrc);
+        }
+
+        card.addEventListener('mouseenter', start);
+        card.addEventListener('focus',      start);
+        card.addEventListener('mouseleave', leave);
+        card.addEventListener('blur',       leave);
       });
     })();
   </script>
