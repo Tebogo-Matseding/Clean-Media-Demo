@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matric Farewell | Clean Media Pictures</title>
+  <!-- Cormorant Garamond: high-fashion editorial serif -->
+  <!-- Bebas Neue: cinematic all-caps display -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #fff;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    .nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 40px;
+    }
+
+    .nav-logo img {
+      height: 95px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .nav-tab {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      opacity: 0.78;
+      transition: opacity 0.2s;
+      position: relative;
+    }
+
+    .nav-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: #c0000a;
+      transition: width 0.28s ease;
+    }
+
+    .nav-tab:hover { opacity: 1; }
+    .nav-tab:hover::after { width: 100%; }
+
+    /* ── Nav Portfolio Mega Dropdown ── */
+    .nav-dropdown-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-dropdown-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .nav-trigger-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      opacity: 0.82;
+      transition: opacity 0.2s;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .nav-trigger-label::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: #c0000a;
+      transition: width 0.28s ease;
+    }
+
+    .nav-dropdown-trigger:hover .nav-trigger-label { opacity: 1; }
+    .nav-dropdown-trigger:hover .nav-trigger-label::after { width: 100%; }
+
+    .nav-dropdown-chevron {
+      width: 9px; height: 6px;
+      flex-shrink: 0;
+      color: #1a1a1a;
+      opacity: 0.7;
+      transition: transform 0.25s ease, opacity 0.2s;
+      display: block;
+      margin-top: 1px;
+    }
+
+    .nav-dropdown-wrap.is-open .nav-dropdown-chevron {
+      transform: rotate(180deg);
+      opacity: 1;
+    }
+
+    /* ── Centered floating panel ── */
+    .nav-dropdown {
+      position: fixed;
+      /* JS sets top; CSS handles horizontal centering */
+      left: 50% !important;
+      transform: translateX(-50%) translateY(-10px);
+      background: #c0000a;
+      border-radius: 18px;
+      padding: 0;
+      width: 760px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.28s cubic-bezier(0.16,1,0.3,1),
+                  visibility 0.28s;
+      z-index: 9999;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.08),
+        0 8px 20px rgba(0,0,0,0.2),
+        0 24px 48px rgba(0,0,0,0.3),
+        0 48px 80px rgba(0,0,0,0.18);
+    }
+
+    .nav-dropdown-wrap.is-open .nav-dropdown {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* No caret — centered panel doesn't need one */
+    .nav-dropdown::before { display: none; }
+
+    /* ── Inner two-column layout ── */
+    .nav-dropdown-inner {
+      display: grid;
+      grid-template-columns: 1fr 230px;
+      grid-template-rows: minmax(0, 1fr);
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* LEFT: links — laid out as a 2-column grid, no divider border (original design) */
+    .nav-dropdown-links {
+      padding: 28px 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-content: space-evenly;   /* original used space-between; evenly looks better with only 2 rows */
+      column-gap: 4px;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .nav-dd-group { display: block; }
+    .nav-dd-row { display: block; }
+    .nav-dd-row .nav-dd-parent { width: 100%; }
+
+    /* Desktop: sub-categories are shown as a slideshow in the image box, not as a list.
+       The markup stays in the page so tablet/mobile can expand it and so each
+       sub-category can be linked to its own page later. */
+    .nav-dd-toggle { display: none; }
+    .nav-dd-subs { display: none; }
+
+    /* Sub-category + third level (tablet / mobile only) */
+    .nav-dropdown-item.nav-dd-sub { padding-left: 30px; padding-top: 8px; padding-bottom: 8px; white-space: normal; }
+    .nav-dropdown-item.nav-dd-subsub {
+      padding-left: 48px; padding-top: 7px; padding-bottom: 7px;
+      font-size: 0.6rem; color: rgba(255,255,255,0.62);
+    }
+
+    .nav-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      padding: 9px 16px;
+      transition: color 0.18s, background 0.18s, padding-left 0.18s;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    /* Thin left bar accent */
+    .nav-dropdown-item::before {
+      content: '';
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.25);
+      flex-shrink: 0;
+      transition: background 0.18s, height 0.18s;
+      border-radius: 1px;
+    }
+
+    .nav-dropdown-item:hover {
+      color: #fff;
+      background: rgba(0,0,0,0.12);
+      padding-left: 20px;
+    }
+
+    .nav-dropdown-item:hover::before {
+      background: #fff;
+      height: 18px;
+    }
+
+    .nav-dropdown-item.is-active {
+      color: #fff;
+    }
+
+    .nav-dropdown-item.is-active::before {
+      background: #fff;
+      height: 18px;
+    }
+
+    /* RIGHT: image panel */
+    .nav-dropdown-preview {
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+    }
+
+    .nav-dropdown-img-wrap {
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.2);
+      position: relative;
+      min-height: 0;
+    }
+
+    .nav-dropdown-img-wrap img.nav-dd-img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+    }
+
+    .nav-dropdown-img-wrap img.nav-dd-img.is-shown { opacity: 1; }
+
+    /* Bottom strip — kept as a spacer, no longer a different shade */
+    .nav-dropdown-footer {
+      height: 3px;
+      margin: 0;
+    }
+
+    /* Desktop only: fewer categories, so the panel is larger */
+    @media (min-width: 1025px) {
+      .nav-dropdown { width: 960px; border-radius: 20px; }
+      .nav-dropdown-inner { grid-template-columns: 1fr 340px; }
+      .nav-dropdown-links { padding: 40px 16px; }
+      .nav-dropdown-item { font-size: 0.76rem; letter-spacing: 0.12em; padding: 15px 22px; gap: 14px; white-space: normal; }
+      .nav-dropdown-item:hover { padding-left: 26px; }
+      .nav-dropdown-item::before { height: 20px; }
+      .nav-dropdown-item:hover::before,
+      .nav-dropdown-item.is-active::before { height: 24px; }
+      .nav-dropdown-preview { padding: 18px; }
+      .nav-dropdown-img-wrap { border-radius: 12px; }
+    }
+
+    /* Logo shown in the preview box when no category is hovered */
+    .nav-dropdown-img-wrap img.nav-dd-img.is-logo {
+      object-fit: contain;
+      padding: 14%;
+      background: rgb(255, 255, 255);
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 18px; }
+
+    .btn-book {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #0a0a0a;
+      border: 1px solid rgba(10,10,10,0.35);
+      border-radius: 100px;
+      padding: 9px 22px;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .btn-book:hover {
+      background: #c0000a;
+      border-color: #c0000a;
+      color: #fff;
+    }
+
+    /* ── Hamburger (mobile nav toggle) ──────────────────────── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 6px;
+      width: 26px;
+      height: 20px;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: #1a1a1a;
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+    }
+
+    .nav-hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 100%; }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 100%; }
+
+    /* ── Mobile menu ────────────────────────────────────────
+       At 1024px and below the hover / image-preview dropdown is not used.
+       The nav collapses into a hamburger menu: links, a Portfolio accordion,
+       and the WhatsApp + Book a Session pills. Desktop (1025px+) is unchanged. */
+    .mobile-menu { display: none; }
+
+    @media (max-width: 1024px) {
+      .nav { padding: 14px 24px; flex-wrap: nowrap; }
+      .nav.menu-open { z-index: 1000; }
+      .nav-logo img { height: 70px; }
+      .nav-tabs { display: none; }
+      .nav-right .btn-book { display: none; }
+
+      /* 44px tap target around the same 26x20 icon */
+      .nav-hamburger { display: flex; width: 44px; height: 44px; padding: 12px 9px; margin-right: -9px; }
+
+      html.menu-lock { overflow: hidden; }
+
+      .mobile-menu {
+        --mm-bg: #fff; --mm-fg: #111; --mm-muted: rgba(10,10,10,0.62);
+        --mm-line: rgba(10,10,10,0.1); --mm-line-strong: rgba(10,10,10,0.45);
+        display: block;
+        position: fixed; left: 0; right: 0; top: 100px; bottom: 0;
+        z-index: 999;
+        background: var(--mm-bg);
+        overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+        opacity: 0; visibility: hidden; transform: translateY(-8px);
+        transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s linear 0.28s;
+      }
+      .mobile-menu.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+      .mobile-menu--dark {
+        --mm-bg: rgba(10,10,10,0.98); --mm-fg: #fff; --mm-muted: rgba(255,255,255,0.66);
+        --mm-line: rgba(255,255,255,0.12); --mm-line-strong: rgba(255,255,255,0.55);
+      }
+
+      .mm-inner { max-width: 560px; margin: 0 auto; padding: 6px 24px calc(32px + env(safe-area-inset-bottom, 0px)); }
+
+      .mm-row { display: flex; align-items: stretch; border-bottom: 1px solid var(--mm-line); }
+      .mm-link {
+        flex: 1; display: flex; align-items: center; min-height: 56px;
+        font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
+        letter-spacing: 0.14em; text-transform: uppercase; color: var(--mm-fg);
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mm-link.is-active { color: #c0000a; }
+      .mm-chev {
+        width: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        background: none; border: none; color: var(--mm-fg); cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mm-chev svg { width: 12px; height: 8px; transition: transform 0.25s ease; }
+      .mm-item.is-open > .mm-row .mm-chev svg { transform: rotate(180deg); }
+
+      /* Accordion panels (Portfolio > category > sub-categories) */
+      .mm-panel {
+        display: grid; grid-template-rows: 0fr; visibility: hidden;
+        transition: grid-template-rows 0.3s ease, visibility 0s linear 0.3s;
+      }
+      .mm-item.is-open > .mm-panel { grid-template-rows: 1fr; visibility: visible; transition-delay: 0s; }
+      .mm-panel-inner { overflow: hidden; min-height: 0; }
+
+      .mm-cat .mm-link { font-size: 0.74rem; padding-left: 14px; min-height: 52px; }
+      .mm-link--small { font-size: 0.7rem; padding-left: 14px; min-height: 52px; color: var(--mm-muted); }
+      .mm-sub {
+        display: flex; align-items: center; gap: 12px; min-height: 46px; padding-left: 30px;
+        font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 500;
+        letter-spacing: 0.12em; text-transform: uppercase; color: var(--mm-muted);
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mm-sub::before { content: ''; width: 1px; height: 12px; background: currentColor; opacity: 0.45; flex-shrink: 0; }
+      .mm-sub.is-active { color: #c0000a; }
+      .mm-sub:last-child { margin-bottom: 8px; }
+
+      /* Pills */
+      .mm-actions { display: flex; flex-direction: column; gap: 12px; padding-top: 28px; }
+      .mm-pill {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        min-height: 52px; padding: 0 24px; border-radius: 100px; text-align: center;
+        font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        transition: background 0.22s, border-color 0.22s, color 0.22s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mm-pill--wa { background: #c0000a; border: 1px solid #c0000a; color: #fff; }
+      .mm-pill--wa:hover, .mm-pill--wa:active { background: #a0000a; border-color: #a0000a; }
+      .mm-pill--book { border: 1px solid var(--mm-line-strong); color: var(--mm-fg); }
+      .mm-pill--book:hover, .mm-pill--book:active { background: #c0000a; border-color: #c0000a; color: #fff; }
+      .mm-wa-icon { width: 20px; height: 20px; fill: #fff; flex-shrink: 0; }
+    }
+
+    @media (max-width: 380px) {
+      .nav { padding: 12px 16px; }
+      .mm-inner { padding-left: 18px; padding-right: 18px; }
+      .mm-pill { font-size: 0.66rem; letter-spacing: 0.08em; padding: 0 16px; }
+    }
+
+    /* ── Page header ─────────────────────────────────────── */
+    .page-header {
+      background: #fff;
+      text-align: center;
+      padding: 56px 40px 0;
+    }
+
+    .page-header-inner { max-width: 720px; margin: 0 auto; }
+
+    .page-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #c0000a;
+      margin-bottom: 18px;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      line-height: 1.05;
+      color: #0d0d0d;
+    }
+
+    .page-rule {
+      width: 48px;
+      height: 1px;
+      background: #c0000a;
+      margin: 26px auto;
+    }
+
+    .page-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(10,10,10,0.62);
+    }
+
+    @media (max-width: 900px) {
+      .page-header { padding: 40px 24px 0; }
+    }
+
+    @media (max-width: 540px) {
+      .page-header { padding: 32px 20px 0; }
+      .page-desc { font-size: 0.9rem; line-height: 1.75; }
+    }
+
+    /* ── Gallery ─────────────────────────────────────────── */
+    .gallery {
+      background: #fff;
+      padding: 56px 40px 112px;
+    }
+
+    /* 4 portrait frames, then 2 landscape frames — same row height,
+       so each row reads as one clean horizontal line either way */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 440px;
+      gap: 16px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .gallery-item--portrait  { grid-column: span 1; }
+    .gallery-item--landscape { grid-column: span 2; }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.92);
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.045);
+      filter: brightness(1);
+    }
+
+    @media (max-width: 900px) {
+      .gallery { padding: 48px 24px 80px; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 320px; gap: 12px; }
+      .gallery-item--landscape { grid-column: span 2; }
+    }
+
+    @media (max-width: 540px) {
+      .gallery { padding: 36px 16px 64px; }
+      /* one column: each frame keeps its natural portrait / landscape shape instead of a fixed 280px crop */
+      .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: auto; gap: 10px; }
+      .gallery-item--portrait,
+      .gallery-item--landscape { grid-column: span 1; }
+      .gallery-item--portrait  { aspect-ratio: 3 / 4; }
+      .gallery-item--landscape { aspect-ratio: 3 / 2; }
+    }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    .footer {
+      background: #0d0d0d;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 40px 40px;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-logo {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      opacity: 0.85;
+      margin-bottom: 14px;
+    }
+
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgb(255, 255, 255);
+    }
+
+    .footer-whatsapp { max-width: 360px; }
+
+    .footer-wa-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .footer-wa-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .footer-wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #c0000a;
+      border: none;
+      border-radius: 100px;
+      padding: 12px 26px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.22s, transform 0.18s;
+    }
+
+    .footer-wa-btn:hover {
+      background: #a0000a;
+      transform: translateY(-1px);
+    }
+
+    .footer-wa-icon {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      flex-shrink: 0;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      padding: 56px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .footer-col-head {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 6px;
+    }
+
+    .footer-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.62);
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: #fff; }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-legal-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.28);
+      transition: color 0.2s;
+    }
+
+    .footer-legal-link:hover { color: rgba(255,255,255,0.7); }
+
+    @media (max-width: 900px) {
+      .footer-inner { padding: 56px 28px 32px; }
+      .footer-top { flex-direction: column; gap: 36px; }
+      .footer-whatsapp { max-width: 100%; }
+      .footer-links { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .footer-links { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ── Lightbox ───────────────────────────────────────── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .lightbox.is-open { display: flex; }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 2px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      animation: lb-in 0.3s ease;
+    }
+
+    @keyframes lb-in {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 24px; right: 32px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .lightbox-close:hover { opacity: 1; }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      cursor: pointer;
+      opacity: 0.75;
+      transition: opacity 0.2s, background 0.22s, border-color 0.22s;
+    }
+
+    .lightbox-nav svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .lightbox-nav:hover {
+      opacity: 1;
+      background: #c0000a;
+      border-color: #c0000a;
+    }
+
+    .lightbox-prev { left: 24px; }
+    .lightbox-next { right: 24px; }
+
+    @media (max-width: 640px) {
+      .lightbox { padding: 16px; }
+      .lightbox-close { top: 10px; right: 16px; }
+      .lightbox-nav { width: 38px; height: 38px; }
+      .lightbox-nav svg { width: 16px; height: 16px; }
+      .lightbox-prev { left: 10px; }
+      .lightbox-next { right: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ───────────────────────────────────────────── -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <a href="../index.html"><img src="../images/nav-logo.png" alt="Clean Media Pictures" /></a>
+    </div>
+
+    <div class="nav-tabs" id="navTabs">
+      <a href="../index.html#about" class="nav-tab">About Studio</a>
+
+      <!-- Portfolio dropdown -->
+      <div class="nav-dropdown-wrap">
+        <button class="nav-dropdown-trigger" id="portfolioDropdownBtn" aria-label="Toggle portfolio categories" aria-expanded="false">
+          <a href="../index.html#portfolio" class="nav-tab nav-trigger-label">Portfolio</a>
+          <svg class="nav-dropdown-chevron" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="nav-dropdown" id="portfolioDropdown" role="menu">
+          <div class="nav-dropdown-inner">
+
+            <!-- LEFT: 3 main categories (desktop = hover slideshow, tablet/phone = arrow expands sub-categories) -->
+            <div class="nav-dropdown-links" id="navDdLinks">
+
+            
+            <div class="nav-dd-group" data-group="corporate">
+              <div class="nav-dd-row">
+                <a href="../corporate-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="../images/headshots.jpg" data-slides="professional-headshots|Professional Headshots,fashion|Fashion">Corporate</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="../corporate-gallery/professional-headshots-gallery.html" class="nav-dropdown-item nav-dd-sub">Professional Headshots</a>
+                <a href="../corporate-gallery/fashion-gallery.html" class="nav-dropdown-item nav-dd-sub">Fashion</a>
+              </div>
+            </div>
+
+            <div class="nav-dd-group" data-group="lifestyle">
+              <div class="nav-dd-row">
+                <a href="../lifestyle-subcategories.html" class="nav-dropdown-item nav-dd-parent is-active" data-img="../images/branding.jpg" data-slides="maternity|Maternity,matric-farewell|Matric Farewell,graduation|Graduation,birthday|Birthday,outdoor-photography|Outdoor Photography,studio-photography|Studio Photography,cake-smash-photography|Cake Smash Photography">Lifestyle</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Lifestyle sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="../lifestyle-gallery/maternity-gallery.html" class="nav-dropdown-item nav-dd-sub">Maternity</a>
+                <a href="../lifestyle-gallery/matric-farewell-gallery.html" class="nav-dropdown-item nav-dd-sub is-active">Matric Farewell</a>
+                <a href="../lifestyle-gallery/graduation-gallery.html" class="nav-dropdown-item nav-dd-sub">Graduation</a>
+                <a href="../lifestyle-gallery/birthday-gallery.html" class="nav-dropdown-item nav-dd-sub">Birthday</a>
+                <a href="../lifestyle-gallery/outdoor-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Outdoor Photography</a>
+                <a href="../lifestyle-gallery/studio-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Studio Photography</a>
+                <a href="../lifestyle-gallery/cake-smash-photography-gallery.html" class="nav-dropdown-item nav-dd-sub">Cake Smash Photography</a>
+              </div>
+            </div>
+
+            <div class="nav-dd-group" data-group="events">
+              <div class="nav-dd-row">
+                <a href="../events-subcategories.html" class="nav-dropdown-item nav-dd-parent" data-img="../images/events.jpg" data-slides="weddings|Weddings,celebration|Celebration,festive|Festive">Events</a>
+                <button type="button" class="nav-dd-toggle" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="nav-dd-subs">
+                <a href="../events-gallery/weddings-gallery.html" class="nav-dropdown-item nav-dd-sub">Weddings</a>
+                <a href="../events-gallery/celebration-gallery.html" class="nav-dropdown-item nav-dd-sub">Celebration</a>
+                <a href="../events-gallery/festive.html" class="nav-dropdown-item nav-dd-sub">Festive</a>
+              </div>
+            </div>
+
+
+            <a href="../booking.html" class="nav-dropdown-item nav-dd-cta" id="navDdCta" data-img="../images/nav-logo.png" data-slides="custom-shoot|Not what you're looking for?">Not what you're looking for?</a>
+
+            </div>
+
+            <!-- RIGHT: image preview (logo shows until a category is hovered) -->
+            <div class="nav-dropdown-preview">
+              <div class="nav-dropdown-img-wrap" id="navDdImgWrap">
+                <img class="nav-dd-img is-shown is-logo" id="navDdImg" src="../images/nav-logo.png" alt="Clean Media Pictures" />
+                <img class="nav-dd-img is-logo" id="navDdImgB" src="../images/nav-logo.png" alt="" />
+              </div>
+            </div>
+
+          </div>
+          <div class="nav-dropdown-footer"></div>
+        </div>
+      </div>
+
+      <a href="../index.html#testimonials" class="nav-tab">Testimonials</a>
+      <a href="../index.html#faqs"         class="nav-tab">FAQs</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="../booking.html" class="btn-book">Book a Session</a>
+      <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu (1024px and below): hamburger panel, no image preview -->
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mm-inner">
+        <div class="mm-row"><a href="../index.html#about" class="mm-link">About Studio</a></div>
+
+        <div class="mm-item">
+          <div class="mm-row">
+            <a href="../index.html#portfolio" class="mm-link">Portfolio</a>
+            <button type="button" class="mm-chev" aria-expanded="false" aria-label="Show portfolio categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+          <div class="mm-panel"><div class="mm-panel-inner">
+            <div class="mm-item mm-cat">
+              <div class="mm-row">
+                <a href="../corporate-subcategories.html" class="mm-link">Corporate</a>
+                <button type="button" class="mm-chev" aria-expanded="false" aria-label="Show Corporate sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="mm-panel"><div class="mm-panel-inner">
+                <a href="../corporate-gallery/professional-headshots-gallery.html" class="mm-sub">Professional Headshots</a>
+                <a href="../corporate-gallery/fashion-gallery.html" class="mm-sub">Fashion</a>
+              </div></div>
+            </div>
+            <div class="mm-item mm-cat">
+              <div class="mm-row">
+                <a href="../lifestyle-subcategories.html" class="mm-link is-active">Lifestyle</a>
+                <button type="button" class="mm-chev" aria-expanded="false" aria-label="Show Lifestyle sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="mm-panel"><div class="mm-panel-inner">
+                <a href="../lifestyle-gallery/maternity-gallery.html" class="mm-sub">Maternity</a>
+                <a href="../lifestyle-gallery/matric-farewell-gallery.html" class="mm-sub is-active">Matric Farewell</a>
+                <a href="../lifestyle-gallery/graduation-gallery.html" class="mm-sub">Graduation</a>
+                <a href="../lifestyle-gallery/birthday-gallery.html" class="mm-sub">Birthday</a>
+                <a href="../lifestyle-gallery/outdoor-photography-gallery.html" class="mm-sub">Outdoor Photography</a>
+                <a href="../lifestyle-gallery/studio-photography-gallery.html" class="mm-sub">Studio Photography</a>
+                <a href="../lifestyle-gallery/cake-smash-photography-gallery.html" class="mm-sub">Cake Smash Photography</a>
+              </div></div>
+            </div>
+            <div class="mm-item mm-cat">
+              <div class="mm-row">
+                <a href="../events-subcategories.html" class="mm-link">Events</a>
+                <button type="button" class="mm-chev" aria-expanded="false" aria-label="Show Events sub-categories"><svg viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="mm-panel"><div class="mm-panel-inner">
+                <a href="../events-gallery/weddings-gallery.html" class="mm-sub">Weddings</a>
+                <a href="../events-gallery/celebration-gallery.html" class="mm-sub">Celebration</a>
+                <a href="../events-gallery/festive.html" class="mm-sub">Festive</a>
+              </div></div>
+            </div>
+            <div class="mm-row"><a href="../booking.html" class="mm-link mm-link--small">Not what you're looking for?</a></div>
+          </div></div>
+        </div>
+
+        <div class="mm-row"><a href="../index.html#testimonials" class="mm-link">Testimonials</a></div>
+        <div class="mm-row"><a href="../index.html#faqs" class="mm-link">FAQs</a></div>
+
+        <div class="mm-actions">
+          <a href="https://wa.me/27670237264" target="_blank" rel="noopener" class="mm-pill mm-pill--wa">
+            <svg class="mm-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Chat with us on WhatsApp
+          </a>
+          <a href="../booking.html" class="mm-pill mm-pill--book">Book a Session</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Page header ──────────────────────────────────────── -->
+  <header class="page-header">
+    <div class="page-header-inner">
+      <p class="page-eyebrow">Lifestyle</p>
+      <h1 class="page-title">Matric Farewell</h1>
+      <div class="page-rule"></div>
+      <p class="page-desc">
+        Glamorous portraits to mark the end of school. Expect polished studio and outdoor frames of the dress, the suit, the friends and the final look, all shot to feel confident, elegant and unmistakably you.
+      </p>
+    </div>
+  </header>
+
+  <!-- ── Gallery ──────────────────────────────────────────── -->
+  <section class="gallery" id="gallery">
+    <div class="gallery-grid">
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/1.webp" alt="Matric Farewell photography 1" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/3.webp" alt="Matric Farewell photography 2" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/4.webp" alt="Matric Farewell photography 3" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/5.webp" alt="Matric Farewell photography 4" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/2.webp" alt="Matric Farewell photography 5" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/7.webp" alt="Matric Farewell photography 6" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/6.webp" alt="Matric Farewell photography 7" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/8.webp" alt="Matric Farewell photography 8" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/9.webp" alt="Matric Farewell photography 9" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/10.webp" alt="Matric Farewell photography 10" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/36.webp" alt="Matric Farewell photography 11" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/40.webp" alt="Matric Farewell photography 12" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/11.webp" alt="Matric Farewell photography 13" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/12.webp" alt="Matric Farewell photography 14" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/13.webp" alt="Matric Farewell photography 15" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/14.webp" alt="Matric Farewell photography 16" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/41.webp" alt="Matric Farewell photography 17" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/61.webp" alt="Matric Farewell photography 18" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/15.webp" alt="Matric Farewell photography 19" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/16.webp" alt="Matric Farewell photography 20" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/17.webp" alt="Matric Farewell photography 21" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/18.webp" alt="Matric Farewell photography 22" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/64.webp" alt="Matric Farewell photography 23" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/80.webp" alt="Matric Farewell photography 24" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/19.webp" alt="Matric Farewell photography 25" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/20.webp" alt="Matric Farewell photography 26" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/21.webp" alt="Matric Farewell photography 27" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/22.webp" alt="Matric Farewell photography 28" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/83.webp" alt="Matric Farewell photography 29" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/84.webp" alt="Matric Farewell photography 30" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/23.webp" alt="Matric Farewell photography 31" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/24.webp" alt="Matric Farewell photography 32" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/25.webp" alt="Matric Farewell photography 33" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/26.webp" alt="Matric Farewell photography 34" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/85.webp" alt="Matric Farewell photography 35" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/87.webp" alt="Matric Farewell photography 36" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/27.webp" alt="Matric Farewell photography 37" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/28.webp" alt="Matric Farewell photography 38" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/29.webp" alt="Matric Farewell photography 39" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/30.webp" alt="Matric Farewell photography 40" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/102.webp" alt="Matric Farewell photography 41" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/103.webp" alt="Matric Farewell photography 42" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/31.webp" alt="Matric Farewell photography 43" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/32.webp" alt="Matric Farewell photography 44" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/33.webp" alt="Matric Farewell photography 45" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/34.webp" alt="Matric Farewell photography 46" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/104.webp" alt="Matric Farewell photography 47" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/105.webp" alt="Matric Farewell photography 48" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/35.webp" alt="Matric Farewell photography 49" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/37.webp" alt="Matric Farewell photography 50" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/38.webp" alt="Matric Farewell photography 51" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/39.webp" alt="Matric Farewell photography 52" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/108.webp" alt="Matric Farewell photography 53" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/123.webp" alt="Matric Farewell photography 54" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/42.webp" alt="Matric Farewell photography 55" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/43.webp" alt="Matric Farewell photography 56" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/44.webp" alt="Matric Farewell photography 57" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/45.webp" alt="Matric Farewell photography 58" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/132.webp" alt="Matric Farewell photography 59" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/137.webp" alt="Matric Farewell photography 60" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/46.webp" alt="Matric Farewell photography 61" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/47.webp" alt="Matric Farewell photography 62" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/48.webp" alt="Matric Farewell photography 63" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/49.webp" alt="Matric Farewell photography 64" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/142.webp" alt="Matric Farewell photography 65" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/148.webp" alt="Matric Farewell photography 66" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/50.webp" alt="Matric Farewell photography 67" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/51.webp" alt="Matric Farewell photography 68" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/52.webp" alt="Matric Farewell photography 69" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/53.webp" alt="Matric Farewell photography 70" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/149.webp" alt="Matric Farewell photography 71" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/218.webp" alt="Matric Farewell photography 72" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/54.webp" alt="Matric Farewell photography 73" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/55.webp" alt="Matric Farewell photography 74" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/56.webp" alt="Matric Farewell photography 75" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/57.webp" alt="Matric Farewell photography 76" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/229.webp" alt="Matric Farewell photography 77" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/240.webp" alt="Matric Farewell photography 78" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/58.webp" alt="Matric Farewell photography 79" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/59.webp" alt="Matric Farewell photography 80" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/60.webp" alt="Matric Farewell photography 81" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/62.webp" alt="Matric Farewell photography 82" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/252.webp" alt="Matric Farewell photography 83" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/254.webp" alt="Matric Farewell photography 84" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/63.webp" alt="Matric Farewell photography 85" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/65.webp" alt="Matric Farewell photography 86" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/66.webp" alt="Matric Farewell photography 87" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/67.webp" alt="Matric Farewell photography 88" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/263.webp" alt="Matric Farewell photography 89" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/285.webp" alt="Matric Farewell photography 90" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/68.webp" alt="Matric Farewell photography 91" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/69.webp" alt="Matric Farewell photography 92" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/70.webp" alt="Matric Farewell photography 93" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/71.webp" alt="Matric Farewell photography 94" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/296.webp" alt="Matric Farewell photography 95" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/297.webp" alt="Matric Farewell photography 96" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/72.webp" alt="Matric Farewell photography 97" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/73.webp" alt="Matric Farewell photography 98" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/74.webp" alt="Matric Farewell photography 99" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/75.webp" alt="Matric Farewell photography 100" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/302.webp" alt="Matric Farewell photography 101" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/303.webp" alt="Matric Farewell photography 102" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/76.webp" alt="Matric Farewell photography 103" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/77.webp" alt="Matric Farewell photography 104" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/78.webp" alt="Matric Farewell photography 105" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/79.webp" alt="Matric Farewell photography 106" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/306.webp" alt="Matric Farewell photography 107" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--landscape">
+        <img src="images/matric-farewell/313.webp" alt="Matric Farewell photography 108" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/81.webp" alt="Matric Farewell photography 109" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/82.webp" alt="Matric Farewell photography 110" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/86.webp" alt="Matric Farewell photography 111" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/88.webp" alt="Matric Farewell photography 112" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/89.webp" alt="Matric Farewell photography 113" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/90.webp" alt="Matric Farewell photography 114" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/91.webp" alt="Matric Farewell photography 115" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/92.webp" alt="Matric Farewell photography 116" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/93.webp" alt="Matric Farewell photography 117" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/94.webp" alt="Matric Farewell photography 118" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/95.webp" alt="Matric Farewell photography 119" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/96.webp" alt="Matric Farewell photography 120" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/97.webp" alt="Matric Farewell photography 121" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/98.webp" alt="Matric Farewell photography 122" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/99.webp" alt="Matric Farewell photography 123" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/100.webp" alt="Matric Farewell photography 124" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/101.webp" alt="Matric Farewell photography 125" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/106.webp" alt="Matric Farewell photography 126" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/107.webp" alt="Matric Farewell photography 127" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/109.webp" alt="Matric Farewell photography 128" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/110.webp" alt="Matric Farewell photography 129" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/111.webp" alt="Matric Farewell photography 130" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/112.webp" alt="Matric Farewell photography 131" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/113.webp" alt="Matric Farewell photography 132" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/114.webp" alt="Matric Farewell photography 133" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/115.webp" alt="Matric Farewell photography 134" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/116.webp" alt="Matric Farewell photography 135" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/117.webp" alt="Matric Farewell photography 136" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/118.webp" alt="Matric Farewell photography 137" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/119.webp" alt="Matric Farewell photography 138" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/120.webp" alt="Matric Farewell photography 139" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/121.webp" alt="Matric Farewell photography 140" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/122.webp" alt="Matric Farewell photography 141" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/124.webp" alt="Matric Farewell photography 142" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/125.webp" alt="Matric Farewell photography 143" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/126.webp" alt="Matric Farewell photography 144" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/127.webp" alt="Matric Farewell photography 145" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/128.webp" alt="Matric Farewell photography 146" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/129.webp" alt="Matric Farewell photography 147" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/130.webp" alt="Matric Farewell photography 148" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/131.webp" alt="Matric Farewell photography 149" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/133.webp" alt="Matric Farewell photography 150" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/134.webp" alt="Matric Farewell photography 151" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/135.webp" alt="Matric Farewell photography 152" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/136.webp" alt="Matric Farewell photography 153" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/138.webp" alt="Matric Farewell photography 154" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/139.webp" alt="Matric Farewell photography 155" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/140.webp" alt="Matric Farewell photography 156" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/141.webp" alt="Matric Farewell photography 157" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/143.webp" alt="Matric Farewell photography 158" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/144.webp" alt="Matric Farewell photography 159" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/145.webp" alt="Matric Farewell photography 160" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/146.webp" alt="Matric Farewell photography 161" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/147.webp" alt="Matric Farewell photography 162" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/150.webp" alt="Matric Farewell photography 163" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/151.webp" alt="Matric Farewell photography 164" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/152.webp" alt="Matric Farewell photography 165" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/153.webp" alt="Matric Farewell photography 166" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/154.webp" alt="Matric Farewell photography 167" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/155.webp" alt="Matric Farewell photography 168" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/156.webp" alt="Matric Farewell photography 169" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/157.webp" alt="Matric Farewell photography 170" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/158.webp" alt="Matric Farewell photography 171" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/159.webp" alt="Matric Farewell photography 172" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/160.webp" alt="Matric Farewell photography 173" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/161.webp" alt="Matric Farewell photography 174" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/162.webp" alt="Matric Farewell photography 175" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/163.webp" alt="Matric Farewell photography 176" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/164.webp" alt="Matric Farewell photography 177" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/165.webp" alt="Matric Farewell photography 178" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/166.webp" alt="Matric Farewell photography 179" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/167.webp" alt="Matric Farewell photography 180" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/168.webp" alt="Matric Farewell photography 181" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/169.webp" alt="Matric Farewell photography 182" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/170.webp" alt="Matric Farewell photography 183" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/171.webp" alt="Matric Farewell photography 184" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/172.webp" alt="Matric Farewell photography 185" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/173.webp" alt="Matric Farewell photography 186" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/174.webp" alt="Matric Farewell photography 187" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/175.webp" alt="Matric Farewell photography 188" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/176.webp" alt="Matric Farewell photography 189" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/177.webp" alt="Matric Farewell photography 190" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/178.webp" alt="Matric Farewell photography 191" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/179.webp" alt="Matric Farewell photography 192" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/180.webp" alt="Matric Farewell photography 193" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/181.webp" alt="Matric Farewell photography 194" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/182.webp" alt="Matric Farewell photography 195" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/183.webp" alt="Matric Farewell photography 196" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/184.webp" alt="Matric Farewell photography 197" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/185.webp" alt="Matric Farewell photography 198" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/186.webp" alt="Matric Farewell photography 199" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/187.webp" alt="Matric Farewell photography 200" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/188.webp" alt="Matric Farewell photography 201" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/189.webp" alt="Matric Farewell photography 202" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/190.webp" alt="Matric Farewell photography 203" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/191.webp" alt="Matric Farewell photography 204" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/192.webp" alt="Matric Farewell photography 205" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/193.webp" alt="Matric Farewell photography 206" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/194.webp" alt="Matric Farewell photography 207" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/195.webp" alt="Matric Farewell photography 208" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/196.webp" alt="Matric Farewell photography 209" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/197.webp" alt="Matric Farewell photography 210" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/198.webp" alt="Matric Farewell photography 211" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/199.webp" alt="Matric Farewell photography 212" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/200.webp" alt="Matric Farewell photography 213" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/201.webp" alt="Matric Farewell photography 214" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/202.webp" alt="Matric Farewell photography 215" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/203.webp" alt="Matric Farewell photography 216" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/204.webp" alt="Matric Farewell photography 217" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/205.webp" alt="Matric Farewell photography 218" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/206.webp" alt="Matric Farewell photography 219" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/207.webp" alt="Matric Farewell photography 220" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/208.webp" alt="Matric Farewell photography 221" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/209.webp" alt="Matric Farewell photography 222" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/210.webp" alt="Matric Farewell photography 223" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/211.webp" alt="Matric Farewell photography 224" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/212.webp" alt="Matric Farewell photography 225" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/213.webp" alt="Matric Farewell photography 226" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/214.webp" alt="Matric Farewell photography 227" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/215.webp" alt="Matric Farewell photography 228" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/216.webp" alt="Matric Farewell photography 229" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/217.webp" alt="Matric Farewell photography 230" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/219.webp" alt="Matric Farewell photography 231" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/220.webp" alt="Matric Farewell photography 232" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/221.webp" alt="Matric Farewell photography 233" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/222.webp" alt="Matric Farewell photography 234" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/223.webp" alt="Matric Farewell photography 235" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/224.webp" alt="Matric Farewell photography 236" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/225.webp" alt="Matric Farewell photography 237" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/226.webp" alt="Matric Farewell photography 238" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/227.webp" alt="Matric Farewell photography 239" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/228.webp" alt="Matric Farewell photography 240" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/230.webp" alt="Matric Farewell photography 241" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/231.webp" alt="Matric Farewell photography 242" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/232.webp" alt="Matric Farewell photography 243" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/233.webp" alt="Matric Farewell photography 244" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/234.webp" alt="Matric Farewell photography 245" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/235.webp" alt="Matric Farewell photography 246" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/236.webp" alt="Matric Farewell photography 247" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/237.webp" alt="Matric Farewell photography 248" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/238.webp" alt="Matric Farewell photography 249" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/239.webp" alt="Matric Farewell photography 250" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/241.webp" alt="Matric Farewell photography 251" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/242.webp" alt="Matric Farewell photography 252" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/243.webp" alt="Matric Farewell photography 253" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/244.webp" alt="Matric Farewell photography 254" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/245.webp" alt="Matric Farewell photography 255" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/246.webp" alt="Matric Farewell photography 256" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/247.webp" alt="Matric Farewell photography 257" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/248.webp" alt="Matric Farewell photography 258" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/249.webp" alt="Matric Farewell photography 259" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/250.webp" alt="Matric Farewell photography 260" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/251.webp" alt="Matric Farewell photography 261" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/253.webp" alt="Matric Farewell photography 262" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/255.webp" alt="Matric Farewell photography 263" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/256.webp" alt="Matric Farewell photography 264" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/257.webp" alt="Matric Farewell photography 265" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/258.webp" alt="Matric Farewell photography 266" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/259.webp" alt="Matric Farewell photography 267" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/260.webp" alt="Matric Farewell photography 268" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/261.webp" alt="Matric Farewell photography 269" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/262.webp" alt="Matric Farewell photography 270" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/264.webp" alt="Matric Farewell photography 271" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/265.webp" alt="Matric Farewell photography 272" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/266.webp" alt="Matric Farewell photography 273" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/267.webp" alt="Matric Farewell photography 274" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/268.webp" alt="Matric Farewell photography 275" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/269.webp" alt="Matric Farewell photography 276" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/270.webp" alt="Matric Farewell photography 277" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/271.webp" alt="Matric Farewell photography 278" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/272.webp" alt="Matric Farewell photography 279" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/273.webp" alt="Matric Farewell photography 280" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/274.webp" alt="Matric Farewell photography 281" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/275.webp" alt="Matric Farewell photography 282" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/276.webp" alt="Matric Farewell photography 283" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/277.webp" alt="Matric Farewell photography 284" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/278.webp" alt="Matric Farewell photography 285" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/279.webp" alt="Matric Farewell photography 286" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/280.webp" alt="Matric Farewell photography 287" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/281.webp" alt="Matric Farewell photography 288" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/282.webp" alt="Matric Farewell photography 289" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/283.webp" alt="Matric Farewell photography 290" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/284.webp" alt="Matric Farewell photography 291" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/286.webp" alt="Matric Farewell photography 292" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/287.webp" alt="Matric Farewell photography 293" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/288.webp" alt="Matric Farewell photography 294" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/289.webp" alt="Matric Farewell photography 295" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/290.webp" alt="Matric Farewell photography 296" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/291.webp" alt="Matric Farewell photography 297" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/292.webp" alt="Matric Farewell photography 298" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/293.webp" alt="Matric Farewell photography 299" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/294.webp" alt="Matric Farewell photography 300" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/295.webp" alt="Matric Farewell photography 301" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/298.webp" alt="Matric Farewell photography 302" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/299.webp" alt="Matric Farewell photography 303" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/300.webp" alt="Matric Farewell photography 304" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/301.webp" alt="Matric Farewell photography 305" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/304.webp" alt="Matric Farewell photography 306" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/305.webp" alt="Matric Farewell photography 307" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/307.webp" alt="Matric Farewell photography 308" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/308.webp" alt="Matric Farewell photography 309" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/309.webp" alt="Matric Farewell photography 310" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/310.webp" alt="Matric Farewell photography 311" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/311.webp" alt="Matric Farewell photography 312" loading="lazy" />
+      </div>
+
+      <div class="gallery-item gallery-item--portrait">
+        <img src="images/matric-farewell/312.webp" alt="Matric Farewell photography 313" loading="lazy" />
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Footer ──────────────────────────────────────────── -->
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="../index.html" class="footer-logo-link">
+            <img src="../images/nav-logo.png" alt="Clean Media Pictures" class="footer-logo" />
+          </a>
+          <p class="footer-tagline">Light. Story. Craft.</p>
+        </div>
+
+        <div class="footer-whatsapp">
+          <p class="footer-wa-label">Chat with us on WhatsApp</p>
+          <p class="footer-wa-sub">Ready to book or have questions? Message us directly — we respond fast.</p>
+          <a href="https://wa.me/27670237264" target="_blank" rel="noopener" class="footer-wa-btn">
+            <svg class="footer-wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Message Us on WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <p class="footer-col-head">Studio</p>
+          <a href="../index.html#portfolio" class="footer-link">Portfolio</a>
+          <a href="../index.html#about"     class="footer-link">About Studio</a>
+          <a href="../index.html#faqs"      class="footer-link">FAQs</a>
+          <a href="../privacy-policy.html" class="footer-link">Privacy Policy</a>
+          <a href="../terms-of-use.html" class="footer-link">Terms of Use</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Sessions</p>
+          <a href="../booking.html" class="footer-link">Book a Session</a>
+          <a href="../lifestyle-subcategories.html" class="footer-link">Lifestyle Photography</a>
+          <a href="../events-subcategories.html" class="footer-link">Events Photography</a>
+          <a href="../corporate-subcategories.html" class="footer-link">Corporate Headshots</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Connect</p>
+          <a href="mailto:cleanmediapictures@gmail.com" class="footer-link">cleanmediapictures@gmail.com</a>
+          <a href="https://www.instagram.com/clean_media_pictures/" target="_blank" rel="noopener" class="footer-link">Instagram</a>
+          <a href="https://www.facebook.com/cleanmediaphotography/"  target="_blank" rel="noopener" class="footer-link">Facebook</a>
+          <a href="https://www.tiktok.com/@clean_media_pictures"    target="_blank" rel="noopener" class="footer-link">TikTok</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 Clean Media Pictures. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="../privacy-policy.html" class="footer-legal-link">Privacy Policy</a>
+          <a href="../terms-of-use.html" class="footer-legal-link">Terms of Use</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ── Lightbox ───────────────────────────────────────── -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="Full view" />
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <script>
+    /* ── Portfolio nav dropdown: desktop hover slideshow + tablet/phone accordion ── */
+    (function () {
+      const btn      = document.getElementById('portfolioDropdownBtn');
+      const dropdown = document.getElementById('portfolioDropdown');
+      const wrap     = btn ? btn.closest('.nav-dropdown-wrap') : null;
+      if (!btn || !wrap || !dropdown) return;
+
+      const TABLET_MAX = 1024;                       // must match the CSS breakpoint
+      const isDesktop = () => window.innerWidth > TABLET_MAX;
+
+      /* ---------- positioning ---------- */
+      function positionDropdown() {
+        const rect = btn.getBoundingClientRect();
+        const top  = rect.bottom + 16;
+        dropdown.style.top = top + 'px';
+        if (!isDesktop()) { dropdown.style.height = ''; return; }
+        // Same sizing as index.html: stretch the panel down to where the home-page
+        // "Clean Media" title would start (this page has no hero, so it is computed
+        // from the same CSS: 12vh bottom padding, 14.5vw + 4vw type, 0.88 line-height).
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const mainPx = Math.min(Math.max(vw * 0.145, 64), 256);
+        const subPx  = Math.min(Math.max(vw * 0.04, 12.8), 192);
+        const titleTop = vh - vh * 0.12 - (mainPx * 0.88 + subPx);
+        const available = titleTop - top - 28;
+        const maxH = 620;
+        const safeFloor = Math.min(180, available);
+        dropdown.style.height = Math.max(safeFloor, Math.min(available, maxH)) + 'px';
+      }
+
+      /* ---------- desktop slideshow ---------- */
+      const SLIDE_DIR  = '../images/portfolio/';        // sub-category images: images/portfolio/<slug>.jpg
+      const SLIDE_EXTS = ['jpg', 'webp', 'png', 'jpeg'];
+      const SLIDE_MS   = 1800;
+
+      const ddImgs  = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
+      const linksEl = document.getElementById('navDdLinks');
+      const defaultSrc = ddImgs[0] ? ddImgs[0].getAttribute('src') : '';
+      let active = 0, timer = null, runId = 0;
+      const resolved = {};
+
+      function resolveSlide(slug) {
+        if (resolved[slug]) return resolved[slug];
+        resolved[slug] = new Promise(function (resolve) {
+          let i = 0;
+          (function next() {
+            if (i >= SLIDE_EXTS.length) return resolve(null);
+            const url = SLIDE_DIR + slug + '.' + SLIDE_EXTS[i++];
+            const im = new Image();
+            im.onload = function () { resolve(url); };
+            im.onerror = next;
+            im.src = url;
+          })();
+        });
+        return resolved[slug];
+      }
+
+      function parseSlides(item) {
+        return (item.dataset.slides || '').split(',').map(function (t) {
+          const parts = t.trim().split('|');
+          return { slug: parts[0], label: parts[1] || '' };
+        }).filter(function (d) { return d.slug; });
+      }
+
+      const LOGO_SRC = defaultSrc;
+
+      function show(src) {
+        if (!ddImgs[0] || !ddImgs[1]) return;
+        const next = ddImgs[1 - active], cur = ddImgs[active];
+        if (cur.getAttribute('src') !== src) {
+          next.src = src;
+          next.classList.toggle('is-logo', src === LOGO_SRC);
+          next.classList.add('is-shown');
+          cur.classList.remove('is-shown');
+          active = 1 - active;
+        }
+      }
+
+      function stopSlideshow() {
+        runId++;
+        if (timer) { clearInterval(timer); timer = null; }
+      }
+
+      function resetPreview() {
+        stopSlideshow();
+        show(defaultSrc);
+      }
+
+      async function startSlideshow(item) {
+        if (!isDesktop()) return;
+        stopSlideshow();
+        const id = runId;
+        const defs = parseSlides(item);
+        show(item.dataset.img || defaultSrc);                             // instant feedback
+        const urls = await Promise.all(defs.map(function (d) { return resolveSlide(d.slug); }));
+        if (id !== runId) return;
+        const slides = urls.filter(Boolean);
+        if (!slides.length) return;                                       // no images yet -> keep fallback
+        let n = 0;
+        show(slides[0]);
+        if (slides.length > 1) {
+          timer = setInterval(function () {
+            n = (n + 1) % slides.length;
+            show(slides[n]);
+          }, SLIDE_MS);
+        }
+      }
+
+      function preloadAll() {
+        document.querySelectorAll('.nav-dd-parent, .nav-dd-cta').forEach(function (it) {
+          parseSlides(it).forEach(function (d) { resolveSlide(d.slug); });
+        });
+      }
+
+      document.querySelectorAll('.nav-dd-parent, .nav-dd-cta').forEach(function (it) {
+        it.addEventListener('mouseenter', function () { startSlideshow(this); });
+        it.addEventListener('focus',      function () { startSlideshow(this); });
+      });
+      if (linksEl) linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
+
+      /* ---------- open / close ---------- */
+      function closeDropdown() {
+        wrap.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        resetPreview();
+      }
+
+      const label = btn.querySelector('.nav-trigger-label');
+      if (label) {
+        label.addEventListener('click', function (e) { e.stopPropagation(); });
+      }
+
+      btn.addEventListener('click', function (e) {
+        if (label && label.contains(e.target)) return;
+        e.stopPropagation();
+        const isOpen = wrap.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen);
+        if (isOpen) { positionDropdown(); if (isDesktop()) preloadAll(); } else { resetPreview(); }
+      });
+
+      window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });
+      window.addEventListener('scroll', function () { if (wrap.classList.contains('is-open')) positionDropdown(); }, true);
+
+      document.addEventListener('click', function (e) {
+        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
+      });
+
+      /* ---------- tablet / phone: expand sub-categories ---------- */
+      document.querySelectorAll('.nav-dd-toggle').forEach(function (t) {
+        t.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const group = t.closest('.nav-dd-group');
+          const open = group.classList.toggle('is-expanded');
+          t.setAttribute('aria-expanded', open);
+        });
+      });
+
+      // Lifestyle is the current section, so start it expanded on tablet/phone
+      const current = document.querySelector('.nav-dd-group[data-group="lifestyle"]');
+      if (current) {
+        current.classList.add('is-expanded');
+        const tg = current.querySelector('.nav-dd-toggle');
+        if (tg) tg.setAttribute('aria-expanded', 'true');
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const imgs    = Array.from(document.querySelectorAll('.gallery-item img'));
+      const lb      = document.getElementById('lightbox');
+      const lbImg   = document.getElementById('lightboxImg');
+      const lbClose = document.getElementById('lightboxClose');
+      const lbPrev  = document.getElementById('lightboxPrev');
+      const lbNext  = document.getElementById('lightboxNext');
+      let current = 0;
+
+      function show(index) {
+        current = (index + imgs.length) % imgs.length;
+        lbImg.src = imgs[current].src;
+        lbImg.alt = imgs[current].alt;
+      }
+
+      imgs.forEach((img, i) => {
+        img.addEventListener('click', () => {
+          show(i);
+          lb.classList.add('is-open');
+        });
+      });
+
+      lbClose.addEventListener('click', () => lb.classList.remove('is-open'));
+
+      lbPrev.addEventListener('click', (e) => { e.stopPropagation(); show(current - 1); });
+      lbNext.addEventListener('click', (e) => { e.stopPropagation(); show(current + 1); });
+
+      lb.addEventListener('click', (e) => {
+        if (e.target === lb) lb.classList.remove('is-open');
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (!lb.classList.contains('is-open')) return;
+        if (e.key === 'Escape')     lb.classList.remove('is-open');
+        if (e.key === 'ArrowLeft')  show(current - 1);
+        if (e.key === 'ArrowRight') show(current + 1);
+      });
+    })();
+  </script>
+
+  <script>
+    /* ── Mobile menu (hamburger) ── */
+    (function () {
+      var nav    = document.querySelector('.nav');
+      var burger = document.getElementById('navHamburger');
+      var menu   = document.getElementById('mobileMenu');
+      if (!nav || !burger || !menu) return;
+      var MAX = 1024;                                 // must match the CSS breakpoint
+
+      function place() { menu.style.top = Math.max(0, nav.getBoundingClientRect().bottom) + 'px'; }
+
+      function collapseAll() {
+        menu.querySelectorAll('.mm-item.is-open').forEach(function (it) {
+          it.classList.remove('is-open');
+          var b = it.querySelector(':scope > .mm-row > .mm-chev');
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      function setOpen(open) {
+        if (open) place();
+        menu.classList.toggle('is-open', open);
+        nav.classList.toggle('menu-open', open);
+        document.documentElement.classList.toggle('menu-lock', open);
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        if (!open) collapseAll();
+      }
+
+      burger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setOpen(!menu.classList.contains('is-open'));
+      });
+
+      menu.querySelectorAll('.mm-chev').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var open = b.closest('.mm-item').classList.toggle('is-open');
+          b.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      });
+
+      menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+
+      document.addEventListener('click', function (e) {
+        if (menu.classList.contains('is-open') && !menu.contains(e.target) && !burger.contains(e.target)) setOpen(false);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu.classList.contains('is-open')) setOpen(false);
+      });
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > MAX) setOpen(false);
+        else if (menu.classList.contains('is-open')) place();
+      });
+    })();
+  </script>
+
+</body>
+</html>

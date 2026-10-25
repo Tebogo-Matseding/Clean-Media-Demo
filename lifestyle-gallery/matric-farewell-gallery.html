@@ -2312,6 +2312,9 @@
     </button>
   </div>
 
+  <script src="../portfolio-manifest.js"></script>
+  <script src="../portfolio-images.js" data-root="../"></script>
+
   <script>
     /* ── Portfolio nav dropdown: desktop hover slideshow + tablet/phone accordion ── */
     (function () {
@@ -2342,101 +2345,11 @@
         dropdown.style.height = Math.max(safeFloor, Math.min(available, maxH)) + 'px';
       }
 
-      /* ---------- desktop slideshow ---------- */
-      const SLIDE_DIR  = '../images/portfolio/';        // sub-category images: images/portfolio/<slug>.jpg
-      const SLIDE_EXTS = ['jpg', 'webp', 'png', 'jpeg'];
-      const SLIDE_MS   = 1800;
-
-      const ddImgs  = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
-      const linksEl = document.getElementById('navDdLinks');
-      const defaultSrc = ddImgs[0] ? ddImgs[0].getAttribute('src') : '';
-      let active = 0, timer = null, runId = 0;
-      const resolved = {};
-
-      function resolveSlide(slug) {
-        if (resolved[slug]) return resolved[slug];
-        resolved[slug] = new Promise(function (resolve) {
-          let i = 0;
-          (function next() {
-            if (i >= SLIDE_EXTS.length) return resolve(null);
-            const url = SLIDE_DIR + slug + '.' + SLIDE_EXTS[i++];
-            const im = new Image();
-            im.onload = function () { resolve(url); };
-            im.onerror = next;
-            im.src = url;
-          })();
-        });
-        return resolved[slug];
-      }
-
-      function parseSlides(item) {
-        return (item.dataset.slides || '').split(',').map(function (t) {
-          const parts = t.trim().split('|');
-          return { slug: parts[0], label: parts[1] || '' };
-        }).filter(function (d) { return d.slug; });
-      }
-
-      const LOGO_SRC = defaultSrc;
-
-      function show(src) {
-        if (!ddImgs[0] || !ddImgs[1]) return;
-        const next = ddImgs[1 - active], cur = ddImgs[active];
-        if (cur.getAttribute('src') !== src) {
-          next.src = src;
-          next.classList.toggle('is-logo', src === LOGO_SRC);
-          next.classList.add('is-shown');
-          cur.classList.remove('is-shown');
-          active = 1 - active;
-        }
-      }
-
-      function stopSlideshow() {
-        runId++;
-        if (timer) { clearInterval(timer); timer = null; }
-      }
-
-      function resetPreview() {
-        stopSlideshow();
-        show(defaultSrc);
-      }
-
-      async function startSlideshow(item) {
-        if (!isDesktop()) return;
-        stopSlideshow();
-        const id = runId;
-        const defs = parseSlides(item);
-        show(item.dataset.img || defaultSrc);                             // instant feedback
-        const urls = await Promise.all(defs.map(function (d) { return resolveSlide(d.slug); }));
-        if (id !== runId) return;
-        const slides = urls.filter(Boolean);
-        if (!slides.length) return;                                       // no images yet -> keep fallback
-        let n = 0;
-        show(slides[0]);
-        if (slides.length > 1) {
-          timer = setInterval(function () {
-            n = (n + 1) % slides.length;
-            show(slides[n]);
-          }, SLIDE_MS);
-        }
-      }
-
-      function preloadAll() {
-        document.querySelectorAll('.nav-dd-parent, .nav-dd-cta').forEach(function (it) {
-          parseSlides(it).forEach(function (d) { resolveSlide(d.slug); });
-        });
-      }
-
-      document.querySelectorAll('.nav-dd-parent, .nav-dd-cta').forEach(function (it) {
-        it.addEventListener('mouseenter', function () { startSlideshow(this); });
-        it.addEventListener('focus',      function () { startSlideshow(this); });
-      });
-      if (linksEl) linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
 
       /* ---------- open / close ---------- */
       function closeDropdown() {
         wrap.classList.remove('is-open');
         btn.setAttribute('aria-expanded', 'false');
-        resetPreview();
       }
 
       const label = btn.querySelector('.nav-trigger-label');
@@ -2449,7 +2362,7 @@
         e.stopPropagation();
         const isOpen = wrap.classList.toggle('is-open');
         btn.setAttribute('aria-expanded', isOpen);
-        if (isOpen) { positionDropdown(); if (isDesktop()) preloadAll(); } else { resetPreview(); }
+        if (isOpen) { positionDropdown(); }
       });
 
       window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });

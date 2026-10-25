@@ -851,6 +851,9 @@
     </div>
   </footer>
 
+  <script src="portfolio-manifest.js"></script>
+  <script src="portfolio-images.js" data-root=""></script>
+
   <script>
     /* ════════════════════════════════════════════════════════════
        CONFIG — category text, links and dropdown. (Photos are edited in the HTML, not here.)
@@ -952,88 +955,17 @@
       document.querySelectorAll('.nav-dd-group').forEach(function (group) {
         const parent = group.querySelector('.nav-dd-parent');
         const toggle = group.querySelector('.nav-dd-toggle');
-        const slugs  = parent.dataset.slides.split(',').map(function (t) { return t.split('|')[0].trim(); });
-        const cover  = parent.dataset.img;
         toggle.addEventListener('click', function (e) {
           e.preventDefault();
           e.stopPropagation();
           const open = group.classList.toggle('is-expanded');
           toggle.setAttribute('aria-expanded', open);
         });
-        parent.addEventListener('mouseenter', function () { startSlideshow(slugs, cover); });
-        parent.addEventListener('focus',      function () { startSlideshow(slugs, cover); });
       });
       const cta = document.getElementById('navDdCta');
 
-      /* ---------- desktop hover slideshow (first image of each sub-category) ---------- */
       const TABLET_MAX = 1024;
       const isDesktop = function () { return window.innerWidth > TABLET_MAX; };
-      const SLIDE_MS = 1800;
-      const ddImgs = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
-      const LOGO_SRC = ddImgs[0].getAttribute('src');
-      let active = 0, timer = null, runId = 0;
-      const SLIDE_DIR  = 'images/portfolio/';          // slideshow images: images/portfolio/<slug>.jpg (or .webp/.png/.jpeg)
-      const SLIDE_EXTS = ['jpg', 'webp', 'png', 'jpeg'];
-      const resolved = {};
-
-      function resolveSlide(slug) {
-        if (resolved[slug]) return resolved[slug];
-        resolved[slug] = new Promise(function (resolve) {
-          let i = 0;
-          (function next() {
-            if (i >= SLIDE_EXTS.length) return resolve(null);
-            const url = SLIDE_DIR + slug + '.' + SLIDE_EXTS[i++];
-            const im = new Image();
-            im.onload = function () { resolve(url); };
-            im.onerror = next;
-            im.src = url;
-          })();
-        });
-        return resolved[slug];
-      }
-
-      function slugOf(sub) { return sub.href.split('/').pop().replace(/^gallery-/, '').replace(/-gallery\.html$/, '').replace(/\.html$/, ''); }
-
-      function show(src) {
-        const next = ddImgs[1 - active], cur = ddImgs[active];
-        if (cur.getAttribute('src') === src) return;
-        next.src = src;
-        next.classList.toggle('is-logo', src === LOGO_SRC);
-        next.classList.add('is-shown');
-        cur.classList.remove('is-shown');
-        active = 1 - active;
-      }
-
-      function stopSlideshow() {
-        runId++;
-        if (timer) { clearInterval(timer); timer = null; }
-      }
-      function resetPreview() { stopSlideshow(); show(LOGO_SRC); }
-
-      // Same behaviour as index.html: show the category's cover image straight away, then cycle through
-      // its sub-category images (images/portfolio/<slug>.jpg). Missing ones are skipped; if none exist
-      // the cover image stays.
-      async function startSlideshow(slugs, cover) {
-        if (!isDesktop()) return;
-        stopSlideshow();
-        const id = runId;
-        show(cover);                                           // instant feedback
-        const urls = await Promise.all(slugs.map(resolveSlide));
-        if (id !== runId) return;
-        const slides = urls.filter(Boolean);
-        if (!slides.length) return;                            // no images yet: keep the cover
-        let n = 0;
-        show(slides[0]);
-        if (slides.length > 1) {
-          timer = setInterval(function () { n = (n + 1) % slides.length; show(slides[n]); }, SLIDE_MS);
-        }
-      }
-
-      // "Not what you're looking for?" has its own image too: images/portfolio/custom-shoot.jpg
-      // (falls back to the logo until that file exists).
-      cta.addEventListener('mouseenter', function () { startSlideshow(['custom-shoot'], LOGO_SRC); });
-      cta.addEventListener('focus',      function () { startSlideshow(['custom-shoot'], LOGO_SRC); });
-      linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
 
       /* ---------- positioning ---------- */
       // Same sizing rule as index.html: on desktop the panel stretches down to just above where the
@@ -1063,7 +995,6 @@
       function closeDropdown() {
         wrap.classList.remove('is-open');
         btn.setAttribute('aria-expanded', 'false');
-        resetPreview();
       }
 
       const label = btn.querySelector('.nav-trigger-label');
@@ -1074,7 +1005,7 @@
         e.stopPropagation();
         const isOpen = wrap.classList.toggle('is-open');
         btn.setAttribute('aria-expanded', isOpen);
-        if (isOpen) positionDropdown(); else resetPreview();
+        if (isOpen) positionDropdown();
       });
 
       window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });

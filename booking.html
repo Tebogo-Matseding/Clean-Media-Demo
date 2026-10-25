@@ -511,6 +511,63 @@ a { text-decoration: none; color: inherit; }
   .service-grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
 }
+
+/* ════ PACKAGE PICKER ════ */
+.cat-group { margin-bottom: 16px; gap: 6px; }
+.cat-chip { padding: 8px 14px; font-size: 12.5px; }
+button.chip, button.svc-card, button.num-btn { font-family: inherit; }
+button.svc-card { text-align: left; width: 100%; }
+.svc-desc { color: #777; }
+.pkg-price { font-size: 13px; font-weight: 600; color: #C0000A; margin-bottom: 5px; }
+.pkg-note { font-size: 12px; color: #777; line-height: 1.5; margin: -12px 0 14px; }
+.addon-empty { font-size: 12.5px; color: #777; }
+.field-input.invalid { border-color: #C0000A; background: #fff5f5; }
+.wa-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 22px; min-height: 48px; padding: 0 28px; border-radius: 100px;
+  background: #C0000A; color: #fff;
+  font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  transition: background 0.22s;
+}
+.wa-btn:hover { background: #a0000a; }
+
+.bank-box { margin-top: 26px; width: 100%; max-width: 380px; text-align: left; border: 1.5px solid #ebebeb; border-radius: 14px; padding: 18px 20px; background: #fafafa; }
+.bank-warn { font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 600; color: #C0000A; line-height: 1.5; margin-bottom: 14px; }
+.bank-title { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: #777; margin-bottom: 8px; font-family: 'Myriad Pro', sans-serif; font-weight: 300; }
+.bank-list { display: grid; grid-template-columns: auto 1fr; column-gap: 16px; row-gap: 6px; margin: 0 0 14px; font-size: 13px; }
+.bank-list dt { color: #777; }
+.bank-list dd { margin: 0; color: #111; font-weight: 600; text-align: right; }
+.bank-foot { font-size: 12px; color: #777; line-height: 1.5; }
+
+.gallery-link { display: inline-block; margin-bottom: 8px; font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #C0000A; }
+.gallery-link[hidden] { display: none; }
+.gallery-link:hover { text-decoration: underline; }
+
+.req { color: #C0000A; font-weight: 700; }
+.form-error { margin-top: 6px; padding: 10px 14px; border-radius: 10px; background: #fff5f5; border: 1.5px solid #C0000A; color: #8a0008; font-family: 'Inter', sans-serif; font-size: 12.5px; line-height: 1.45; }
+.form-error[hidden], [hidden] { display: none !important; }
+.field-input.invalid, .field-select.invalid, .field-textarea.invalid { border-color: #C0000A; background: #fff5f5; }
+.consent { display: flex; gap: 10px; align-items: flex-start; font-size: 12.5px; line-height: 1.5; color: #555; margin: 4px 0 8px; cursor: pointer; }
+.consent input { margin-top: 3px; accent-color: #C0000A; flex-shrink: 0; }
+.consent a { color: #C0000A; text-decoration: underline; }
+.sum-line { font-weight: 600; color: #111; margin-bottom: 10px; }
+.bank-list dd span { user-select: all; }
+.copy-btn { margin-left: 8px; padding: 3px 10px; border: 1px solid #C0000A; border-radius: 100px; background: #fff; color: #C0000A; font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
+.copy-btn:hover { background: #C0000A; color: #fff; }
+#success p { max-width: 340px; }
+
+/* ── final screen: compact so the bank details are fully visible without scrolling ── */
+#success { justify-content: flex-start; justify-content: safe center; padding: 4px 0 8px; }
+#success .success-ring { display: none; }
+#success h3 { font-size: 26px; margin-bottom: 6px; }
+#success p { font-size: 12.5px; line-height: 1.55; color: #555; max-width: 380px; }
+.sum-line { margin-bottom: 6px; color: #111 !important; }
+.wa-btn { margin-top: 12px; min-height: 44px; }
+.bank-box { margin-top: 14px; padding: 14px 18px; }
+.bank-warn { background: #fff5f5; border: 1.5px solid #C0000A; border-radius: 10px; padding: 9px 12px; margin-bottom: 12px; }
+.bank-list { row-gap: 4px; margin-bottom: 10px; }
+.bank-foot { font-size: 11.5px; }
 </style>
 </head>
 <body>
@@ -683,7 +740,7 @@ a { text-decoration: none; color: inherit; }
       </div>
       <div class="panel-bottom">
         <div class="panel-step-label" id="panel-label">Step 1 of 4</div>
-        <div class="panel-step-title" id="panel-title">Choose your <em>shoot</em> type.</div>
+        <div class="panel-step-title" id="panel-title">Choose your <em>package</em>.</div>
       </div>
     </div>
 
@@ -706,82 +763,53 @@ a { text-decoration: none; color: inherit; }
       <!-- STEP 1 -->
       <div class="step active" id="step-0">
         <div class="step-eyebrow">What are you booking?</div>
-        <div class="step-heading">Select your service</div>
-        <div class="service-grid" id="svc-group">
-          <div class="svc-card" data-val="Wedding Photography" tabindex="0" role="button">
-            <div class="svc-name">Wedding Photography</div>
-            <div class="svc-desc">Full-day coverage for your special day</div>
-          </div>
-          <div class="svc-card" data-val="Portrait Shoot" tabindex="0" role="button">
-            <div class="svc-name">Portrait Shoot</div>
-            <div class="svc-desc">Professional studio or outdoor portraits</div>
-          </div>
-          <div class="svc-card" data-val="Videography" tabindex="0" role="button">
-            <div class="svc-name">Videography</div>
-            <div class="svc-desc">Cinematic video for any occasion</div>
-          </div>
-          <div class="svc-card" data-val="Family & Kids" tabindex="0" role="button">
-            <div class="svc-name">Family &amp; Kids</div>
-            <div class="svc-desc">Fun, natural family sessions</div>
-          </div>
-          <div class="svc-card" data-val="Events & Corporate" tabindex="0" role="button">
-            <div class="svc-name">Events &amp; Corporate</div>
-            <div class="svc-desc">Conferences, launches, headshots</div>
-          </div>
-          <div class="svc-card" data-val="Digital Art & Retouching" tabindex="0" role="button">
-            <div class="svc-name">Digital Art &amp; Retouching</div>
-            <div class="svc-desc">Creative editing &amp; composite work</div>
-          </div>
-        </div>
+        <div class="step-heading">Select your package</div>
+        <div class="chip-group cat-group" id="cat-group"></div>
+        <div class="service-grid" id="svc-group"></div>
+        <div class="pkg-note" id="pkg-note"></div>
+        <a class="gallery-link" id="gallery-link" href="#" hidden></a>
+        <div class="form-error" id="err-0" role="alert" hidden></div>
       </div>
 
-      <!-- STEP 2 -->
+<!-- STEP 2 -->
       <div class="step" id="step-1">
         <div class="step-eyebrow">Tell us more</div>
-        <div class="step-heading">Session preferences</div>
+        <div class="step-heading" id="prefs-heading">Session preferences</div>
 
-        <span class="chip-label">Shoot location preference</span>
-        <div class="chip-group" id="location-group">
-          <div class="chip" data-val="Studio">Studio</div>
-          <div class="chip" data-val="Outdoor">Outdoor</div>
-          <div class="chip" data-val="At my venue">At my venue</div>
-          <div class="chip" data-val="Flexible">I'm flexible</div>
+        <div id="grp-location" hidden>
+          <span class="chip-label" id="lbl-location"></span>
+          <div class="chip-group" id="location-group"></div>
         </div>
 
-        <span class="chip-label">How many people in the shoot?</span>
-        <div class="num-group" id="people-group">
-          <button class="num-btn" data-val="1">1</button>
-          <button class="num-btn" data-val="2">2</button>
-          <button class="num-btn" data-val="3">3</button>
-          <button class="num-btn" data-val="4">4</button>
-          <button class="num-btn" data-val="5">5</button>
-          <button class="num-btn" data-val="6">6</button>
-          <button class="num-btn" data-val="7+">7+</button>
+        <div id="grp-people" hidden>
+          <span class="chip-label" id="lbl-people"></span>
+          <div class="chip-group" id="people-group"></div>
         </div>
 
-        <span class="chip-label">Budget range</span>
-        <div class="chip-group" id="budget-group">
-          <div class="chip" data-val="Under R1 500">Under R1 500</div>
-          <div class="chip" data-val="R1 500 – R3 000">R1 500 – R3 000</div>
-          <div class="chip" data-val="R3 000 – R6 000">R3 000 – R6 000</div>
-          <div class="chip" data-val="R6 000+">R6 000+</div>
-          <div class="chip" data-val="Let's discuss">Let's discuss</div>
+        <div id="grp-addons" hidden>
+          <span class="chip-label">Add-ons (optional)</span>
+          <div class="chip-group" id="addon-group"></div>
         </div>
 
+        <div class="form-error" id="err-1" role="alert" hidden></div>
       </div>
 
       <!-- STEP 3 -->
       <div class="step" id="step-2">
-        <div class="step-eyebrow">When &amp; where</div>
-        <div class="step-heading">Pick your date</div>
+        <div class="step-eyebrow" id="when-eyebrow">When &amp; where</div>
+        <div class="step-heading" id="when-heading">Pick your date</div>
 
         <div class="field-row">
-          <div class="field-group">
-            <label class="field-label" for="f-date">Preferred date</label>
+          <div class="field-group" id="fld-date">
+            <label class="field-label" id="lbl-date" for="f-date">Preferred date</label>
             <input class="field-input" type="date" id="f-date">
           </div>
-          <div class="field-group">
-            <label class="field-label" for="f-time">Preferred time</label>
+          <div class="field-group" id="fld-date2" hidden>
+            <label class="field-label" id="lbl-date2" for="f-date2">Day 2 date</label>
+            <input class="field-input" type="date" id="f-date2">
+          </div>
+          <div class="field-group" id="fld-time">
+            <label class="field-label" id="lbl-time" for="f-time">Preferred time</label>
             <select class="field-select" id="f-time">
               <option value="" disabled selected>Select time</option>
               <option>Morning (07:00 – 10:00)</option>
@@ -791,18 +819,23 @@ a { text-decoration: none; color: inherit; }
               <option>Golden Hour (18:00 – 20:00)</option>
             </select>
           </div>
+          <div class="field-group" id="fld-starttime" hidden>
+            <label class="field-label" id="lbl-starttime" for="f-starttime">Start time</label>
+            <input class="field-input" type="time" id="f-starttime">
+          </div>
         </div>
 
-        <div class="field-group">
-          <label class="field-label" for="f-location">Specific location / venue</label>
-          <input class="field-input" type="text" id="f-location" placeholder="e.g. Kempton Park Studio, Sandton rooftop…">
+        <div class="field-group" id="fld-venue" hidden>
+          <label class="field-label" id="lbl-venue" for="f-venue">Venue</label>
+          <input class="field-input" type="text" id="f-venue">
         </div>
 
-        <div class="field-group">
-          <label class="field-label" for="f-notes">Your vision (optional)</label>
-          <textarea class="field-textarea" id="f-notes" placeholder="Mood, inspiration, special requests, outfit ideas…"></textarea>
+        <div class="field-group" id="fld-notes">
+          <label class="field-label" id="lbl-notes" for="f-notes">Your vision (optional)</label>
+          <textarea class="field-textarea" id="f-notes"></textarea>
         </div>
 
+        <div class="form-error" id="err-2" role="alert" hidden></div>
       </div>
 
       <!-- STEP 4 -->
@@ -812,27 +845,27 @@ a { text-decoration: none; color: inherit; }
 
         <div class="field-row">
           <div class="field-group">
-            <label class="field-label" for="f-fname">First name</label>
-            <input class="field-input" type="text" id="f-fname" placeholder="Thabo">
+            <label class="field-label" id="lbl-fname" for="f-fname">First name</label>
+            <input class="field-input" type="text" id="f-fname" autocomplete="given-name" placeholder="Thabo">
           </div>
           <div class="field-group">
-            <label class="field-label" for="f-lname">Last name</label>
-            <input class="field-input" type="text" id="f-lname" placeholder="Nkosi">
+            <label class="field-label" id="lbl-lname" for="f-lname">Last name</label>
+            <input class="field-input" type="text" id="f-lname" autocomplete="family-name" placeholder="Nkosi">
           </div>
         </div>
 
         <div class="field-group">
-          <label class="field-label" for="f-email">Email address</label>
-          <input class="field-input" type="email" id="f-email" placeholder="you@example.com">
+          <label class="field-label" id="lbl-phone" for="f-phone">Phone / WhatsApp</label>
+          <input class="field-input" type="tel" id="f-phone" autocomplete="tel" placeholder="+27 72 000 0000">
         </div>
 
         <div class="field-group">
-          <label class="field-label" for="f-phone">Phone / WhatsApp</label>
-          <input class="field-input" type="tel" id="f-phone" placeholder="+27 72 000 0000">
+          <label class="field-label" id="lbl-email" for="f-email">Email address (optional)</label>
+          <input class="field-input" type="email" id="f-email" autocomplete="email" placeholder="you@example.com">
         </div>
 
         <div class="field-group">
-          <label class="field-label" for="f-heard">How did you hear about us?</label>
+          <label class="field-label" for="f-heard">How did you hear about us? (optional)</label>
           <select class="field-select" id="f-heard">
             <option value="" disabled selected>Select one</option>
             <option>Instagram</option>
@@ -844,18 +877,42 @@ a { text-decoration: none; color: inherit; }
           </select>
         </div>
 
+        <label class="consent">
+          <input type="checkbox" id="f-consent">
+          <span>I have read the <a href="terms-of-use.html" target="_blank" rel="noopener">terms</a>. I understand my date is only secured once the 50% deposit is paid, and that deposits are non-refundable.</span>
+        </label>
+
+        <div class="form-error" id="err-3" role="alert" hidden></div>
       </div>
 
       <!-- SUCCESS -->
       <div id="success">
         <div class="success-ring">&#10003;</div>
-        <h3>Request sent!</h3>
-        <p>Thank you. We'll be in touch within 24 hours to confirm your session details.</p>
+        <h3>Almost there!</h3>
+        <p class="sum-line" id="sum-line"></p>
+        <p>Send the pre-filled message on WhatsApp (it should have opened already). We will reply to confirm your date.</p>
+        <a class="wa-btn" id="wa-link" href="https://wa.me/27670237264" target="_blank" rel="noopener">Open WhatsApp</a>
+        <div class="bank-box">
+          <div class="bank-warn">Please wait for our reply on WhatsApp before you send any money.</div>
+          <div class="bank-title">Banking details</div>
+          <dl class="bank-list">
+            <dt>Bank</dt><dd>Capitec Business</dd>
+            <dt>Account name</dt><dd>Clean Media Pictures</dd>
+            <dt>Account type</dt><dd>Capitec Business Account</dd>
+            <dt>Account number</dt><dd><span>1052655939</span> <button type="button" class="copy-btn" id="copy-acc">Copy</button></dd>
+            <dt>Branch code</dt><dd>450105</dd>
+            <dt>Reference</dt><dd id="bank-ref">Your name and type of shoot</dd>
+          </dl>
+          <div class="bank-foot">A 50% deposit secures your date. Send us your proof of payment on WhatsApp after paying. Bookings are only considered once the deposit is paid.</div>
+        </div>
       </div>
 
     </div>
   </div>
 </div>
+
+  <script src="portfolio-manifest.js"></script>
+  <script src="portfolio-images.js" data-root=""></script>
 
   <script>
     /* ════════════════ Portfolio mega dropdown (built from CATEGORIES) ════════════════ */
@@ -870,88 +927,17 @@ a { text-decoration: none; color: inherit; }
       document.querySelectorAll('.nav-dd-group').forEach(function (group) {
         const parent = group.querySelector('.nav-dd-parent');
         const toggle = group.querySelector('.nav-dd-toggle');
-        const slugs  = parent.dataset.slides.split(',').map(function (t) { return t.split('|')[0].trim(); });
-        const cover  = parent.dataset.img;
         toggle.addEventListener('click', function (e) {
           e.preventDefault();
           e.stopPropagation();
           const open = group.classList.toggle('is-expanded');
           toggle.setAttribute('aria-expanded', open);
         });
-        parent.addEventListener('mouseenter', function () { startSlideshow(slugs, cover); });
-        parent.addEventListener('focus',      function () { startSlideshow(slugs, cover); });
       });
       const cta = document.getElementById('navDdCta');
 
-      /* ---------- desktop hover slideshow (first image of each sub-category) ---------- */
       const TABLET_MAX = 1024;
       const isDesktop = function () { return window.innerWidth > TABLET_MAX; };
-      const SLIDE_MS = 1800;
-      const ddImgs = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
-      const LOGO_SRC = ddImgs[0].getAttribute('src');
-      let active = 0, timer = null, runId = 0;
-      const SLIDE_DIR  = 'images/portfolio/';          // slideshow images: images/portfolio/<slug>.jpg (or .webp/.png/.jpeg)
-      const SLIDE_EXTS = ['jpg', 'webp', 'png', 'jpeg'];
-      const resolved = {};
-
-      function resolveSlide(slug) {
-        if (resolved[slug]) return resolved[slug];
-        resolved[slug] = new Promise(function (resolve) {
-          let i = 0;
-          (function next() {
-            if (i >= SLIDE_EXTS.length) return resolve(null);
-            const url = SLIDE_DIR + slug + '.' + SLIDE_EXTS[i++];
-            const im = new Image();
-            im.onload = function () { resolve(url); };
-            im.onerror = next;
-            im.src = url;
-          })();
-        });
-        return resolved[slug];
-      }
-
-      function slugOf(sub) { return sub.href.split('/').pop().replace(/^gallery-/, '').replace(/-gallery\.html$/, '').replace(/\.html$/, ''); }
-
-      function show(src) {
-        const next = ddImgs[1 - active], cur = ddImgs[active];
-        if (cur.getAttribute('src') === src) return;
-        next.src = src;
-        next.classList.toggle('is-logo', src === LOGO_SRC);
-        next.classList.add('is-shown');
-        cur.classList.remove('is-shown');
-        active = 1 - active;
-      }
-
-      function stopSlideshow() {
-        runId++;
-        if (timer) { clearInterval(timer); timer = null; }
-      }
-      function resetPreview() { stopSlideshow(); show(LOGO_SRC); }
-
-      // Same behaviour as index.html: show the category's cover image straight away, then cycle through
-      // its sub-category images (images/portfolio/<slug>.jpg). Missing ones are skipped; if none exist
-      // the cover image stays.
-      async function startSlideshow(slugs, cover) {
-        if (!isDesktop()) return;
-        stopSlideshow();
-        const id = runId;
-        show(cover);                                           // instant feedback
-        const urls = await Promise.all(slugs.map(resolveSlide));
-        if (id !== runId) return;
-        const slides = urls.filter(Boolean);
-        if (!slides.length) return;                            // no images yet: keep the cover
-        let n = 0;
-        show(slides[0]);
-        if (slides.length > 1) {
-          timer = setInterval(function () { n = (n + 1) % slides.length; show(slides[n]); }, SLIDE_MS);
-        }
-      }
-
-      // "Not what you're looking for?" has its own image too: images/portfolio/custom-shoot.jpg
-      // (falls back to the logo until that file exists).
-      cta.addEventListener('mouseenter', function () { startSlideshow(['custom-shoot'], LOGO_SRC); });
-      cta.addEventListener('focus',      function () { startSlideshow(['custom-shoot'], LOGO_SRC); });
-      linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
 
       /* ---------- positioning ---------- */
       // Same sizing rule as index.html: on desktop the panel stretches down to just above where the
@@ -981,7 +967,6 @@ a { text-decoration: none; color: inherit; }
       function closeDropdown() {
         wrap.classList.remove('is-open');
         btn.setAttribute('aria-expanded', 'false');
-        resetPreview();
       }
 
       const label = btn.querySelector('.nav-trigger-label');
@@ -992,7 +977,7 @@ a { text-decoration: none; color: inherit; }
         e.stopPropagation();
         const isOpen = wrap.classList.toggle('is-open');
         btn.setAttribute('aria-expanded', isOpen);
-        if (isOpen) positionDropdown(); else resetPreview();
+        if (isOpen) positionDropdown();
       });
 
       window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });
@@ -1003,178 +988,7 @@ a { text-decoration: none; color: inherit; }
     })();
   </script>
 
-<script>
-
-/* ════ MIN DATE ════ */
-var today = new Date().toISOString().split('T')[0];
-document.getElementById('f-date').setAttribute('min', today);
-
-/* ════ STEP LOGIC ════ */
-var currentStep = 0;
-var totalSteps  = 4;
-
-var panelMeta = [
-  { label: 'Step 1 of 4', title: 'Choose your <em>shoot</em> type.'  },
-  { label: 'Step 2 of 4', title: 'Set your <em>preferences</em>.'     },
-  { label: 'Step 3 of 4', title: 'Pick the <em>perfect</em> date.'    },
-  { label: 'Step 4 of 4', title: 'Last step — <em>almost</em> there.' },
-];
-
-function goTo(step) {
-  document.getElementById('step-' + currentStep).classList.remove('active');
-  currentStep = step;
-  document.getElementById('step-' + currentStep).classList.add('active');
-  updateUI();
-}
-
-document.getElementById('btn-prev').addEventListener('click', function() {
-  if (currentStep > 0) goTo(currentStep - 1);
-});
-document.getElementById('btn-next-arr').addEventListener('click', function() {
-  if (currentStep < totalSteps - 1) {
-    goTo(currentStep + 1);
-  } else {
-    submitForm();
-  }
-});
-
-function updateUI() {
-  for (var i = 0; i < totalSteps; i++) {
-    var d = document.getElementById('dot-' + i);
-    d.classList.remove('active', 'done');
-    if (i === currentStep) d.classList.add('active');
-    else if (i < currentStep) d.classList.add('done');
-  }
-  document.getElementById('btn-prev').disabled = currentStep === 0;
-  var nextBtn = document.getElementById('btn-next-arr');
-  if (currentStep === totalSteps - 1) {
-    nextBtn.textContent = 'Send Request';
-    nextBtn.disabled = false;
-  } else {
-    nextBtn.textContent = 'Next';
-    nextBtn.disabled = false;
-  }
-  var m = panelMeta[currentStep];
-  document.getElementById('panel-label').textContent = m.label;
-  document.getElementById('panel-title').innerHTML   = m.title;
-}
-
-/* ════ INTERACTIONS ════ */
-function initChips(groupId, single) {
-  var g = document.getElementById(groupId);
-  if (!g) return;
-  g.querySelectorAll('.chip').forEach(function(c) {
-    c.addEventListener('click', function() {
-      if (single) g.querySelectorAll('.chip').forEach(function(x){ x.classList.remove('selected'); });
-      c.classList.toggle('selected');
-    });
-  });
-}
-function initNumBtns(groupId) {
-  var g = document.getElementById(groupId);
-  if (!g) return;
-  g.querySelectorAll('.num-btn').forEach(function(b) {
-    b.addEventListener('click', function() {
-      g.querySelectorAll('.num-btn').forEach(function(x){ x.classList.remove('selected'); });
-      b.classList.add('selected');
-    });
-  });
-}
-initChips('location-group', true);
-initNumBtns('people-group');
-initChips('budget-group', true);
-
-/* ════ IMAGE SLIDER ════ */
-
-var CATEGORY_IMAGES = {
-  'Wedding Photography':      ['weddings/wedding1.webp','weddings/wedding2.webp','weddings/wedding3.webp','weddings/wedding4.webp','weddings/wedding5.webp'],
-  'Portrait Shoot':           ['portraits/portraits1.webp','portraits/portraits2.webp','portraits/portraits3.webp','portraits/portraits4.webp'],
-  'Videography':              ['videography/video1.webp','videography/video2.webp','videography/video3.webp'],
-  'Family & Kids':            ['family/family1.webp','family/family2.webp','family/family3.webp','family/family4.webp'],
-  'Events & Corporate':       ['events/event1.webp','events/event2.webp','events/event3.webp','events/event4.webp'],
-  'Digital Art & Retouching': ['digital/digital1.webp','digital/digital2.webp','digital/digital3.webp'],
-  /* TODO: replace images/ paths above with real category folders once created:
-     Portrait Shoot    → portraits/portrait1.webp … portrait4.webp
-     Videography       → videography/video1.webp … video3.webp
-     Family & Kids     → family/family1.webp … family4.webp
-     Events & Corporate → events/event1.webp … event4.webp
-     Digital Art       → digital/digital1.webp … digital3.webp  */
-};
-
-var DEFAULT_IMAGES = [
-  'images/image1.webp','images/image2.webp','images/image3.webp',
-  'images/image4.webp','images/image5.webp',
-];
-
-var sliderEl    = document.getElementById('panel-slider');
-var sliderIndex = 0;
-var sliderTimer = null;
-
-function startSlider(images) {
-  /* Stop existing timer */
-  clearInterval(sliderTimer);
-  sliderTimer = null;
-  sliderIndex = 0;
-
-  /* Build fresh slides */
-  sliderEl.innerHTML = '';
-  for (var i = 0; i < images.length; i++) {
-    var div = document.createElement('div');
-    div.className = 'slide' + (i === 0 ? ' active' : '');
-    div.style.backgroundImage = "url('" + images[i] + "')";
-    sliderEl.appendChild(div);
-  }
-
-  /* Auto-advance */
-  if (images.length > 1) {
-    sliderTimer = setInterval(function() {
-      var slides = sliderEl.querySelectorAll('.slide');
-      slides[sliderIndex].classList.remove('active');
-      sliderIndex = (sliderIndex + 1) % slides.length;
-      slides[sliderIndex].classList.add('active');
-    }, 3500);
-  }
-}
-
-/* Start on defaults */
-startSlider(DEFAULT_IMAGES);
-
-/* Service card clicks — select/deselect + swap slider */
-var svcGroup = document.getElementById('svc-group');
-svcGroup.addEventListener('click', function(e) {
-  var card = e.target.closest('.svc-card');
-  if (!card) return;
-
-  var wasSelected = card.classList.contains('selected');
-
-  /* Deselect all cards first */
-  svcGroup.querySelectorAll('.svc-card').forEach(function(c) {
-    c.classList.remove('selected');
-  });
-
-  if (wasSelected) {
-    /* Clicking a selected card deselects it → back to defaults */
-    startSlider(DEFAULT_IMAGES);
-  } else {
-    /* Select the clicked card → show its images */
-    card.classList.add('selected');
-    var key  = card.getAttribute('data-val');
-    var imgs = CATEGORY_IMAGES[key];
-    startSlider(imgs && imgs.length ? imgs : DEFAULT_IMAGES);
-  }
-});
-
-function submitForm() {
-  for (var i = 0; i < totalSteps; i++) {
-    var s = document.getElementById('step-' + i);
-    if (s) s.classList.remove('active');
-  }
-  document.getElementById('success').style.display = 'flex';
-  document.querySelector('.progress-row').style.display = 'none';
-  document.getElementById('panel-label').textContent = 'All done!';
-  document.getElementById('panel-title').innerHTML   = 'We\'ll be in <em>touch</em> soon.';
-}
-</script>
+<script src="booking.js"></script>
 
   <script>
     /* ── Mobile menu (hamburger) ── */

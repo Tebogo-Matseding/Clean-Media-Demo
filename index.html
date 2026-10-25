@@ -1170,10 +1170,13 @@
       margin-bottom: 18px;
     }
 
-    .tslide-logo-dot {
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      background: #c0000a;
+    /* Studio logo (replaces the old red dot) */
+    .tslide-logo-img {
+      height: 44px;
+      width: auto;
+      max-width: 120px;
+      object-fit: contain;
+      display: block;
       flex-shrink: 0;
     }
 
@@ -1727,41 +1730,44 @@
           <div class="tslide">
             <div class="tslide-body">
               <div class="tslide-logo">
-                <div class="tslide-logo-dot"></div>
-                <span class="tslide-logo-name">Molefe Brands</span>
+                <img class="tslide-logo-img" src="images/nav-logo.png" alt="" />
+                <span class="tslide-logo-name">Clean Media Pictures</span>
               </div>
               <div class="tslide-stars">★★★★★</div>
               <p class="tslide-quote">
-                Clean Media completely transformed how our brand looks online. The team understood
-                our vision instantly — every shot was deliberate, clean, and exactly what we needed
-                to stand out.
+                I had an amazing experience with Clean Media Photography!
+                From the clean and beautiful studio to the photographer's creativity and professionalism, everything was exceptional.
+                The entire photoshoot was enjoyable, and the final pictures came out absolutely stunning.
+                I'll definitely be coming back, and even my family members are already looking forward to booking their own sessions!
               </p>
-              <span class="tslide-author-name">— Thabo Molefe</span>
-              <span class="tslide-author-role">CEO, Molefe Brands</span>
+              <span class="tslide-author-name">— Tebogo Sonti</span>
+              <span class="tslide-author-role">Studio Photography</span>
             </div>
             <div class="tslide-avatar">
-              <img src="images/client3.jpg" alt="Thabo Molefe" />
+              <img src="images/client3.jpg" alt="Tebogo Sonti" />
             </div>
           </div>
 
           <!-- Slide 2: avatar LEFT (flex-direction reversed by nth-child CSS) -->
           <div class="tslide">
             <div class="tslide-avatar">
-              <img src="images/client2.jpg" alt="Amahle Nkosi" />
+              <img src="images/client2.jpg" alt="Kgotsofatso Mohuba" />
             </div>
             <div class="tslide-body">
               <div class="tslide-logo">
-                <div class="tslide-logo-dot"></div>
-                <span class="tslide-logo-name">Personal Brand</span>
+                <img class="tslide-logo-img" src="images/nav-logo.png" alt="" />
+                <span class="tslide-logo-name">Clean Media Pictures</span>
               </div>
               <div class="tslide-stars">★★★★★</div>
               <p class="tslide-quote">
-                I came in nervous and left feeling like a model. The studio atmosphere is
-                professional but welcoming — and the final headshots exceeded everything I expected.
-                Booked again already.
+                I had another amazing experience with CMP!
+                This was my second time booking with them, and they exceeded my expectations once again.
+                They guide you throughout the session, especially when it comes to posing, and their patience with clients is unmatched.
+                The final photos were absolutely beautiful, and every detail was done perfectly.
+                I'll definitely be booking with them again!
               </p>
-              <span class="tslide-author-name">— Amahle Nkosi</span>
-              <span class="tslide-author-role">Entrepreneur &amp; Speaker</span>
+              <span class="tslide-author-name">— Kgotsofatso Mohuba</span>
+              <span class="tslide-author-role">Graduation Photography</span>
             </div>
           </div>
 
@@ -1769,20 +1775,22 @@
           <div class="tslide">
             <div class="tslide-body">
               <div class="tslide-logo">
-                <div class="tslide-logo-dot"></div>
-                <span class="tslide-logo-name">Luxe Co.</span>
+                <img class="tslide-logo-img" src="images/nav-logo.png" alt="" />
+                <span class="tslide-logo-name">Clean Media Pictures</span>
               </div>
               <div class="tslide-stars">★★★★★</div>
               <p class="tslide-quote">
-                Our product launch campaign visuals were shot here and the quality was
-                outstanding. Fast turnaround, great communication, and imagery that actually
-                converts. Highly recommended.
+                I had an amazing experience with this photographer on my graduation day.
+                They were professional, patient, and made me feel comfortable throughout the shoot.
+                They paid attention to every detail and captured all the special moments beautifully.
+                The photos were of excellent quality, with vibrant colours and beautiful editing.
+                I will definitely be booking again!
               </p>
-              <span class="tslide-author-name">— Keitumetse Dlamini</span>
-              <span class="tslide-author-role">Marketing Director, Luxe Co.</span>
+              <span class="tslide-author-name">— Bridgette Brio</span>
+              <span class="tslide-author-role">Graduation Photography</span>
             </div>
             <div class="tslide-avatar">
-              <img src="images/client1.jpg" alt="Keitumetse Dlamini" />
+              <img src="images/client1.jpg" alt="Bridgette Brio" />
             </div>
           </div>
 
@@ -2024,74 +2032,9 @@
       if (s) observer.observe(s);
     })();
   </script>
-  <!-- Image manifest: built by Build-Portfolio-Manifest.ps1 (portrait + landscape lists per sub-category) -->
+
   <script src="portfolio-manifest.js"></script>
-  <script>
-    /* ── Image helpers shared by the #portfolio cards and the nav preview ── */
-    (function () {
-      var M    = window.PORTFOLIO_MANIFEST && window.PORTFOLIO_MANIFEST.categories;
-      var ROOT = '';                      // use '../' on pages that live inside a *-gallery folder
-
-      function shuffle(a) {
-        a = a.slice();
-        for (var i = a.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
-        }
-        return a;
-      }
-
-      // One list per sub-category (in manifest order), empty lists dropped
-      function lists(cat, orient) {
-        var c = M && M[cat];
-        if (!c) return [];
-        return Object.keys(c).map(function (k) { return c[k][orient] || []; })
-                             .filter(function (l) { return l.length; });
-      }
-
-      function randomFrom(ls, avoid) {
-        if (!ls.length) return null;
-        var src = null;
-        for (var t = 0; t < 4; t++) {
-          var l = ls[Math.floor(Math.random() * ls.length)];
-          src = ROOT + l[Math.floor(Math.random() * l.length)];
-          if (src !== avoid) break;
-        }
-        return src;
-      }
-
-      window.CMP_IMG = {
-        preload: function (src) {
-          return new Promise(function (resolve) {
-            var im = new Image();
-            im.src = src;
-            if (im.decode) {            // fully decoded before it is shown, so the fade never stalls
-              im.decode().then(function () { resolve(src); }, function () { resolve(null); });
-            } else {
-              im.onload  = function () { resolve(src); };
-              im.onerror = function () { resolve(null); };
-            }
-          });
-        },
-        // Nav preview: a random landscape photo from the category
-        randomLandscape: function (cat, avoid) { return randomFrom(lists(cat, 'landscape'), avoid); },
-        // Card resting image: a random portrait photo from the category
-        randomPortrait:  function (cat, avoid) { return randomFrom(lists(cat, 'portrait'), avoid); },
-        // Card slideshow: portraits taken round-robin from every sub-category, random within each
-        portraitSequence: function (cat, max) {
-          var ls = lists(cat, 'portrait').map(shuffle), out = [], i = 0;
-          while (out.length < max) {
-            var added = false;
-            for (var k = 0; k < ls.length && out.length < max; k++) {
-              if (i < ls[k].length) { out.push(ROOT + ls[k][i]); added = true; }
-            }
-            if (!added) break;
-            i++;
-          }
-          return out;
-        }
-      };
-    })();
-  </script>
+  <script src="portfolio-images.js" data-root=""></script>
 
   <script>
     /* ── Portfolio nav dropdown: filter + desktop hover slideshow + tablet/phone accordion ── */
@@ -2124,54 +2067,11 @@
         }
       }
 
-      /* ---------- desktop preview: a random landscape photo from the hovered category ---------- */
-      const ddImgs  = [document.getElementById('navDdImg'), document.getElementById('navDdImgB')];
-      const linksEl = document.getElementById('navDdLinks');
-      const defaultSrc = ddImgs[0] ? ddImgs[0].getAttribute('src') : '';
-      const LOGO_SRC = defaultSrc;
-      let active = 0, runId = 0;
-
-      function show(src) {
-        if (!ddImgs[0] || !ddImgs[1]) return;
-        const next = ddImgs[1 - active], cur = ddImgs[active];
-        if (cur.getAttribute('src') !== src) {
-          next.src = src;
-          next.classList.toggle('is-logo', src === LOGO_SRC);
-          next.classList.add('is-shown');
-          cur.classList.remove('is-shown');
-          active = 1 - active;
-        }
-      }
-
-      function resetPreview() {
-        runId++;
-        show(defaultSrc);
-      }
-
-      async function showCategory(item) {
-        if (!isDesktop()) return;
-        const id    = ++runId;
-        const group = item.closest('.nav-dd-group');
-        const cat   = group ? group.dataset.group : '';
-        const api   = window.CMP_IMG;
-        const pick  = (api && cat) ? api.randomLandscape(cat, ddImgs[active].getAttribute('src')) : null;
-        if (!pick) { show(item.dataset.img || defaultSrc); return; }   // no manifest / no landscapes -> fallback
-        const ok = await api.preload(pick);
-        if (id !== runId) return;
-        show(ok || item.dataset.img || defaultSrc);
-      }
-
-      document.querySelectorAll('.nav-dd-parent, .nav-dd-cta').forEach(function (it) {
-        it.addEventListener('mouseenter', function () { showCategory(this); });
-        it.addEventListener('focus',      function () { showCategory(this); });
-      });
-      if (linksEl) linksEl.addEventListener('mouseleave', function () { if (isDesktop()) resetPreview(); });
 
       /* ---------- open / close ---------- */
       function closeDropdown() {
         wrap.classList.remove('is-open');
         btn.setAttribute('aria-expanded', 'false');
-        resetPreview();
       }
 
       const label = btn.querySelector('.nav-trigger-label');
@@ -2184,7 +2084,7 @@
         e.stopPropagation();
         const isOpen = wrap.classList.toggle('is-open');
         btn.setAttribute('aria-expanded', isOpen);
-        if (isOpen) { positionDropdown(); } else { resetPreview(); }
+        if (isOpen) { positionDropdown(); }
       });
 
       window.addEventListener('resize', function () { if (wrap.classList.contains('is-open')) positionDropdown(); });
