@@ -534,8 +534,9 @@
 
     @media (max-width: 768px) {
       /* Hero photo on phones: the photo is 16:9, so a portrait screen crops the sides.
-         The face sits at ~52.6% across the photo, which works out to 53.5% here; nudged to 58% to move it further left. */
-      .hero-bg img { object-position: 58% 50%; }
+         The face sits at ~52.6% across the photo. For a phone-shaped screen that centres it at an
+         object-position of about 53.5% (53 to 54% for any phone from 360x640 to 430x932). */
+      .hero-bg img { object-position: 53.5% 50%; }
       .line-main { font-size: clamp(3rem, 16vw, 6rem); }
       .line-sub  { font-size: clamp(0.7rem, 4vw, 1.8rem); letter-spacing: 0.35em; padding-left: 0.35em; }
     }
